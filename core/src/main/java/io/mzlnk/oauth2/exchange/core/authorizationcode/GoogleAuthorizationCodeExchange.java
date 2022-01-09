@@ -1,13 +1,10 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.mzlnk.oauth2.exchange.core.ExchangeException;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-import java.io.IOException;
 import java.util.Map;
 
 public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<GoogleAuthorizationCodeExchangeResponse> {
@@ -33,17 +30,13 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
                 .url("https://auth.mzlnk.io")
                 .post(requestBody)
                 .build();
-        try {
-            var responseBody = this.httpClient.newCall(request).execute().body().string();
 
-            var typeRef = new TypeReference<Map<String, Object>>() {
-            };
-            var values = this.objectMapper.readValue(responseBody, typeRef);
+        return this.makeHttpCall(request);
+    }
 
-            return GoogleAuthorizationCodeExchangeResponse.from(values);
-        } catch (IOException e) {
-            throw new ExchangeException(e.getMessage(), e);
-        }
+    @Override
+    protected GoogleAuthorizationCodeExchangeResponse convertMapToResponse(Map<String, Object> values) {
+        return GoogleAuthorizationCodeExchangeResponse.from(values);
     }
 
     public static class Builder {
