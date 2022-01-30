@@ -1,0 +1,30 @@
+name: 'oauth2-exchange-core: deploy artifact on push'
+
+on:
+  push:
+    paths:
+      - 'core/**'
+    branches:
+      - 'main'
+      - 'develop'
+
+jobs:
+  oauth2-exchange-core-mvn-deploy-on-push:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: core
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setting up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: Build and verify with Maven
+        run: mvn clean deploy
