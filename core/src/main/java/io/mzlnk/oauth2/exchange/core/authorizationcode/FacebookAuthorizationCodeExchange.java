@@ -1,5 +1,6 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookAuthorizationCodeExchangeClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookAuthorizationCodeExchangeResponse;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -10,19 +11,17 @@ import java.util.Map;
 public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<FacebookAuthorizationCodeExchangeResponse> {
 
     private FacebookAuthorizationCodeExchange(OkHttpClient client,
-                                              String clientId,
-                                              String clientSecret,
-                                              String redirectUri) {
-        super(client, clientId, clientSecret, redirectUri);
+                                              FacebookAuthorizationCodeExchangeClient exchangeClient) {
+        super(client, exchangeClient);
     }
 
     @Override
     public FacebookAuthorizationCodeExchangeResponse exchangeAuthorizationCode(String code) {
-        var url = HttpUrl.parse("https://graph.facebook.com/v12.0/oauth/access_token")
+        var url = HttpUrl.parse("%s/v12.0/oauth/access_token".formatted(this.exchangeClient.getClientBaseUrl()))
                 .newBuilder()
-                .addQueryParameter("client_id", this.clientId)
-                .addQueryParameter("client_secret", this.clientSecret)
-                .addQueryParameter("redirect_uri", this.redirectUri)
+                .addQueryParameter("client_id", this.exchangeClient.getClientId())
+                .addQueryParameter("client_secret", this.exchangeClient.getClientSecret())
+                .addQueryParameter("redirect_uri", this.exchangeClient.getClientSecret())
                 .addQueryParameter("code", code)
                 .build();
 
@@ -40,39 +39,26 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
 
     public static class Builder {
 
-        private OkHttpClient client = new OkHttpClient();
-        private String clientId = "";
-        private String clientSecret = "";
-        private String redirectUri = "";
+        private OkHttpClient httpClient = new OkHttpClient();
+        private FacebookAuthorizationCodeExchangeClient exchangeClient;
 
-        public Builder client(OkHttpClient client) {
-            this.client = client;
+        public Builder httpClient(OkHttpClient httpClient) {
+            this.httpClient = httpClient;
             return this;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
-            return this;
-        }
-
-        public Builder clientSecret(String clientSecret) {
-            this.clientSecret = clientSecret;
-            return this;
-        }
-
-        public Builder redirectUri(String redirectUri) {
-            this.redirectUri = redirectUri;
+        public Builder exchangeClient(FacebookAuthorizationCodeExchangeClient exchangeClient) {
+            this.exchangeClient = exchangeClient;
             return this;
         }
 
         public FacebookAuthorizationCodeExchange build() {
             return new FacebookAuthorizationCodeExchange(
-                    this.client,
-                    this.clientId,
-                    this.clientSecret,
-                    this.redirectUri
+                    this.httpClient,
+                    this.exchangeClient
             );
         }
+
     }
 
 }

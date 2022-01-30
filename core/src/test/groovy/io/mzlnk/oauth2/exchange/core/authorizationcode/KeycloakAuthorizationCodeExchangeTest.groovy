@@ -1,6 +1,6 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode
 
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakAuthorizationCodeExchangeClient
 import io.mzlnk.oauth2.exchange.core.utils.http.HttpResponse
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
@@ -11,11 +11,11 @@ import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.defaultSuccessHttpRe
 import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.loadResourceAsString
 import static org.mockito.Mockito.when
 
-class OktaAuthorizationCodeExchangeTest {
+class KeycloakAuthorizationCodeExchangeTest {
 
-    private static String BASE_PATH = 'io/mzlnk/oauth2/exchange/core/authorizationcode/OktaAuthorizationCodeExchangeTest'
+    private static String BASE_PATH = 'io/mzlnk/oauth2/exchange/core/authorizationcode/KeycloakAuthorizationCodeExchangeTest'
 
-    private OktaAuthorizationCodeExchange exchange
+    private KeycloakAuthorizationCodeExchange exchange
     private HttpResponse response
 
     @BeforeEach
@@ -26,14 +26,15 @@ class OktaAuthorizationCodeExchangeTest {
                 .addInterceptor(new MockHttpClientInterceptor(response: this.response))
                 .build()
 
-        def exchangeClient = new OktaAuthorizationCodeExchangeClient.OktaSingleSignOnClient(
+        def exchangeClient = new KeycloakAuthorizationCodeExchangeClient(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri',
-                'https://some.domain.com'
+                'https://some.domain.com',
+                'some-realm'
         )
 
-        this.exchange = new OktaAuthorizationCodeExchange.Builder()
+        this.exchange = new KeycloakAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
                 .build()
@@ -51,11 +52,13 @@ class OktaAuthorizationCodeExchangeTest {
         then:
         assert response != null
         assert response.getAccessToken() == 'some-access-token'
-        assert response.getTokenType() == 'Bearer'
-        assert response.getExpiresIn() == 3600
-        assert response.getScope() == 'some-scope'
+        assert response.getExpiresIn() == 300
+        assert response.getRefreshExpiresIn() == 1800
         assert response.getRefreshToken() == 'some-refresh-token'
-        assert response.getIdToken() == 'some-id-token'
+        assert response.getTokenType() == 'bearer'
+        assert response.getNotBeforePolicy() == 0
+        assert response.getSessionState() == 'some-session-state'
+        assert response.getScope() == 'some-scope'
     }
 
 }

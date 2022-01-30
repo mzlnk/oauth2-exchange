@@ -1,14 +1,19 @@
-package io.mzlnk.oauth2.exchange.core.authorizationcode
+package io.mzlnk.oauth2.exchange.core.authorizationcode.client
 
 import org.junit.jupiter.api.Test
 
-class OktaClientTest {
+class OktaAuthorizationCodeExchangeClientTest {
 
     @Test
     void "Should return client baseURL for single-sign-on client"() {
         given:
         def oktaDomain = 'some.domain.com'
-        def oktaClient = new OktaClient.OktaSingleSignOnClient(oktaDomain)
+        def oktaClient = new OktaAuthorizationCodeExchangeClient.OktaSingleSignOnClient(
+                'some-client-id',
+                'some-client-secret',
+                'some-redirect-uri',
+                oktaDomain
+        )
 
         when:
         def clientBaseUrl = oktaClient.getClientBaseUrl()
@@ -24,7 +29,13 @@ class OktaClientTest {
         def oktaDomain = 'some.domain.com'
         def oktaAuthorizationServerId = 'some-authorization-server-id'
 
-        def oktaClient = new OktaClient.OktaAuthorizationServerClient(oktaDomain, oktaAuthorizationServerId)
+        def oktaClient = new OktaAuthorizationCodeExchangeClient.OktaAuthorizationServerClient(
+                'some-client-id',
+                'some-client-secret',
+                'some-redirect-uri',
+                oktaDomain,
+                oktaAuthorizationServerId
+        )
 
         when:
         def clientBaseUrl = oktaClient.getClientBaseUrl()
