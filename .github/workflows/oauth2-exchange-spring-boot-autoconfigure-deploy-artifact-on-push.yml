@@ -19,12 +19,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setting up JDK 17
+      - name: Setting up JDK 17 and Maven Central Repository
         uses: actions/setup-java@v2
         with:
           java-version: '17'
           distribution: 'adopt'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
           cache: maven
 
-      - name: Build and verify with Maven
+      - name: Publish with Maven
         run: mvn clean deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

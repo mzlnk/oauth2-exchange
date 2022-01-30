@@ -4,10 +4,57 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.mzlnk.oauth2</groupId>
+    <groupId>io.mzlnk.oauth2.exchange</groupId>
     <artifactId>oauth2-exchange-core</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
     <name>oauth2-exchange-core</name>
+    <description>Java library for managing OAuth2 flows from server side</description>
+    <url>https://github.com/mzlnk/oauth2-exchange</url>
+
+    <inceptionYear>2021</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>mzlnk</id>
+            <name>Marcin Zielonka</name>
+            <email>zielonka.marcin@protonmail.com</email>
+            <url>mzlnk.io</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Warsaw</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/mzlnk/oauth2-exchange.git
+        </connection>
+        <developerConnection>
+            scm:git:ssh://github.com:mzlnk/oauth2-exchange.git
+        </developerConnection>
+        <url>https://github.com/mzlnk/oauth2-exchange</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
