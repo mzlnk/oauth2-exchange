@@ -26,7 +26,7 @@ class GoogleAuthorizationCodeExchangeTest {
                 .build()
 
         this.exchange = new GoogleAuthorizationCodeExchange.Builder()
-                .client(httpClient)
+                .httpClient(httpClient)
                 .clientId("clientId")
                 .clientSecret("clientSecret")
                 .redirectUri("redirectUri")

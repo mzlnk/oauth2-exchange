@@ -1,5 +1,6 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -9,24 +10,18 @@ import java.util.Map;
 
 public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<MicrosoftAuthorizationCodeExchangeResponse> {
 
-    private final MicrosoftTenantType tenant;
     private final String scope;
     private final String codeVerifier;
     private final String clientAssertionType;
     private final String clientAssertion;
 
     private MicrosoftAuthorizationCodeExchange(OkHttpClient client,
-                                               String clientId,
-                                               String clientSecret,
-                                               String redirectUri,
-                                               MicrosoftTenantType tenant,
+                                               MicrosoftAuthorizationCodeExchangeClient exchangeClient,
                                                String scope,
                                                String codeVerifier,
                                                String clientAssertionType,
                                                String clientAssertion) {
-        super(client, clientId, clientSecret, redirectUri);
-
-        this.tenant = tenant;
+        super(client, exchangeClient);
         this.scope = scope;
         this.codeVerifier = codeVerifier;
         this.clientAssertionType = clientAssertionType;
@@ -36,18 +31,18 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     @Override
     public MicrosoftAuthorizationCodeExchangeResponse exchangeAuthorizationCode(String code) {
         var builder = new FormBody.Builder()
-                .add("client_id", this.clientId)
-                .add("client_secret", this.clientSecret)
+                .add("client_id", this.exchangeClient.getClientId())
+                .add("client_secret", this.exchangeClient.getClientSecret())
                 .add("code", code)
                 .add("grant_type", "authorization_code")
-                .add("redirect_uri", this.redirectUri);
+                .add("redirect_uri", this.exchangeClient.getRedirectUri());
 
         addFormFieldIfExists(builder, "scope", this.scope);
         addFormFieldIfExists(builder, "code_verifier", this.codeVerifier);
         addFormFieldIfExists(builder, "client_assertion_type", this.clientAssertionType);
         addFormFieldIfExists(builder, "client_assertion", this.clientAssertion);
 
-        var url = String.format("https://login.microsoftonline.com/%s/oauth2/v2.0/token", this.tenant);
+        var url = "%s/oauth2/v2.0/token".formatted(this.exchangeClient.getClientBaseUrl());
 
         var request = new Request.Builder()
                 .url(url)
@@ -63,45 +58,27 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     }
 
     private void addFormFieldIfExists(FormBody.Builder builder, String fieldName, String value) {
-        if(value != null) {
+        if (value != null) {
             builder.add(fieldName, value);
         }
     }
 
     public static class Builder {
 
-        private OkHttpClient client = new OkHttpClient();
-        private String clientId;
-        private String clientSecret;
-        private String redirectUri;
-        private MicrosoftTenantType tenant;
+        private OkHttpClient httpClient = new OkHttpClient();
+        private MicrosoftAuthorizationCodeExchangeClient exchangeClient;
         private String scope;
         private String codeVerifier;
         private String clientAssertionType;
         private String clientAssertion;
 
-        public Builder client(OkHttpClient client) {
-            this.client = client;
+        public Builder httpClient(OkHttpClient httpClient) {
+            this.httpClient = httpClient;
             return this;
         }
 
-        public Builder clientId(String clientId) {
-            this.clientId = clientId;
-            return this;
-        }
-
-        public Builder clientSecret(String clientSecret) {
-            this.clientSecret = clientSecret;
-            return this;
-        }
-
-        public Builder redirectUri(String redirectUri) {
-            this.redirectUri = redirectUri;
-            return this;
-        }
-
-        public Builder tenant(MicrosoftTenantType tenant) {
-            this.tenant = tenant;
+        public Builder exchangeClient(MicrosoftAuthorizationCodeExchangeClient exchangeClient) {
+            this.exchangeClient = exchangeClient;
             return this;
         }
 
@@ -127,11 +104,8 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
 
         public MicrosoftAuthorizationCodeExchange build() {
             return new MicrosoftAuthorizationCodeExchange(
-                    this.client,
-                    this.clientId,
-                    this.clientSecret,
-                    this.redirectUri,
-                    this.tenant,
+                    this.httpClient,
+                    this.exchangeClient,
                     this.scope,
                     this.codeVerifier,
                     this.clientAssertionType,

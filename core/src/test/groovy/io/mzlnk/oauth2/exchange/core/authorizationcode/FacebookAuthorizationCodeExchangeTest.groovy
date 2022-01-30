@@ -26,7 +26,7 @@ class FacebookAuthorizationCodeExchangeTest {
                 .build()
 
         this.exchange = new FacebookAuthorizationCodeExchange.Builder()
-                .client(httpClient)
+                .httpClient(httpClient)
                 .clientId("clientId")
                 .clientSecret("clientSecret")
                 .redirectUri("redirectUri")

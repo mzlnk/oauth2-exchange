@@ -26,7 +26,7 @@ class GitHubAuthorizationCodeExchangeTest {
                 .build()
 
         this.exchange = new GitHubAuthorizationCodeExchange.Builder()
-                .client(httpClient)
+                .httpClient(httpClient)
                 .clientId("clientId")
                 .clientSecret("clientSecret")
                 .redirectUri("redirectUri")

@@ -26,7 +26,7 @@ class MicrosoftAuthorizationCodeExchangeTest {
                 .build()
 
         this.exchange = new MicrosoftAuthorizationCodeExchange.Builder()
-                .client(httpClient)
+                .httpClient(httpClient)
                 .clientId("clientId")
                 .clientSecret("clientSecret")
                 .redirectUri("redirectUri")
