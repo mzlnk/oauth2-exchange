@@ -27,4 +27,26 @@ public abstract class OktaAuthorizationCodeExchangeClient extends AbstractAuthor
 
     }
 
+    public static class OktaAuthorizationServerClient extends OktaAuthorizationCodeExchangeClient {
+
+        private final String oktaDomain;
+        private final String authorizationServerId;
+
+        public OktaAuthorizationServerClient(String clientId,
+                                             String clientSecret,
+                                             String redirectUri,
+                                             String oktaDomain,
+                                             String authorizationServerId) {
+            super(clientId, clientSecret, redirectUri);
+            this.oktaDomain = oktaDomain;
+            this.authorizationServerId = authorizationServerId;
+        }
+
+        @Override
+        public String getClientBaseUrl() {
+            return "https://%s/oauth2/%s".formatted(this.oktaDomain, this.authorizationServerId);
+        }
+
+    }
+
 }

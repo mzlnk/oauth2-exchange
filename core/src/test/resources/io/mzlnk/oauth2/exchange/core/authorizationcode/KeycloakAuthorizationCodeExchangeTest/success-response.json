@@ -1,0 +1,10 @@
+{
+  "access_token": "some-access-token",
+  "expires_in": 300,
+  "refresh_expires_in": 1800,
+  "refresh_token": "some-refresh-token",
+  "token_type": "bearer",
+  "not-before-policy": 0,
+  "session_state": "some-session-state",
+  "scope": "some-scope"
+}

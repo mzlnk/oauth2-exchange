@@ -1,5 +1,6 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode
 
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient
 import io.mzlnk.oauth2.exchange.core.utils.http.HttpResponse
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
@@ -25,11 +26,15 @@ class GoogleAuthorizationCodeExchangeTest {
                 .addInterceptor(new MockHttpClientInterceptor(response: this.response))
                 .build()
 
+        def exchangeClient = new GoogleAuthorizationCodeExchangeClient(
+                'some-client-id',
+                'some-client-secret',
+                'some-redirect-uri'
+        )
+
         this.exchange = new GoogleAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)
-                .clientId("clientId")
-                .clientSecret("clientSecret")
-                .redirectUri("redirectUri")
+                .exchangeClient(exchangeClient)
                 .build()
     }
 
