@@ -1,20 +1,20 @@
-name: 'oauth2-exchange-spring-boot-starter: deploy artifact on push'
+name: 'oauth2-exchange-spring-boot-autoconfigure: deploy snapshot'
 
 on:
   push:
     paths:
-      - 'spring-boot/starter/**'
+      - 'spring-boot/autoconfigure/**'
     branches:
-      - 'main'
       - 'develop'
 
 jobs:
-  oauth2-exchange-spring-boot-starter-mvn-deploy-on-push:
+  oauth2-exchange-spring-boot-autoconfigure-deploy-snapshot-on-push:
+    name: 'oauth2-exchange-spring-boot-autoconfigure: deploy snapshot'
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: spring-boot/starter
+        working-directory: spring-boot/autoconfigure
 
     steps:
       - uses: actions/checkout@v2
