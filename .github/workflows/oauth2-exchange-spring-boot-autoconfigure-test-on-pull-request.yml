@@ -1,4 +1,4 @@
-name: 'oauth2-exchange-spring-boot-autoconfigure: test on pull request'
+name: 'oauth2-exchange-spring-boot-autoconfigure: run tests'
 
 on:
   pull_request:
@@ -13,7 +13,8 @@ on:
       - 'tmp/**'
 
 jobs:
-  oauth2-exchange-spring-boot-autoconfigure-mvn-verify-on-pr:
+  oauth2-exchange-spring-boot-autoconfigure-run-tests-on-pr:
+    name: 'oauth2-exchange-spring-boot-autoconfigure: run tests'
     runs-on: ubuntu-latest
 
     defaults:

@@ -1,4 +1,4 @@
-name: 'oauth2-exchange-core: test on pull request'
+name: 'oauth2-exchange-core: run tests'
 
 on:
   pull_request:
@@ -13,7 +13,8 @@ on:
       - 'tmp/**'
 
 jobs:
-  oauth2-exchange-core-mvn-verify-on-pr:
+  oauth2-exchange-core-run-tests-on-pr:
+    name: 'oauth2-exchange-core: run tests'
     runs-on: ubuntu-latest
 
     defaults:

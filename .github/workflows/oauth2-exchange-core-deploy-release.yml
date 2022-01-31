@@ -1,20 +1,18 @@
-name: 'oauth2-exchange-spring-boot-autoconfigure: deploy artifact on push'
+name: 'oauth2-exchange-core: deploy release'
 
 on:
-  push:
-    paths:
-      - 'spring-boot/autoconfigure/**'
-    branches:
-      - 'main'
-      - 'develop'
+  release:
+    types:
+      - released
 
 jobs:
-  oauth2-exchange-spring-boot-autoconfigure-mvn-deploy-on-push:
+  oauth2-exchange-core-deploy-release-on-release:
+    name: 'oauth2-exchange-core: deploy release'
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: spring-boot/autoconfigure
+        working-directory: core
 
     steps:
       - uses: actions/checkout@v2
@@ -27,10 +25,13 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
           cache: maven
 
       - name: Publish with Maven
-        run: mvn clean deploy
+        run: mvn clean deploy -P release
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
