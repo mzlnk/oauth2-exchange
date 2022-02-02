@@ -7,7 +7,8 @@ import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.defaultSuccessHttpResponse
+import static io.mzlnk.oauth2.exchange.core.utils.http.HttpFixtures.*
+import static io.mzlnk.oauth2.exchange.core.utils.http.rule.HttpRules.*
 import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.loadResourceAsString
 import static org.mockito.Mockito.when
 
@@ -17,13 +18,14 @@ class GoogleAuthorizationCodeExchangeTest {
 
     private GoogleAuthorizationCodeExchange exchange
     private HttpResponse response
+    private MockHttpClientInterceptor http
 
     @BeforeEach
     void "Set up tests"() {
-        this.response = defaultSuccessHttpResponse()
+        this.http = new MockHttpClientInterceptor()
 
         def httpClient = new OkHttpClient.Builder()
-                .addInterceptor(new MockHttpClientInterceptor(response: this.response))
+                .addInterceptor(http)
                 .build()
 
         def exchangeClient = new GoogleAuthorizationCodeExchangeClient(
@@ -42,7 +44,11 @@ class GoogleAuthorizationCodeExchangeTest {
     void "Should return token response"() {
         given:
         def json = loadResourceAsString("${BASE_PATH}/success-response.json")
-        when(this.response.getResponseBody()).thenReturn(json)
+        def httpResponse = defaultSuccessHttpResponse() {
+            body(jsonResponseBody(json))
+        }
+
+        this.http.when(post('https://oauth2.googleapis.com/token')).thenReturn(httpResponse)
 
         when:
         def response = this.exchange.exchangeAuthorizationCode('some-code')
