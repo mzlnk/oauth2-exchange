@@ -13,17 +13,19 @@ class HasExactFormBodyHttpRule implements HttpRule {
 
     @Override
     boolean matches(Request httpRequest) {
-        if (httpRequest.body().class == FormBody) {
+        if (httpRequest.body().class != FormBody) {
             return false
         }
         def formBody = httpRequest.body() as FormBody
         def fields = toMap(formBody)
 
-        assert fields == expectedFields
+        return fields.size() == expectedFields.size() && expectedFields.every {field ->
+            fields[field.key].matches(field.value)
+        }
     }
 
     private static def toMap(FormBody formBody) {
-        def map = [:]
+        def map = [:] as Map<String, String>
         for( i in 0..<formBody.size()) {
             map[formBody.name(i)] = formBody.value(i)
         }

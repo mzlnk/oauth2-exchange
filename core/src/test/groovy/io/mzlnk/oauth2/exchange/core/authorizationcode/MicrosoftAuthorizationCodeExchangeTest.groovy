@@ -55,8 +55,29 @@ class MicrosoftAuthorizationCodeExchangeTest {
         assert response.getScope() == 'some-scope'
         assert response.getRefreshToken() == 'some-refresh-token'
         assert response.getIdToken() == 'some-id-token'
+    }
 
+    @Test
+    void "Should return exception when exchange failed"() {
+    }
 
+    @Test
+    void "Should return exception when exchange does not return 2xx or 4xx response"() {
+    }
+
+    @Test
+    void "Should return exception when provide empty authorization code"() {
+        // TODO: GH-30
+    }
+
+    @Test
+    void "Should return exception when provide null authorization code"() {
+        // TODO: GH-30
+    }
+
+    @Test
+    void "Should not create exchange when provide null exchange client"() {
+        // TODO: GH-30
     }
 
 }

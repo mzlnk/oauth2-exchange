@@ -16,6 +16,10 @@ class HttpFixtures {
         return ResponseBody.create(json, MediaType.parse('application/json'))
     }
 
+    static def emptyResponseBody() {
+        return ResponseBody.create('', MediaType.parse('application/json+problem'))
+    }
+
     static def defaultSuccessHttpResponse(@DelegatesTo(Response.Builder) Closure customizer = {}) {
         return new Response.Builder()
                 .protocol(Protocol.HTTP_2)
@@ -26,5 +30,25 @@ class HttpFixtures {
                 .build()
     }
 
+    static def defaultBadRequestHttpResponse(@DelegatesTo(Response.Builder) Closure customizer = {}) {
+        return new Response.Builder()
+                .protocol(Protocol.HTTP_2)
+                .message('Bad Request')
+                .code(400)
+                .request(MOCK_REQUEST)
+                .tap(customizer)
+                .build()
+    }
+
+    static def defaultInternalServerErrorHttpResponse(@DelegatesTo(Response.Builder) Closure customizer = {}) {
+        return new Response.Builder()
+                .protocol(Protocol.HTTP_2)
+                .message('Internal Server Error')
+                .code(500)
+                .request(MOCK_REQUEST)
+                .body(emptyResponseBody())
+                .tap(customizer)
+                .build()
+    }
 
 }
