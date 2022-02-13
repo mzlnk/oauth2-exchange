@@ -1,15 +1,15 @@
-package io.mzlnk.oauth2.exchange.core.authorizationcode.response;
+package io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto;
 
 import java.util.Map;
 
-public class MicrosoftAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
+public class OktaAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
-    public static MicrosoftAuthorizationCodeExchangeResponse from(Map<String, Object> values) {
-        return new MicrosoftAuthorizationCodeExchangeResponse(values);
+    private OktaAuthorizationCodeExchangeResponse(Map<String, Object> values) {
+        super(values);
     }
 
-    private MicrosoftAuthorizationCodeExchangeResponse(Map<String, Object> values) {
-        super(values);
+    public static OktaAuthorizationCodeExchangeResponse from(Map<String, Object> values) {
+        return new OktaAuthorizationCodeExchangeResponse(values);
     }
 
     public String getAccessToken() {

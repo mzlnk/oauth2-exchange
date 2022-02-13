@@ -1,24 +1,24 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.mzlnk.oauth2.exchange.core.ExchangeException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponse;
-import io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GoogleAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
-import java.io.IOException;
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
+
+import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClient;
 
 public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<GoogleAuthorizationCodeExchangeResponse> {
 
     private GoogleAuthorizationCodeExchange(OkHttpClient client,
-                                            GoogleAuthorizationCodeExchangeClient exchangeClient) {
-        super(client, exchangeClient);
+                                            GoogleAuthorizationCodeExchangeClient exchangeClient,
+                                            GoogleAuthorizationCodeExchangeResponseHandler responseHandler) {
+        super(client, exchangeClient, responseHandler);
     }
 
     @Override
@@ -41,41 +41,11 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         return this.makeHttpCall(request);
     }
 
-    @Override
-    protected GoogleAuthorizationCodeExchangeResponse convertMapToResponse(Map<String, Object> values) {
-        return GoogleAuthorizationCodeExchangeResponse.from(values);
-    }
-
-    @Override
-    protected void handleErrorResponse(Response errorResponse) throws IOException {
-        String responseBody = Optional
-                .ofNullable(errorResponse.body())
-                .map(OkHttpUtils::convertResponseBodyToString).orElse("");
-
-        if (errorResponse.code() == 400) {
-            handleBadRequestHttpResponse(errorResponse, responseBody);
-        }
-
-        handleNonBadRequestHttpResponse(errorResponse, responseBody);
-    }
-
-    private void handleBadRequestHttpResponse(Response errorResponse, String responseBody) throws IOException {
-        var typeRef = new TypeReference<Map<String, Object>>() {};
-        var values = this.objectMapper.readValue(responseBody, typeRef);
-
-        var message = "Exchange failed. Cause: %s, %s".formatted(values.get("error"), values.get("error_description"));
-        throw new ExchangeException(message, responseBody);
-    }
-
-    private void handleNonBadRequestHttpResponse(Response errorResponse, String responseBody) {
-        var message = "Exchange failed. Cause: %s".formatted(errorResponse.message());
-        throw new ExchangeException(message, responseBody);
-    }
-
     public static class Builder {
 
-        private OkHttpClient httpClient = new OkHttpClient();
+        private OkHttpClient httpClient;
         private GoogleAuthorizationCodeExchangeClient exchangeClient;
+        private GoogleAuthorizationCodeExchangeResponseHandler responseHandler;
 
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
@@ -87,12 +57,23 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
             return this;
         }
 
+        public Builder responseHandler(GoogleAuthorizationCodeExchangeResponseHandler responseHandler) {
+            this.responseHandler = responseHandler;
+            return this;
+        }
+
         public GoogleAuthorizationCodeExchange build() {
             return new GoogleAuthorizationCodeExchange(
-                    this.httpClient,
-                    this.exchangeClient
+                    Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),
+                    this.exchangeClient,
+                    Optional.ofNullable(this.responseHandler).orElseGet(defaultResponseHandler())
             );
         }
+
+        private static Supplier<GoogleAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
+            return () -> new GoogleAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        }
+
     }
 
 }

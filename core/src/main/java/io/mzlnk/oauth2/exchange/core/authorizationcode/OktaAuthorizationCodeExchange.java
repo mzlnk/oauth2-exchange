@@ -1,19 +1,25 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaAuthorizationCodeExchangeResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaAuthorizationCodeExchangeResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OktaAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClient;
 
 public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<OktaAuthorizationCodeExchangeResponse> {
 
     private OktaAuthorizationCodeExchange(OkHttpClient httpClient,
-                                          OktaAuthorizationCodeExchangeClient exchangeClient) {
-        super(httpClient, exchangeClient);
+                                          OktaAuthorizationCodeExchangeClient exchangeClient,
+                                          OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
+        super(httpClient, exchangeClient, responseHandler);
     }
 
     @Override
@@ -36,15 +42,15 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
         return this.makeHttpCall(request);
     }
 
-    @Override
-    protected OktaAuthorizationCodeExchangeResponse convertMapToResponse(Map<String, Object> values) {
-        return OktaAuthorizationCodeExchangeResponse.from(values);
-    }
-
     public static class Builder {
 
-        private OkHttpClient httpClient = new OkHttpClient();
+        private OkHttpClient httpClient;
         private OktaAuthorizationCodeExchangeClient exchangeClient;
+        private OktaAuthorizationCodeExchangeResponseHandler responseHandler;
+
+        private static Supplier<OktaAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
+            return () -> new OktaAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        }
 
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
@@ -60,10 +66,12 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
             Preconditions.checkNotNull(this.exchangeClient, "Okta client cannot be null.");
 
             return new OktaAuthorizationCodeExchange(
-                    this.httpClient,
-                    this.exchangeClient
+                    Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),
+                    this.exchangeClient,
+                    Optional.ofNullable(this.responseHandler).orElseGet(defaultResponseHandler())
             );
         }
+
     }
 
 }

@@ -1,12 +1,17 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClient;
 
 public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<MicrosoftAuthorizationCodeExchangeResponse> {
 
@@ -17,11 +22,12 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
 
     private MicrosoftAuthorizationCodeExchange(OkHttpClient client,
                                                MicrosoftAuthorizationCodeExchangeClient exchangeClient,
+                                               MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler,
                                                String scope,
                                                String codeVerifier,
                                                String clientAssertionType,
                                                String clientAssertion) {
-        super(client, exchangeClient);
+        super(client, exchangeClient, responseHandler);
         this.scope = scope;
         this.codeVerifier = codeVerifier;
         this.clientAssertionType = clientAssertionType;
@@ -52,11 +58,6 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
         return this.makeHttpCall(request);
     }
 
-    @Override
-    protected MicrosoftAuthorizationCodeExchangeResponse convertMapToResponse(Map<String, Object> values) {
-        return MicrosoftAuthorizationCodeExchangeResponse.from(values);
-    }
-
     private void addFormFieldIfExists(FormBody.Builder builder, String fieldName, String value) {
         if (value != null) {
             builder.add(fieldName, value);
@@ -65,12 +66,18 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
 
     public static class Builder {
 
-        private OkHttpClient httpClient = new OkHttpClient();
+        private OkHttpClient httpClient;
         private MicrosoftAuthorizationCodeExchangeClient exchangeClient;
+        private MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler;
+
         private String scope;
         private String codeVerifier;
         private String clientAssertionType;
         private String clientAssertion;
+
+        private static Supplier<MicrosoftAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
+            return () -> new MicrosoftAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        }
 
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
@@ -104,8 +111,9 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
 
         public MicrosoftAuthorizationCodeExchange build() {
             return new MicrosoftAuthorizationCodeExchange(
-                    this.httpClient,
+                    Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),
                     this.exchangeClient,
+                    Optional.ofNullable(this.responseHandler).orElseGet(defaultResponseHandler()),
                     this.scope,
                     this.codeVerifier,
                     this.clientAssertionType,

@@ -1,4 +1,4 @@
-package io.mzlnk.oauth2.exchange.core.authorizationcode.response;
+package io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto;
 
 import java.util.Collection;
 import java.util.HashMap;
