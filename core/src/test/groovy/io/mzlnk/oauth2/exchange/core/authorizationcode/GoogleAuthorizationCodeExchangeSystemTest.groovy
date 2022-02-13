@@ -1,7 +1,9 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponseHandler
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
@@ -14,9 +16,9 @@ import static io.mzlnk.oauth2.exchange.core.utils.http.rule.HttpRules.post
 import static io.mzlnk.oauth2.exchange.core.utils.http.rule.HttpRules.withExactFormBody
 import static org.junit.jupiter.api.Assertions.assertThrows
 
-class GoogleAuthorizationCodeExchangeTest {
+class GoogleAuthorizationCodeExchangeSystemTest {
 
-    private static String BASE_PATH = 'io/mzlnk/oauth2/exchange/core/authorizationcode/GoogleAuthorizationCodeExchangeTest'
+    private static String BASE_PATH = 'io/mzlnk/oauth2/exchange/core/authorizationcode/GoogleAuthorizationCodeExchangeSystemTest'
 
     private GoogleAuthorizationCodeExchange exchange
     private MockHttpClientInterceptor http
@@ -35,9 +37,12 @@ class GoogleAuthorizationCodeExchangeTest {
                 'some-redirect-uri'
         )
 
+        def responseHandler = new GoogleAuthorizationCodeExchangeResponseHandler(new ObjectMapper())
+
         this.exchange = new GoogleAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
+                .responseHandler(responseHandler)
                 .build()
     }
 
@@ -57,7 +62,7 @@ class GoogleAuthorizationCodeExchangeTest {
                         code         : 'some-code',
                         grant_type   : 'authorization_code',
                         redirect_uri : 'some-redirect-uri'
-                ]),
+                ])
         ).thenReturn(httpResponse)
 
         when:

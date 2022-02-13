@@ -7,7 +7,7 @@ class HasQueryParameterHttpRule implements HttpRule {
     private final String key
     private final String expectedValue
 
-    public HasQueryParameterHttpRule(String key, String expectedValue) {
+    HasQueryParameterHttpRule(String key, String expectedValue) {
         this.key = key
         this.expectedValue = expectedValue
     }

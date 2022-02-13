@@ -1,29 +1,32 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubAuthorizationCodeExchangeClient
-import io.mzlnk.oauth2.exchange.core.utils.http.HttpResponse
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubAuthorizationCodeExchangeResponseHandler
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.defaultSuccessHttpResponse
 import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.loadResourceAsString
-import static org.mockito.Mockito.when
+import static io.mzlnk.oauth2.exchange.core.utils.http.HttpFixtures.defaultSuccessHttpResponse
+import static io.mzlnk.oauth2.exchange.core.utils.http.HttpFixtures.jsonResponseBody
+import static io.mzlnk.oauth2.exchange.core.utils.http.rule.HttpRules.post
+import static io.mzlnk.oauth2.exchange.core.utils.http.rule.HttpRules.withExactFormBody
 
-class GitHubAuthorizationCodeExchangeTest {
+class GitHubAuthorizationCodeExchangeSystemTest {
 
-    private static String BASE_PATH = 'io/mzlnk/oauth2/exchange/core/authorizationcode/GitHubAuthorizationCodeExchangeTest'
+    private static String BASE_PATH = 'io/mzlnk/oauth2/exchange/core/authorizationcode/GitHubAuthorizationCodeExchangeSystemTest'
 
     private GitHubAuthorizationCodeExchange exchange
-    private HttpResponse response
+    private MockHttpClientInterceptor http
 
     @BeforeEach
     void "Set up tests"() {
-        this.response = defaultSuccessHttpResponse()
+        this.http = new MockHttpClientInterceptor()
 
         def httpClient = new OkHttpClient.Builder()
-                .addInterceptor(new MockHttpClientInterceptor(response: this.response))
+                .addInterceptor(this.http)
                 .build()
 
         def exchangeClient = new GitHubAuthorizationCodeExchangeClient(
@@ -32,9 +35,12 @@ class GitHubAuthorizationCodeExchangeTest {
                 'some-redirect-uri'
         )
 
+        def responseHandler = new GitHubAuthorizationCodeExchangeResponseHandler(new ObjectMapper())
+
         this.exchange = new GitHubAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
+                .responseHandler(responseHandler)
                 .build()
     }
 
@@ -42,7 +48,19 @@ class GitHubAuthorizationCodeExchangeTest {
     void "Should return token response"() {
         given:
         def json = loadResourceAsString("${BASE_PATH}/success-response.json")
-        when(this.response.getResponseBody()).thenReturn(json)
+        def httpResponse = defaultSuccessHttpResponse() {
+            body(jsonResponseBody(json))
+        }
+
+        this.http.when(
+                post('https://github.com/login/oauth/access_token'),
+                withExactFormBody([
+                        client_id    : 'some-client-id',
+                        client_secret: 'some-client-secret',
+                        code         : 'some-code',
+                        redirect_uri : 'some-redirect-uri'
+                ])
+        ).thenReturn(httpResponse)
 
         when:
         def response = this.exchange.exchangeAuthorizationCode('some-code')

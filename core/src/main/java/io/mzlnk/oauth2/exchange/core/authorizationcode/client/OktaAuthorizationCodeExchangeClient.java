@@ -22,7 +22,7 @@ public abstract class OktaAuthorizationCodeExchangeClient extends AbstractAuthor
 
         @Override
         public String getClientBaseUrl() {
-            return "https://%s/oauth2".formatted(this.oktaDomain);
+            return "%s/oauth2".formatted(this.oktaDomain);
         }
 
     }
@@ -44,7 +44,7 @@ public abstract class OktaAuthorizationCodeExchangeClient extends AbstractAuthor
 
         @Override
         public String getClientBaseUrl() {
-            return "https://%s/oauth2/%s".formatted(this.oktaDomain, this.authorizationServerId);
+            return "%s/oauth2/%s".formatted(this.oktaDomain, this.authorizationServerId);
         }
 
     }

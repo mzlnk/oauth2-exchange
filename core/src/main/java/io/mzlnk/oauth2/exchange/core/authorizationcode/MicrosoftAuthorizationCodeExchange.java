@@ -89,6 +89,11 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
             return this;
         }
 
+        public Builder responseHandler(MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler) {
+            this.responseHandler = responseHandler;
+            return this;
+        }
+
         public Builder scope(String scope) {
             this.scope = scope;
             return this;

@@ -62,6 +62,11 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
             return this;
         }
 
+        public Builder responseHandler(OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
+            this.responseHandler = responseHandler;
+            return this;
+        }
+
         public OktaAuthorizationCodeExchange build() {
             Preconditions.checkNotNull(this.exchangeClient, "Okta client cannot be null.");
 

@@ -7,7 +7,7 @@ class OktaAuthorizationCodeExchangeClientTest {
     @Test
     void "Should return client baseURL for single-sign-on client"() {
         given:
-        def oktaDomain = 'some.domain.com'
+        def oktaDomain = 'https://some.domain.com'
         def oktaClient = new OktaAuthorizationCodeExchangeClient.OktaSingleSignOnClient(
                 'some-client-id',
                 'some-client-secret',
@@ -20,13 +20,13 @@ class OktaAuthorizationCodeExchangeClientTest {
 
         then:
         assert clientBaseUrl != null
-        assert clientBaseUrl == "https://${oktaDomain}/oauth2"
+        assert clientBaseUrl == "${oktaDomain}/oauth2"
     }
 
     @Test
     void "Should return client baseURL for authorization server client"() {
         given:
-        def oktaDomain = 'some.domain.com'
+        def oktaDomain = 'https://some.domain.com'
         def oktaAuthorizationServerId = 'some-authorization-server-id'
 
         def oktaClient = new OktaAuthorizationCodeExchangeClient.OktaAuthorizationServerClient(
@@ -42,7 +42,7 @@ class OktaAuthorizationCodeExchangeClientTest {
 
         then:
         assert clientBaseUrl != null
-        assert clientBaseUrl == "https://${oktaDomain}/oauth2/${oktaAuthorizationServerId}"
+        assert clientBaseUrl == "${oktaDomain}/oauth2/${oktaAuthorizationServerId}"
     }
 
 }

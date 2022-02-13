@@ -1,29 +1,32 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookAuthorizationCodeExchangeClient
-import io.mzlnk.oauth2.exchange.core.utils.http.HttpResponse
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookAuthorizationCodeExchangeResponseHandler
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.defaultSuccessHttpResponse
 import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.loadResourceAsString
-import static org.mockito.Mockito.when
+import static io.mzlnk.oauth2.exchange.core.utils.http.HttpFixtures.defaultSuccessHttpResponse
+import static io.mzlnk.oauth2.exchange.core.utils.http.HttpFixtures.jsonResponseBody
+import static io.mzlnk.oauth2.exchange.core.utils.http.rule.HttpRules.get
+import static io.mzlnk.oauth2.exchange.core.utils.http.rule.HttpRules.withQueryParameter
 
-class FacebookAuthorizationCodeExchangeTest {
+class FacebookAuthorizationCodeExchangeSystemTest {
 
-    private static String BASE_PATH = 'io/mzlnk/oauth2/exchange/core/authorizationcode/FacebookAuthorizationCodeExchangeTest'
+    private static String BASE_PATH = 'io/mzlnk/oauth2/exchange/core/authorizationcode/FacebookAuthorizationCodeExchangeSystemTest'
 
     private FacebookAuthorizationCodeExchange exchange
-    private HttpResponse response
+    private MockHttpClientInterceptor http
 
     @BeforeEach
     void "Set up tests"() {
-        this.response = defaultSuccessHttpResponse()
+        this.http = new MockHttpClientInterceptor()
 
         def httpClient = new OkHttpClient.Builder()
-                .addInterceptor(new MockHttpClientInterceptor(response: this.response))
+                .addInterceptor(this.http)
                 .build()
 
         def exchangeClient = new FacebookAuthorizationCodeExchangeClient(
@@ -32,9 +35,12 @@ class FacebookAuthorizationCodeExchangeTest {
                 'some-redirect-uri'
         )
 
+        def responseHandler = new FacebookAuthorizationCodeExchangeResponseHandler(new ObjectMapper())
+
         this.exchange = new FacebookAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
+                .responseHandler(responseHandler)
                 .build()
     }
 
@@ -42,7 +48,17 @@ class FacebookAuthorizationCodeExchangeTest {
     void "Should return token response"() {
         given:
         def json = loadResourceAsString("${BASE_PATH}/success-response.json")
-        when(this.response.getResponseBody()).thenReturn(json)
+        def httpResponse = defaultSuccessHttpResponse() {
+            body(jsonResponseBody(json))
+        }
+
+        this.http.when(
+                get('https://graph.facebook.com/v12.0/oauth/access_token'),
+                withQueryParameter('client_id', 'some-client-id'),
+                withQueryParameter('client_secret', 'some-client-secret'),
+                withQueryParameter('redirect_uri', 'some-redirect-uri'),
+                withQueryParameter('code', 'some-code')
+        ).thenReturn(httpResponse)
 
         when:
         def response = this.exchange.exchangeAuthorizationCode('some-code')

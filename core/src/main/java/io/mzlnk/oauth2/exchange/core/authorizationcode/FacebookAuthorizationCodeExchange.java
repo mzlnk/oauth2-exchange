@@ -27,7 +27,7 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
                 .newBuilder()
                 .addQueryParameter("client_id", this.exchangeClient.getClientId())
                 .addQueryParameter("client_secret", this.exchangeClient.getClientSecret())
-                .addQueryParameter("redirect_uri", this.exchangeClient.getClientSecret())
+                .addQueryParameter("redirect_uri", this.exchangeClient.getRedirectUri())
                 .addQueryParameter("code", code)
                 .build();
 

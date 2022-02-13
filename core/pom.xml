@@ -135,7 +135,7 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <excludes>
-                        <exclude>**/*SystemTest.groovy</exclude>
+                        <exclude>**/*SystemTest</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -150,7 +150,7 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>**/*SystemTest.groovy</include>
+                                <include>**/*SystemTest</include>
                             </includes>
                         </configuration>
                     </execution>
