@@ -80,7 +80,7 @@ class GoogleAuthorizationCodeExchangeSystemTest {
     @Test
     void "Should return exception when exchange failed"() {
         given:
-        def json = loadResourceAsString("${BASE_PATH}/invalid-client-response.json")
+        def json = loadResourceAsString("${BASE_PATH}/error-response-invalid-client.json")
         def httpResponse = defaultBadRequestHttpResponse() {
             body(jsonResponseBody(json))
         }
