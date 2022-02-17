@@ -1,6 +1,7 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mzlnk.oauth2.exchange.core.ExchangeException;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftAuthorizationCodeExchangeResponse;
 import okhttp3.Response;
 
@@ -18,8 +19,17 @@ public class MicrosoftAuthorizationCodeExchangeResponseHandler extends AbstractJ
     }
 
     @Override
-    public MicrosoftAuthorizationCodeExchangeResponse handleErrorResponse(Response response) {
-        return null;
+    protected MicrosoftAuthorizationCodeExchangeResponse handleErrorResponse(Response response) {
+        return response.code() == 400
+                ? this.handleBadRequestResponse(response)
+                : super.handleErrorResponse(response);
+    }
+
+    private MicrosoftAuthorizationCodeExchangeResponse handleBadRequestResponse(Response response) {
+        var jsonResponse = this.readJsonBody(response);
+
+        var message = "Exchange failed. Cause: Bad Request - %s".formatted(jsonResponse.get("error_description"));
+        throw new ExchangeException(message, response);
     }
 
 }

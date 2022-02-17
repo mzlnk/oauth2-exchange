@@ -1,6 +1,8 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mzlnk.oauth2.exchange.core.ExchangeException;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GoogleAuthorizationCodeExchangeResponse;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.KeycloakAuthorizationCodeExchangeResponse;
 import okhttp3.Response;
 
@@ -18,7 +20,17 @@ public class KeycloakAuthorizationCodeExchangeResponseHandler extends AbstractJs
     }
 
     @Override
-    public KeycloakAuthorizationCodeExchangeResponse handleErrorResponse(Response response) {
-        return null;
+    protected KeycloakAuthorizationCodeExchangeResponse handleErrorResponse(Response response) {
+        return response.code() == 400
+                ? this.handleBadRequestResponse(response)
+                : super.handleErrorResponse(response);
     }
+
+    private KeycloakAuthorizationCodeExchangeResponse handleBadRequestResponse(Response response) {
+        var jsonResponse = this.readJsonBody(response);
+
+        var message = "Exchange failed. Cause: Bad Request - %s".formatted(jsonResponse.get("error"));
+        throw new ExchangeException(message, response);
+    }
+
 }

@@ -40,6 +40,16 @@ class HttpFixtures {
                 .build()
     }
 
+    static def defaultUnauthorizedHttpResponse(@DelegatesTo(Response.Builder) Closure customizer = {}) {
+        return new Response.Builder()
+                .protocol(Protocol.HTTP_2)
+                .message('Unauthorized')
+                .code(401)
+                .request(MOCK_REQUEST)
+                .tap(customizer)
+                .build()
+    }
+
     static def defaultInternalServerErrorHttpResponse(@DelegatesTo(Response.Builder) Closure customizer = {}) {
         return new Response.Builder()
                 .protocol(Protocol.HTTP_2)

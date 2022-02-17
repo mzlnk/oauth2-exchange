@@ -1,15 +1,18 @@
 package io.mzlnk.oauth2.exchange.core;
 
+import okhttp3.Response;
+
 public class ExchangeException extends RuntimeException {
 
-    private final String httpResponse;
-    public ExchangeException(String message, String httpResponse) {
+    private final Response response;
+
+    public ExchangeException(String message, Response response) {
         super(message);
-        this.httpResponse = httpResponse;
+        this.response = response;
     }
 
-    public String getHttpResponse() {
-        return httpResponse;
+    public Response getResponse() {
+        return response;
     }
 
 }

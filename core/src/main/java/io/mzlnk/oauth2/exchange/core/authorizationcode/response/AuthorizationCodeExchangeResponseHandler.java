@@ -6,12 +6,6 @@ import java.util.Map;
 
 public interface AuthorizationCodeExchangeResponseHandler<R extends Map<String, Object>> {
 
-    R handleSuccessfulResponse(Response response);
-
-    R handleErrorResponse(Response response);
-
-    default R handleResponse(Response response) {
-        return response.isSuccessful() ? handleSuccessfulResponse(response) : handleErrorResponse(response);
-    }
+    R handleResponse(Response response);
 
 }
