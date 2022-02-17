@@ -101,7 +101,7 @@ class GoogleAuthorizationCodeExchangeSystemTest {
 
         then:
         assert exception != null
-        assert exception.getMessage() == 'Exchange failed. Cause: invalid_client, Unauthorized'
+        assert exception.getMessage() == 'Exchange failed. Cause: Bad Request - Unauthorized'
     }
 
     @Test
