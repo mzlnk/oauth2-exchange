@@ -1,18 +1,20 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.mzlnk.oauth2.exchange.core.ExchangeException
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookAuthorizationCodeExchangeClient
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookAuthorizationCodeExchangeResponseHandler
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.loadResourceAsString
-import static io.mzlnk.oauth2.exchange.core.utils.http.HttpFixtures.defaultSuccessHttpResponse
-import static io.mzlnk.oauth2.exchange.core.utils.http.HttpFixtures.jsonResponseBody
+import static io.mzlnk.oauth2.exchange.core.utils.http.HttpFixtures.*
 import static io.mzlnk.oauth2.exchange.core.utils.http.rule.HttpRules.get
 import static io.mzlnk.oauth2.exchange.core.utils.http.rule.HttpRules.withQueryParameter
+import static org.junit.jupiter.api.Assertions.assertThrows
 
 class FacebookAuthorizationCodeExchangeSystemTest {
 
@@ -71,26 +73,109 @@ class FacebookAuthorizationCodeExchangeSystemTest {
     }
 
     @Test
-    void "Should return exception when exchange failed"() {
+    void "Should return exception when exchange returns bad request response"() {
+        given:
+        def json = loadResourceAsString("${BASE_PATH}/error-response-invalid-client.json")
+        def httpResponse = defaultBadRequestHttpResponse() {
+            body(jsonResponseBody(json))
+        }
+
+        this.http.when(
+                get('https://graph.facebook.com/v12.0/oauth/access_token'),
+                withQueryParameter('client_id', 'some-client-id'),
+                withQueryParameter('client_secret', 'some-client-secret'),
+                withQueryParameter('redirect_uri', 'some-redirect-uri'),
+                withQueryParameter('code', 'some-code')
+        ).thenReturn(httpResponse)
+
+        when:
+        def exception = assertThrows(
+                ExchangeException,
+                () -> this.exchange.exchangeAuthorizationCode('some-code')
+        )
+
+        then:
+        assert exception != null
+        assert exception.message == 'Exchange failed. Cause: Bad Request - Missing or invalid client id.'
     }
 
     @Test
-    void "Should return exception when exchange does not return 2xx or 4xx response"() {
+    void "Should return exception when exchange returns error response other than bad request"() {
+        given:
+        def httpResponse = defaultInternalServerErrorHttpResponse()
+
+        this.http.when(
+                get('https://graph.facebook.com/v12.0/oauth/access_token'),
+                withQueryParameter('client_id', 'some-client-id'),
+                withQueryParameter('client_secret', 'some-client-secret'),
+                withQueryParameter('redirect_uri', 'some-redirect-uri'),
+                withQueryParameter('code', 'some-code')
+        ).thenReturn(httpResponse)
+
+        when:
+        def exception = assertThrows(
+                ExchangeException,
+                () -> this.exchange.exchangeAuthorizationCode('some-code')
+        )
+
+        then:
+        assert exception != null
+        assert exception.message == 'Exchange failed. Cause: Internal Server Error'
     }
 
     @Test
+    @Disabled('Disabled until GH-30 done')
+    // TODO: GH-30
     void "Should return exception when provide empty authorization code"() {
-        // TODO: GH-30
+        given:
+        def emptyCode = ''
+
+        when:
+        def exception = assertThrows(
+                IllegalArgumentException,
+                () -> this.exchange.exchangeAuthorizationCode(emptyCode)
+        )
+
+        then:
+        assert exception != null
+        assert exception.message == 'Authorization code cannot be empty'
     }
 
     @Test
+    @Disabled('Disabled until GH-30 done')
+    // TODO: GH-30
     void "Should return exception when provide null authorization code"() {
-        // TODO: GH-30
+        given:
+        def nullCode = null
+
+        when:
+        def exception = assertThrows(
+                IllegalArgumentException,
+                () -> this.exchange.exchangeAuthorizationCode(nullCode)
+        )
+
+        then:
+        assert exception != null
+        assert exception.message == 'Authorization code cannot be null'
     }
 
     @Test
+    @Disabled('Disabled until GH-30 done')
+    // TODO: GH-30
     void "Should not create exchange when provide null exchange client"() {
-        // TODO: GH-30
+        given:
+        def exchangeBuilder = new FacebookAuthorizationCodeExchange.Builder()
+                .httpClient(new OkHttpClient())
+
+        when:
+        def exception = assertThrows(
+                IllegalArgumentException,
+                () -> exchangeBuilder.build()
+        )
+
+        then:
+        assert exception != null
+        assert exception.message == 'Exchange client cannot be null'
     }
 
 }

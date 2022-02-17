@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Missing or invalid client id.",
+    "type": "OAuthException",
+    "code": 101,
+    "fbtrace_id": "Ae4c-Ab0KEfFq-ETmNRiZu9"
+  }
+}

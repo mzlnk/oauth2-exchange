@@ -23,10 +23,7 @@ public class GitHubAuthorizationCodeExchangeResponseHandler extends AbstractJson
             return super.handleErrorResponse(response);
         }
 
-        var jsonResponse = this.readJsonBody(response);
-        boolean errorFieldExists = jsonResponse.containsKey("error");
-
-        return errorFieldExists
+        return this.isBadRequestResponse(response)
                 ? this.handleBadRequestResponse(response)
                 : super.handleSuccessfulResponse(response);
     }
@@ -41,6 +38,11 @@ public class GitHubAuthorizationCodeExchangeResponseHandler extends AbstractJson
 
         var message = "Exchange failed. Cause: Bad Request - %s".formatted(jsonResponse.getOrDefault("error_description", ""));
         throw new ExchangeException(message, response);
+    }
+
+    private boolean isBadRequestResponse(Response response) {
+        var jsonResponse = this.readJsonBody(response);
+        return jsonResponse.containsKey("error");
     }
 
 }

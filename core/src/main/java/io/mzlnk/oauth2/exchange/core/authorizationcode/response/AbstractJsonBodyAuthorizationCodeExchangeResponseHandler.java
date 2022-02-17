@@ -22,7 +22,7 @@ public abstract class AbstractJsonBodyAuthorizationCodeExchangeResponseHandler<R
     @Override
     protected R handleSuccessfulResponse(Response response) {
         try {
-            var responseBody = Objects.requireNonNull(response.body()).string();
+            var responseBody = Objects.requireNonNull(response.peekBody(Long.MAX_VALUE)).string();
 
             var typeRef = new TypeReference<Map<String, Object>>() {};
             var values = this.objectMapper.readValue(responseBody, typeRef);

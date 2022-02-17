@@ -78,7 +78,7 @@ class GoogleAuthorizationCodeExchangeSystemTest {
     }
 
     @Test
-    void "Should return exception when exchange failed"() {
+    void "Should return exception when exchange returns bad request response"() {
         given:
         def json = loadResourceAsString("${BASE_PATH}/error-response-invalid-client.json")
         def httpResponse = defaultBadRequestHttpResponse() {
@@ -97,7 +97,10 @@ class GoogleAuthorizationCodeExchangeSystemTest {
         ).thenReturn(httpResponse)
 
         when:
-        def exception = assertThrows(ExchangeException, () -> this.exchange.exchangeAuthorizationCode('some-code'))
+        def exception = assertThrows(
+                ExchangeException,
+                () -> this.exchange.exchangeAuthorizationCode('some-code')
+        )
 
         then:
         assert exception != null
@@ -105,7 +108,7 @@ class GoogleAuthorizationCodeExchangeSystemTest {
     }
 
     @Test
-    void "Should return exception when exchange does not return 2xx or 4xx response"() {
+    void "Should return exception when exchange returns error response other than bad request one"() {
         given:
         def httpResponse = defaultInternalServerErrorHttpResponse()
 
@@ -121,7 +124,10 @@ class GoogleAuthorizationCodeExchangeSystemTest {
         ).thenReturn(httpResponse)
 
         when:
-        def exception = assertThrows(ExchangeException, () -> this.exchange.exchangeAuthorizationCode('some-code'))
+        def exception = assertThrows(
+                ExchangeException,
+                () -> this.exchange.exchangeAuthorizationCode('some-code')
+        )
 
         then:
         assert exception != null
@@ -136,11 +142,14 @@ class GoogleAuthorizationCodeExchangeSystemTest {
         def emptyCode = ''
 
         when:
-        def exception = assertThrows(IllegalArgumentException, () -> this.exchange.exchangeAuthorizationCode(emptyCode))
+        def exception = assertThrows(
+                IllegalArgumentException,
+                () -> this.exchange.exchangeAuthorizationCode(emptyCode)
+        )
 
         then:
         assert exception != null
-        assert exception.getMessage() == 'Authorization code cannot be empty'
+        assert exception.message == 'Authorization code cannot be empty'
     }
 
     @Test
@@ -151,11 +160,14 @@ class GoogleAuthorizationCodeExchangeSystemTest {
         def nullCode = null
 
         when:
-        def exception = assertThrows(IllegalArgumentException, () -> this.exchange.exchangeAuthorizationCode(nullCode))
+        def exception = assertThrows(
+                IllegalArgumentException,
+                () -> this.exchange.exchangeAuthorizationCode(nullCode)
+        )
 
         then:
         assert exception != null
-        assert exception.getMessage() == 'Authorization code cannot be null'
+        assert exception.message == 'Authorization code cannot be null'
     }
 
     @Test
@@ -167,11 +179,14 @@ class GoogleAuthorizationCodeExchangeSystemTest {
                 .httpClient(new OkHttpClient())
 
         when:
-        def exception = assertThrows(IllegalArgumentException, () -> exchangeBuilder.build())
+        def exception = assertThrows(
+                IllegalArgumentException,
+                () -> exchangeBuilder.build()
+        )
 
         then:
         assert exception != null
-        assert exception.getMessage() == 'Exchange client cannot be null'
+        assert exception.message == 'Exchange client cannot be null'
     }
 
 }
