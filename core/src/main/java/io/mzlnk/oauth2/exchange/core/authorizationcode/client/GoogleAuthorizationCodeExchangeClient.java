@@ -2,7 +2,7 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode.client;
 
 import org.jetbrains.annotations.NotNull;
 
-public class GoogleAuthorizationCodeExchangeClient extends AbstractAuthorizationCodeExchangeClient {
+public final class GoogleAuthorizationCodeExchangeClient extends AbstractAuthorizationCodeExchangeClient {
 
     public GoogleAuthorizationCodeExchangeClient(@NotNull String clientId,
                                                  @NotNull String clientSecret,

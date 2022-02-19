@@ -12,6 +12,7 @@ public abstract class AbstractAuthorizationCodeExchangeClient implements Authori
     protected AbstractAuthorizationCodeExchangeClient(@NotNull String clientId,
                                                       @NotNull String clientSecret,
                                                       @NotNull String redirectUri) {
+
         Preconditions.checkNotNull(clientId, "Parameter `clientId` cannot be null.");
         Preconditions.checkNotNull(clientSecret, "Parameter `clientSecret` cannot be null.");
         Preconditions.checkNotNull(redirectUri, "Parameter `redirectUri` cannot be null.");

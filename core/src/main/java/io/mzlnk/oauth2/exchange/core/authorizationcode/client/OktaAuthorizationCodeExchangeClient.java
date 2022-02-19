@@ -11,7 +11,7 @@ public abstract class OktaAuthorizationCodeExchangeClient extends AbstractAuthor
         super(clientId, clientSecret, redirectUri);
     }
 
-    public static class OktaSingleSignOnClient extends OktaAuthorizationCodeExchangeClient {
+    public static final class OktaSingleSignOnClient extends OktaAuthorizationCodeExchangeClient {
 
         private final String oktaDomain;
 
@@ -21,7 +21,7 @@ public abstract class OktaAuthorizationCodeExchangeClient extends AbstractAuthor
                                       @NotNull String oktaDomain) {
             super(clientId, clientSecret, redirectUri);
 
-            Preconditions.checkNotNull(oktaDomain,"Parameter `oktaDomain` cannot be null.");
+            Preconditions.checkNotNull(oktaDomain, "Parameter `oktaDomain` cannot be null.");
             this.oktaDomain = oktaDomain;
         }
 
@@ -33,7 +33,7 @@ public abstract class OktaAuthorizationCodeExchangeClient extends AbstractAuthor
 
     }
 
-    public static class OktaAuthorizationServerClient extends OktaAuthorizationCodeExchangeClient {
+    public static final class OktaAuthorizationServerClient extends OktaAuthorizationCodeExchangeClient {
 
         private final String oktaDomain;
         private final String authorizationServerId;

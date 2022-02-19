@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class OktaAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
+public final class OktaAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
     private OktaAuthorizationCodeExchangeResponse(@NotNull Map<String, Object> values) {
         super(values);

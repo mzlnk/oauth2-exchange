@@ -3,7 +3,7 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode.client;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
-public class KeycloakAuthorizationCodeExchangeClient extends AbstractAuthorizationCodeExchangeClient {
+public final class KeycloakAuthorizationCodeExchangeClient extends AbstractAuthorizationCodeExchangeClient {
 
     private final String host;
     private final String realm;

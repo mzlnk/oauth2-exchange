@@ -5,13 +5,13 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class MicrosoftAuthorizationCodeExchangeClient extends AbstractAuthorizationCodeExchangeClient {
 
-    public MicrosoftAuthorizationCodeExchangeClient(@NotNull String clientId,
-                                                    @NotNull String clientSecret,
-                                                    @NotNull String redirectUri) {
+    protected MicrosoftAuthorizationCodeExchangeClient(@NotNull String clientId,
+                                                       @NotNull String clientSecret,
+                                                       @NotNull String redirectUri) {
         super(clientId, clientSecret, redirectUri);
     }
 
-    public static class MicrosoftCommonClient extends MicrosoftAuthorizationCodeExchangeClient {
+    public static final class MicrosoftCommonClient extends MicrosoftAuthorizationCodeExchangeClient {
 
         public MicrosoftCommonClient(@NotNull String clientId,
                                      @NotNull String clientSecret,
@@ -26,7 +26,7 @@ public abstract class MicrosoftAuthorizationCodeExchangeClient extends AbstractA
         }
     }
 
-    public static class MicrosoftOrganizationClient extends MicrosoftAuthorizationCodeExchangeClient {
+    public static final class MicrosoftOrganizationClient extends MicrosoftAuthorizationCodeExchangeClient {
 
         public MicrosoftOrganizationClient(@NotNull String clientId,
                                            @NotNull String clientSecret,
@@ -42,7 +42,7 @@ public abstract class MicrosoftAuthorizationCodeExchangeClient extends AbstractA
 
     }
 
-    public static class MicrosoftConsumerClient extends MicrosoftAuthorizationCodeExchangeClient {
+    public static final class MicrosoftConsumerClient extends MicrosoftAuthorizationCodeExchangeClient {
 
         public MicrosoftConsumerClient(@NotNull String clientId,
                                        @NotNull String clientSecret,
@@ -58,7 +58,7 @@ public abstract class MicrosoftAuthorizationCodeExchangeClient extends AbstractA
 
     }
 
-    public static class MicrosoftAzureADClient extends MicrosoftAuthorizationCodeExchangeClient {
+    public static final class MicrosoftAzureADClient extends MicrosoftAuthorizationCodeExchangeClient {
 
         private final String azureADId;
 
