@@ -124,8 +124,6 @@ class FacebookAuthorizationCodeExchangeSystemTest {
     }
 
     @Test
-    @Disabled('Disabled until GH-30 done')
-    // TODO: GH-30
     void "Should return exception when provide empty authorization code"() {
         given:
         def emptyCode = ''
@@ -142,15 +140,13 @@ class FacebookAuthorizationCodeExchangeSystemTest {
     }
 
     @Test
-    @Disabled('Disabled until GH-30 done')
-    // TODO: GH-30
     void "Should return exception when provide null authorization code"() {
         given:
         def nullCode = null
 
         when:
         def exception = assertThrows(
-                IllegalArgumentException,
+                NullPointerException,
                 () -> this.exchange.exchangeAuthorizationCode(nullCode)
         )
 
@@ -160,22 +156,20 @@ class FacebookAuthorizationCodeExchangeSystemTest {
     }
 
     @Test
-    @Disabled('Disabled until GH-30 done')
-    // TODO: GH-30
-    void "Should not create exchange when provide null exchange client"() {
+    void "Should return exception when provide no exchange client"() {
         given:
         def exchangeBuilder = new FacebookAuthorizationCodeExchange.Builder()
                 .httpClient(new OkHttpClient())
 
         when:
         def exception = assertThrows(
-                IllegalArgumentException,
+                NullPointerException,
                 () -> exchangeBuilder.build()
         )
 
         then:
         assert exception != null
-        assert exception.message == 'Exchange client cannot be null'
+        assert exception.message == 'Parameter `exchangeClient` cannot be null.'
     }
 
 }
