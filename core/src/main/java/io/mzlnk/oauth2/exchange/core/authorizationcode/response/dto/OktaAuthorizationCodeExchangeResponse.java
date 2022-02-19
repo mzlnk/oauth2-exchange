@@ -1,14 +1,16 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 public class OktaAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
-    private OktaAuthorizationCodeExchangeResponse(Map<String, Object> values) {
+    private OktaAuthorizationCodeExchangeResponse(@NotNull Map<String, Object> values) {
         super(values);
     }
 
-    public static OktaAuthorizationCodeExchangeResponse from(Map<String, Object> values) {
+    public static OktaAuthorizationCodeExchangeResponse from(@NotNull Map<String, Object> values) {
         return new OktaAuthorizationCodeExchangeResponse(values);
     }
 

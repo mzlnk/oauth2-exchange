@@ -7,6 +7,7 @@ import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GitHubAuthor
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -15,14 +16,16 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<GitHubAuthorizationCodeExchangeResponse> {
 
-    private GitHubAuthorizationCodeExchange(OkHttpClient client,
-                                            GitHubAuthorizationCodeExchangeClient exchangeClient,
-                                            GitHubAuthorizationCodeExchangeResponseHandler responseHandler) {
+    private GitHubAuthorizationCodeExchange(@NotNull OkHttpClient client,
+                                            @NotNull GitHubAuthorizationCodeExchangeClient exchangeClient,
+                                            @NotNull GitHubAuthorizationCodeExchangeResponseHandler responseHandler) {
         super(client, exchangeClient, responseHandler);
     }
 
     @Override
-    public GitHubAuthorizationCodeExchangeResponse exchangeAuthorizationCode(String code) {
+    public GitHubAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+        verifyAuthorizationCode(code);
+
         var requestBody = new FormBody.Builder()
                 .add("client_id", this.exchangeClient.getClientId())
                 .add("client_secret", this.exchangeClient.getClientSecret())

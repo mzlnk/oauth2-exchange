@@ -1,14 +1,16 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 public class MicrosoftAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
-    public static MicrosoftAuthorizationCodeExchangeResponse from(Map<String, Object> values) {
+    public static MicrosoftAuthorizationCodeExchangeResponse from(@NotNull Map<String, Object> values) {
         return new MicrosoftAuthorizationCodeExchangeResponse(values);
     }
 
-    private MicrosoftAuthorizationCodeExchangeResponse(Map<String, Object> values) {
+    private MicrosoftAuthorizationCodeExchangeResponse(@NotNull Map<String, Object> values) {
         super(values);
     }
 

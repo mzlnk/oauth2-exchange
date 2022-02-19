@@ -1,14 +1,16 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 public class GoogleAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
-    public static GoogleAuthorizationCodeExchangeResponse from(Map<String, Object> values) {
+    public static GoogleAuthorizationCodeExchangeResponse from(@NotNull Map<String, Object> values) {
         return new GoogleAuthorizationCodeExchangeResponse(values);
     }
 
-    private GoogleAuthorizationCodeExchangeResponse(Map<String, Object> values) {
+    private GoogleAuthorizationCodeExchangeResponse(@NotNull Map<String, Object> values) {
         super(values);
     }
 

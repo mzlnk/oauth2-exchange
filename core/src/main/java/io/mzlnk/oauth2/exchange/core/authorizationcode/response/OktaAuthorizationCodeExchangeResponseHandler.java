@@ -4,22 +4,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.ExchangeException;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OktaAuthorizationCodeExchangeResponse;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public class OktaAuthorizationCodeExchangeResponseHandler extends AbstractJsonBodyAuthorizationCodeExchangeResponseHandler<OktaAuthorizationCodeExchangeResponse> {
 
-    public OktaAuthorizationCodeExchangeResponseHandler(ObjectMapper objectMapper) {
+    public OktaAuthorizationCodeExchangeResponseHandler(@NotNull ObjectMapper objectMapper) {
         super(objectMapper);
     }
 
     @Override
-    protected OktaAuthorizationCodeExchangeResponse convertValues(Map<String, Object> values) {
+    protected OktaAuthorizationCodeExchangeResponse convertValues(@NotNull Map<String, Object> values) {
         return OktaAuthorizationCodeExchangeResponse.from(values);
     }
 
     @Override
-    protected OktaAuthorizationCodeExchangeResponse handleErrorResponse(Response response) {
+    protected OktaAuthorizationCodeExchangeResponse handleErrorResponse(@NotNull Response response) {
         return switch (response.code()) {
             case 400 -> this.handleBadRequestResponse(response);
             case 401 -> this.handleUnauthorizedResponse(response);

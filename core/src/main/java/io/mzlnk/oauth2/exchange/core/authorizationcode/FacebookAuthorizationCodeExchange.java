@@ -7,6 +7,7 @@ import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.FacebookAuth
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -15,14 +16,16 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<FacebookAuthorizationCodeExchangeResponse> {
 
-    private FacebookAuthorizationCodeExchange(OkHttpClient client,
-                                              FacebookAuthorizationCodeExchangeClient exchangeClient,
-                                              FacebookAuthorizationCodeExchangeResponseHandler responseHandler) {
-        super(client, exchangeClient, responseHandler);
+    private FacebookAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
+                                              @NotNull FacebookAuthorizationCodeExchangeClient exchangeClient,
+                                              @NotNull FacebookAuthorizationCodeExchangeResponseHandler responseHandler) {
+        super(httpClient, exchangeClient, responseHandler);
     }
 
     @Override
-    public FacebookAuthorizationCodeExchangeResponse exchangeAuthorizationCode(String code) {
+    public FacebookAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+        verifyAuthorizationCode(code);
+
         var url = HttpUrl.parse("%s/v12.0/oauth/access_token".formatted(this.exchangeClient.getClientBaseUrl()))
                 .newBuilder()
                 .addQueryParameter("client_id", this.exchangeClient.getClientId())

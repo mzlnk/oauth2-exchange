@@ -76,4 +76,20 @@ class GitHubAuthorizationCodeExchangeResponseHandlerTest {
         assert exception.response == httpResponse
     }
 
+    @Test
+    void "Should return exception if objectMapper parameter is null"() {
+        given:
+        def objectMapper = null
+
+        when:
+        def exception = assertThrows(
+                NullPointerException,
+                () -> new GitHubAuthorizationCodeExchangeResponseHandler(objectMapper)
+        )
+
+        then:
+        assert exception != null
+        assert exception.message == 'Parameter `objectMapper` cannot be null.'
+    }
+
 }

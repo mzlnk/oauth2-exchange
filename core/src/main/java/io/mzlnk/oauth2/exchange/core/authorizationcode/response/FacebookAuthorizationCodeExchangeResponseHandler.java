@@ -4,22 +4,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.ExchangeException;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.FacebookAuthorizationCodeExchangeResponse;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public class FacebookAuthorizationCodeExchangeResponseHandler extends AbstractJsonBodyAuthorizationCodeExchangeResponseHandler<FacebookAuthorizationCodeExchangeResponse> {
 
-    public FacebookAuthorizationCodeExchangeResponseHandler(ObjectMapper objectMapper) {
+    public FacebookAuthorizationCodeExchangeResponseHandler(@NotNull ObjectMapper objectMapper) {
         super(objectMapper);
     }
 
     @Override
-    protected FacebookAuthorizationCodeExchangeResponse convertValues(Map<String, Object> values) {
+    protected FacebookAuthorizationCodeExchangeResponse convertValues(@NotNull Map<String, Object> values) {
         return FacebookAuthorizationCodeExchangeResponse.from(values);
     }
 
     @Override
-    protected FacebookAuthorizationCodeExchangeResponse handleErrorResponse(Response response) {
+    protected FacebookAuthorizationCodeExchangeResponse handleErrorResponse(@NotNull Response response) {
         return response.code() == 400
                 ? this.handleBadRequestResponse(response)
                 : super.handleErrorResponse(response);

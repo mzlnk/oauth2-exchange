@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.ExchangeException;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GitHubAuthorizationCodeExchangeResponse;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class GitHubAuthorizationCodeExchangeResponseHandler extends AbstractJson
      * HTTP 400 Bad Request related responses with HTTP 200 OK status.
      */
     @Override
-    public GitHubAuthorizationCodeExchangeResponse handleResponse(Response response) {
+    public GitHubAuthorizationCodeExchangeResponse handleResponse(@NotNull Response response) {
         if(!response.isSuccessful()) {
             return super.handleErrorResponse(response);
         }
@@ -29,7 +30,7 @@ public class GitHubAuthorizationCodeExchangeResponseHandler extends AbstractJson
     }
 
     @Override
-    protected GitHubAuthorizationCodeExchangeResponse convertValues(Map<String, Object> values) {
+    protected GitHubAuthorizationCodeExchangeResponse convertValues(@NotNull Map<String, Object> values) {
         return GitHubAuthorizationCodeExchangeResponse.from(values);
     }
 

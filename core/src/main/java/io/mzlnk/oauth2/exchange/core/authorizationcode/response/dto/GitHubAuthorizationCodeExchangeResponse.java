@@ -1,14 +1,16 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 public class GitHubAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
-    public static GitHubAuthorizationCodeExchangeResponse from(Map<String, Object> values) {
+    public static GitHubAuthorizationCodeExchangeResponse from(@NotNull Map<String, Object> values) {
         return new GitHubAuthorizationCodeExchangeResponse(values);
     }
 
-    private GitHubAuthorizationCodeExchangeResponse(Map<String, Object> values) {
+    private GitHubAuthorizationCodeExchangeResponse(@NotNull Map<String, Object> values) {
         super(values);
     }
 
