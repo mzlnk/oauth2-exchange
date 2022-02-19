@@ -8,6 +8,7 @@ import java.util.Map;
 public abstract class AbstractAuthorizationCodeExchangeResponseHandler<R extends Map<String, Object>> implements AuthorizationCodeExchangeResponseHandler<R> {
 
     protected abstract R handleSuccessfulResponse(@NotNull Response response);
+
     protected abstract R handleErrorResponse(@NotNull Response response);
 
     @Override

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class KeycloakAuthorizationCodeExchangeResponseHandler extends AbstractJsonBodyAuthorizationCodeExchangeResponseHandler<KeycloakAuthorizationCodeExchangeResponse> {
+public final class KeycloakAuthorizationCodeExchangeResponseHandler extends AbstractJsonBodyAuthorizationCodeExchangeResponseHandler<KeycloakAuthorizationCodeExchangeResponse> {
 
     public KeycloakAuthorizationCodeExchangeResponseHandler(@NotNull ObjectMapper objectMapper) {
         super(objectMapper);

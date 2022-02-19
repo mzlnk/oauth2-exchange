@@ -2,7 +2,7 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode.client;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FacebookAuthorizationCodeExchangeClient extends AbstractAuthorizationCodeExchangeClient {
+public final class FacebookAuthorizationCodeExchangeClient extends AbstractAuthorizationCodeExchangeClient {
 
     public FacebookAuthorizationCodeExchangeClient(@NotNull String clientId,
                                                    @NotNull String clientSecret,

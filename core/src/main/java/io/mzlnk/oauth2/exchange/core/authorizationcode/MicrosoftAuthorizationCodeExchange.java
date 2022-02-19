@@ -1,8 +1,8 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Preconditions;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.AuthorizationCodeExchangeClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.AuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
@@ -23,14 +23,14 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     private final String clientAssertionType;
     private final String clientAssertion;
 
-    private MicrosoftAuthorizationCodeExchange(@NotNull OkHttpClient client,
-                                               @NotNull MicrosoftAuthorizationCodeExchangeClient exchangeClient,
-                                               @NotNull MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler,
+    private MicrosoftAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
+                                               @NotNull AuthorizationCodeExchangeClient exchangeClient,
+                                               @NotNull AuthorizationCodeExchangeResponseHandler<MicrosoftAuthorizationCodeExchangeResponse> responseHandler,
                                                @Nullable String scope,
                                                @Nullable String codeVerifier,
                                                @Nullable String clientAssertionType,
                                                @Nullable String clientAssertion) {
-        super(client, exchangeClient, responseHandler);
+        super(httpClient, exchangeClient, responseHandler);
 
         this.scope = scope;
         this.codeVerifier = codeVerifier;
@@ -73,29 +73,25 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private MicrosoftAuthorizationCodeExchangeClient exchangeClient;
-        private MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler;
+        private AuthorizationCodeExchangeClient exchangeClient;
+        private AuthorizationCodeExchangeResponseHandler<MicrosoftAuthorizationCodeExchangeResponse> responseHandler;
 
         private String scope;
         private String codeVerifier;
         private String clientAssertionType;
         private String clientAssertion;
 
-        private static Supplier<MicrosoftAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
-            return () -> new MicrosoftAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
-        }
-
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
-        public Builder exchangeClient(MicrosoftAuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(AuthorizationCodeExchangeClient exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
 
-        public Builder responseHandler(MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler) {
+        public Builder responseHandler(AuthorizationCodeExchangeResponseHandler<MicrosoftAuthorizationCodeExchangeResponse> responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
@@ -131,6 +127,11 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
                     this.clientAssertion
             );
         }
+
+        private static Supplier<MicrosoftAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
+            return () -> new MicrosoftAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        }
+
     }
 
 }

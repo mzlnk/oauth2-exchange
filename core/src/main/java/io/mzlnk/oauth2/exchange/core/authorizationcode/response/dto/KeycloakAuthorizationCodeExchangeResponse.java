@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class KeycloakAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
+public final class KeycloakAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
     public static KeycloakAuthorizationCodeExchangeResponse from(@NotNull Map<String, Object> values) {
         return new KeycloakAuthorizationCodeExchangeResponse(values);

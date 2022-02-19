@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class FacebookAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
+public final class FacebookAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
     public static FacebookAuthorizationCodeExchangeResponse from(@NotNull Map<String, Object> values) {
         return new FacebookAuthorizationCodeExchangeResponse(values);

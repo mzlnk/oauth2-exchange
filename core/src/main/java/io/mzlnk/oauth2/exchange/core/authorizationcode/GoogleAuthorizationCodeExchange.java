@@ -1,15 +1,14 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Preconditions;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.AuthorizationCodeExchangeClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.AuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GoogleAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -18,10 +17,10 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<GoogleAuthorizationCodeExchangeResponse> {
 
-    private GoogleAuthorizationCodeExchange(@NotNull OkHttpClient client,
-                                            @NotNull GoogleAuthorizationCodeExchangeClient exchangeClient,
-                                            @NotNull GoogleAuthorizationCodeExchangeResponseHandler responseHandler) {
-        super(client, exchangeClient, responseHandler);
+    private GoogleAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
+                                            @NotNull AuthorizationCodeExchangeClient exchangeClient,
+                                            @NotNull AuthorizationCodeExchangeResponseHandler<GoogleAuthorizationCodeExchangeResponse> responseHandler) {
+        super(httpClient, exchangeClient, responseHandler);
     }
 
     @Override
@@ -49,20 +48,20 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private GoogleAuthorizationCodeExchangeClient exchangeClient;
-        private GoogleAuthorizationCodeExchangeResponseHandler responseHandler;
+        private AuthorizationCodeExchangeClient exchangeClient;
+        private AuthorizationCodeExchangeResponseHandler<GoogleAuthorizationCodeExchangeResponse> responseHandler;
 
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
-        public Builder exchangeClient(GoogleAuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(AuthorizationCodeExchangeClient exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
 
-        public Builder responseHandler(GoogleAuthorizationCodeExchangeResponseHandler responseHandler) {
+        public Builder responseHandler(AuthorizationCodeExchangeResponseHandler<GoogleAuthorizationCodeExchangeResponse> responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }

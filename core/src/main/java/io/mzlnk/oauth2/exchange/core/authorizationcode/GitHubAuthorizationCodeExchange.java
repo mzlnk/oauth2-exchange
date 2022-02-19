@@ -1,7 +1,8 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubAuthorizationCodeExchangeClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.AuthorizationCodeExchangeClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.AuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GitHubAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
@@ -16,10 +17,10 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<GitHubAuthorizationCodeExchangeResponse> {
 
-    private GitHubAuthorizationCodeExchange(@NotNull OkHttpClient client,
-                                            @NotNull GitHubAuthorizationCodeExchangeClient exchangeClient,
-                                            @NotNull GitHubAuthorizationCodeExchangeResponseHandler responseHandler) {
-        super(client, exchangeClient, responseHandler);
+    private GitHubAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
+                                            @NotNull AuthorizationCodeExchangeClient exchangeClient,
+                                            @NotNull AuthorizationCodeExchangeResponseHandler<GitHubAuthorizationCodeExchangeResponse> responseHandler) {
+        super(httpClient, exchangeClient, responseHandler);
     }
 
     @Override
@@ -45,24 +46,20 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private GitHubAuthorizationCodeExchangeClient exchangeClient;
-        private GitHubAuthorizationCodeExchangeResponseHandler responseHandler;
-
-        private static Supplier<GitHubAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
-            return () -> new GitHubAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
-        }
+        private AuthorizationCodeExchangeClient exchangeClient;
+        private AuthorizationCodeExchangeResponseHandler<GitHubAuthorizationCodeExchangeResponse> responseHandler;
 
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
-        public Builder exchangeClient(GitHubAuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(AuthorizationCodeExchangeClient exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
 
-        public Builder responseHandler(GitHubAuthorizationCodeExchangeResponseHandler responseHandler) {
+        public Builder responseHandler(AuthorizationCodeExchangeResponseHandler<GitHubAuthorizationCodeExchangeResponse> responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
@@ -74,6 +71,11 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
                     Optional.ofNullable(this.responseHandler).orElseGet(defaultResponseHandler())
             );
         }
+
+        private static Supplier<GitHubAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
+            return () -> new GitHubAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        }
+
     }
 
 }

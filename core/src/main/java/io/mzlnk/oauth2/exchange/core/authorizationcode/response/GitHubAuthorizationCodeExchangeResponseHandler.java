@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class GitHubAuthorizationCodeExchangeResponseHandler extends AbstractJsonBodyAuthorizationCodeExchangeResponseHandler<GitHubAuthorizationCodeExchangeResponse> {
+public final class GitHubAuthorizationCodeExchangeResponseHandler extends AbstractJsonBodyAuthorizationCodeExchangeResponseHandler<GitHubAuthorizationCodeExchangeResponse> {
 
     public GitHubAuthorizationCodeExchangeResponseHandler(ObjectMapper objectMapper) {
         super(objectMapper);

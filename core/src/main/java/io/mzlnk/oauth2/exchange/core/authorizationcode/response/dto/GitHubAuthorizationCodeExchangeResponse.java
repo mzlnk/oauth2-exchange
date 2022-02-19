@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class GitHubAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
+public final class GitHubAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
     public static GitHubAuthorizationCodeExchangeResponse from(@NotNull Map<String, Object> values) {
         return new GitHubAuthorizationCodeExchangeResponse(values);
