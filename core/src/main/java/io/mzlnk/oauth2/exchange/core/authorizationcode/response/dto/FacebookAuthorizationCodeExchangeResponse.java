@@ -1,14 +1,16 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 public class FacebookAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
-    public static FacebookAuthorizationCodeExchangeResponse from(Map<String, Object> values) {
+    public static FacebookAuthorizationCodeExchangeResponse from(@NotNull Map<String, Object> values) {
         return new FacebookAuthorizationCodeExchangeResponse(values);
     }
 
-    private FacebookAuthorizationCodeExchangeResponse(Map<String, Object> values) {
+    private FacebookAuthorizationCodeExchangeResponse(@NotNull Map<String, Object> values) {
         super(values);
     }
 

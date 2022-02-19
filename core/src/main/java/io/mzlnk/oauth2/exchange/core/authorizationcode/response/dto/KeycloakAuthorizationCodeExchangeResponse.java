@@ -1,14 +1,16 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 public class KeycloakAuthorizationCodeExchangeResponse extends AbstractAuthorizationCodeExchangeResponse {
 
-    public static KeycloakAuthorizationCodeExchangeResponse from(Map<String, Object> values) {
+    public static KeycloakAuthorizationCodeExchangeResponse from(@NotNull Map<String, Object> values) {
         return new KeycloakAuthorizationCodeExchangeResponse(values);
     }
 
-    private KeycloakAuthorizationCodeExchangeResponse(Map<String, Object> values) {
+    private KeycloakAuthorizationCodeExchangeResponse(@NotNull Map<String, Object> values) {
         super(values);
     }
 

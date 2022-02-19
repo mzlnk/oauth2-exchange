@@ -4,22 +4,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.ExchangeException;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftAuthorizationCodeExchangeResponse;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public class MicrosoftAuthorizationCodeExchangeResponseHandler extends AbstractJsonBodyAuthorizationCodeExchangeResponseHandler<MicrosoftAuthorizationCodeExchangeResponse> {
 
-    public MicrosoftAuthorizationCodeExchangeResponseHandler(ObjectMapper objectMapper) {
+    public MicrosoftAuthorizationCodeExchangeResponseHandler(@NotNull ObjectMapper objectMapper) {
         super(objectMapper);
     }
 
     @Override
-    protected MicrosoftAuthorizationCodeExchangeResponse convertValues(Map<String, Object> values) {
+    protected MicrosoftAuthorizationCodeExchangeResponse convertValues(@NotNull Map<String, Object> values) {
         return MicrosoftAuthorizationCodeExchangeResponse.from(values);
     }
 
     @Override
-    protected MicrosoftAuthorizationCodeExchangeResponse handleErrorResponse(Response response) {
+    protected MicrosoftAuthorizationCodeExchangeResponse handleErrorResponse(@NotNull Response response) {
         return response.code() == 400
                 ? this.handleBadRequestResponse(response)
                 : super.handleErrorResponse(response);

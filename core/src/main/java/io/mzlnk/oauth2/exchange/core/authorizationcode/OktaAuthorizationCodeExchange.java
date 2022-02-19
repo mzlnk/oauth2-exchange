@@ -8,6 +8,8 @@ import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OktaAuthoriz
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -16,14 +18,16 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<OktaAuthorizationCodeExchangeResponse> {
 
-    private OktaAuthorizationCodeExchange(OkHttpClient httpClient,
-                                          OktaAuthorizationCodeExchangeClient exchangeClient,
-                                          OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
+    private OktaAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
+                                          @NotNull OktaAuthorizationCodeExchangeClient exchangeClient,
+                                          @NotNull OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
         super(httpClient, exchangeClient, responseHandler);
     }
 
     @Override
-    public OktaAuthorizationCodeExchangeResponse exchangeAuthorizationCode(String code) {
+    public OktaAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+        verifyAuthorizationCode(code);
+
         var requestBody = new FormBody.Builder()
                 .add("client_id", this.exchangeClient.getClientId())
                 .add("client_secret", this.exchangeClient.getClientSecret())
@@ -68,8 +72,6 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
         }
 
         public OktaAuthorizationCodeExchange build() {
-            Preconditions.checkNotNull(this.exchangeClient, "Okta client cannot be null.");
-
             return new OktaAuthorizationCodeExchange(
                     Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),
                     this.exchangeClient,

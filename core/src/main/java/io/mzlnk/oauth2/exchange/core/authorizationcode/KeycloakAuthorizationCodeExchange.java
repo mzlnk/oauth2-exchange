@@ -1,12 +1,15 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakAuthorizationCodeExchangeClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.KeycloakAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.KeycloakAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -15,14 +18,16 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<KeycloakAuthorizationCodeExchangeResponse> {
 
-    private KeycloakAuthorizationCodeExchange(OkHttpClient httpClient,
-                                              KeycloakAuthorizationCodeExchangeClient exchangeClient,
-                                              KeycloakAuthorizationCodeExchangeResponseHandler responseHandler) {
+    private KeycloakAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
+                                              @NotNull KeycloakAuthorizationCodeExchangeClient exchangeClient,
+                                              @NotNull KeycloakAuthorizationCodeExchangeResponseHandler responseHandler) {
         super(httpClient, exchangeClient, responseHandler);
     }
 
     @Override
-    public KeycloakAuthorizationCodeExchangeResponse exchangeAuthorizationCode(String code) {
+    public KeycloakAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+        verifyAuthorizationCode(code);
+
         var builder = new FormBody.Builder()
                 .add("client_id", this.exchangeClient.getClientId())
                 .add("client_secret", this.exchangeClient.getClientSecret())

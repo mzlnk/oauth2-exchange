@@ -1,5 +1,8 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto;
 
+import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +12,10 @@ public abstract class AbstractAuthorizationCodeExchangeResponse implements Map<S
 
     private final Map<String, Object> delegate;
 
-    protected AbstractAuthorizationCodeExchangeResponse(Map<String, Object> values) {
+    protected AbstractAuthorizationCodeExchangeResponse(@NotNull Map<String, Object> values) {
         this();
+
+        Preconditions.checkNotNull(values, "Cannot create response from null values.");
         this.delegate.putAll(values);
     }
 

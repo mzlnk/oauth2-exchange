@@ -1,12 +1,15 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -20,14 +23,15 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     private final String clientAssertionType;
     private final String clientAssertion;
 
-    private MicrosoftAuthorizationCodeExchange(OkHttpClient client,
-                                               MicrosoftAuthorizationCodeExchangeClient exchangeClient,
-                                               MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler,
-                                               String scope,
-                                               String codeVerifier,
-                                               String clientAssertionType,
-                                               String clientAssertion) {
+    private MicrosoftAuthorizationCodeExchange(@NotNull OkHttpClient client,
+                                               @NotNull MicrosoftAuthorizationCodeExchangeClient exchangeClient,
+                                               @NotNull MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler,
+                                               @Nullable String scope,
+                                               @Nullable String codeVerifier,
+                                               @Nullable String clientAssertionType,
+                                               @Nullable String clientAssertion) {
         super(client, exchangeClient, responseHandler);
+
         this.scope = scope;
         this.codeVerifier = codeVerifier;
         this.clientAssertionType = clientAssertionType;
@@ -35,7 +39,9 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     }
 
     @Override
-    public MicrosoftAuthorizationCodeExchangeResponse exchangeAuthorizationCode(String code) {
+    public MicrosoftAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+        verifyAuthorizationCode(code);
+
         var builder = new FormBody.Builder()
                 .add("client_id", this.exchangeClient.getClientId())
                 .add("client_secret", this.exchangeClient.getClientSecret())
