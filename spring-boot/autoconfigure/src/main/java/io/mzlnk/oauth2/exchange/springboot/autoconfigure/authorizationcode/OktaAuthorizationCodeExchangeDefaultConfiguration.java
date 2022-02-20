@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConditionalOnPropertiesExist(
-        prefix = "oauth2.exchange.providers.microsoft",
+        prefix = "oauth2.exchange.providers.okta",
         properties = {"client-id", "client-secret", "redirect-uri", "client-type"}
 )
 public class OktaAuthorizationCodeExchangeDefaultConfiguration {
