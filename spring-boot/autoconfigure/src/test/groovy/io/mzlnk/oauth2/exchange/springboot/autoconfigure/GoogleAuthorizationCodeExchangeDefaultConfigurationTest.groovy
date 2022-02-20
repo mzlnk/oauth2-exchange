@@ -1,6 +1,6 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure
 
-import io.mzlnk.oauth2.exchange.core.authorizationcode.GoogleAuthorizationCodeExchange
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode.GoogleAuthorizationCodeExchangeDefaultConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,25 +25,84 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withInitializer(initializer)
     }
 
-//    @Test
-//    void "Should default response handler be configured if property is present"() {
-//        this.contextRunner
-//                .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
-//                .withPropertyValues("oauth2.exchange.providers.google.client-id=some-client-id")
-//                .withPropertyValues("oauth2.exchange.providers.google.client-secret=some-client-secret")
-//                .withPropertyValues("oauth2.exchange.providers.google.redirect-uri=some-redirect-uri")
-//                .withPropertyValues("abc.a3=1234")
-////                .withPropertyValues(
-////                        "${GOOGLE_EXCHANGE_PREFIX}.client-id='some-client-id'",
-////                        "${GOOGLE_EXCHANGE_PREFIX}.client-secret='some-client-secret'",
-////                        "${GOOGLE_EXCHANGE_PREFIX}.redirect-uri='some-redirect-uri'")
-//
-//                .run((context) -> {
-//                    context.getProperties()
-//                    assertThat(context).hasSingleBean(GoogleAuthorizationCodeExchange)
-//                })
-//
-//    }
+    @Test
+    void "Should application context not fail to start if properties are present"() {
+        this.contextRunner
+                .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-id=some-client-id")
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-secret=some-client-secret")
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.redirect-uri=some-redirect-uri")
+                .run((context) -> {
+                    assertThat(context).hasNotFailed()
+                })
+    }
 
+    @Test
+    void "Should application context not fail to start if properties are not present"() {
+        this.contextRunner
+                .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
+                .run((context) -> {
+                    assertThat(context).hasNotFailed()
+                })
+    }
+
+    @Test
+    void "Should auto-configure all components if properties are present"() {
+        this.contextRunner
+                .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-id=some-client-id")
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-secret=some-client-secret")
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.redirect-uri=some-redirect-uri")
+                .run((context) -> {
+                    assertThat(context).hasBean('defaultGoogleExchangeClient')
+                    assertThat(context).hasBean('defaultGoogleResponseHandler')
+                    assertThat(context).hasBean('defaultGoogleExchange')
+                })
+    }
+
+    @Test
+    void "Should not auto-configure all components if no properties are present"() {
+        this.contextRunner
+                .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
+                .run((context) -> {
+                    assertThat(context).doesNotHaveBean('defaultGoogleExchangeClient')
+                    assertThat(context).doesNotHaveBean('defaultGoogleResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultGoogleExchange')
+                })
+    }
+
+    @Test
+    void "Should not auto-configure all components if not all properties are present"() {
+        this.contextRunner
+                .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-id=some-client-id")
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-secret=some-client-secret")
+                .run((context) -> {
+                    assertThat(context).doesNotHaveBean('defaultGoogleExchangeClient')
+                    assertThat(context).doesNotHaveBean('defaultGoogleResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultGoogleExchange')
+                })
+    }
+
+    @Test
+    void "Should auto-configure exchange client with proper properties values"() {
+        def clientId = 'some-client-id'
+        def clientSecret = 'some-client-secret'
+        def redirectUri = 'some-redirect-uri'
+
+        this.contextRunner
+                .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-id=${clientId}")
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-secret=${clientSecret}")
+                .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.redirect-uri=${redirectUri}")
+                .run((context) -> {
+                    assertThat(context).hasBean('defaultGoogleExchangeClient')
+
+                    def exchangeClient = context.getBean('defaultGoogleExchangeClient', GoogleAuthorizationCodeExchangeClient)
+                    assert exchangeClient.clientId == clientId
+                    assert exchangeClient.clientSecret == clientSecret
+                    assert exchangeClient.redirectUri == redirectUri
+                })
+    }
 
 }
