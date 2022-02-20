@@ -110,10 +110,8 @@ class KeycloakAuthorizationCodeExchangeDefaultConfigurationTest {
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
-                    // TODO: implement getter for host field - GH-48
-                    // assert exchangeClient.host == host
-                    // TODO: implement getter for realm field - GH-48
-                    // assert exchangeClient.realm == realm
+                    assert exchangeClient.host == host
+                    assert exchangeClient.realm == realm
                 })
     }
 
