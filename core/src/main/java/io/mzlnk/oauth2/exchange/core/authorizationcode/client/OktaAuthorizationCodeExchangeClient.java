@@ -31,6 +31,10 @@ public abstract class OktaAuthorizationCodeExchangeClient extends AbstractAuthor
             return "%s/oauth2".formatted(this.oktaDomain);
         }
 
+        public String getOktaDomain() {
+            return this.oktaDomain;
+        }
+
     }
 
     public static final class OktaAuthorizationServerClient extends OktaAuthorizationCodeExchangeClient {
@@ -56,6 +60,14 @@ public abstract class OktaAuthorizationCodeExchangeClient extends AbstractAuthor
         @Override
         public String getClientBaseUrl() {
             return "%s/oauth2/%s".formatted(this.oktaDomain, this.authorizationServerId);
+        }
+
+        public String getOktaDomain() {
+            return this.oktaDomain;
+        }
+
+        public String getAuthorizationServerId() {
+            return this.authorizationServerId;
         }
 
     }
