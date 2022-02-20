@@ -78,6 +78,10 @@ public abstract class MicrosoftAuthorizationCodeExchangeClient extends AbstractA
             return "https://login.microsoftonline.com/%s".formatted(this.azureADId);
         }
 
+        public String getAzureADId() {
+            return this.azureADId;
+        }
+
     }
 
 }
