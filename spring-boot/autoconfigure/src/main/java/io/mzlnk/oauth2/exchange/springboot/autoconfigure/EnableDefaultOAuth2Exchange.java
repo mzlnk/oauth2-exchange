@@ -15,7 +15,8 @@ import java.lang.annotation.Target;
         MicrosoftAuthorizationCodeExchangeDefaultConfiguration.class,
         OktaAuthorizationCodeExchangeDefaultConfiguration.class,
         GitHubAuthorizationCodeExchangeDefaultConfiguration.class,
-        FacebookAuthorizationCodeExchangeDefaultConfiguration.class
+        FacebookAuthorizationCodeExchangeDefaultConfiguration.class,
+        KeycloakAuthorizationCodeExchangeDefaultConfiguration.class
 })
 public @interface EnableDefaultOAuth2Exchange {
 
