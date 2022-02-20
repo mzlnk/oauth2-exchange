@@ -6,6 +6,8 @@ import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationC
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -18,6 +20,8 @@ import org.springframework.context.annotation.Configuration;
         properties = {"client-id", "client-secret", "redirect-uri", "client-type"}
 )
 public class OktaAuthorizationCodeExchangeDefaultConfiguration {
+
+    private final Logger log = LoggerFactory.getLogger(OktaAuthorizationCodeExchangeDefaultConfiguration.class);
 
     @Bean(name = "defaultOktaExchangeClient")
     @ConditionalOnPropertiesExist(prefix = "oauth2.exchange.providers.okta", properties = "okta-domain")
@@ -49,6 +53,7 @@ public class OktaAuthorizationCodeExchangeDefaultConfiguration {
     public OktaAuthorizationCodeExchange oktaAuthorizationCodeExchange(OkHttpClient httpClient,
                                                                        @Qualifier("defaultOktaExchangeClient") OktaAuthorizationCodeExchangeClient exchangeClient,
                                                                        @Qualifier("defaultOktaResponseHandler") OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
+        log.debug("Creating default OAuth2 authorization code exchange for Okta auth provider");
         return new OktaAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)

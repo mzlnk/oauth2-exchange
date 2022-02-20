@@ -5,6 +5,8 @@ import io.mzlnk.oauth2.exchange.core.authorizationcode.MicrosoftAuthorizationCod
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,6 +19,8 @@ import org.springframework.context.annotation.Configuration;
         properties = {"client-id", "client-secret", "redirect-uri", "client-type"}
 )
 public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
+
+    private final Logger log = LoggerFactory.getLogger(MicrosoftAuthorizationCodeExchangeDefaultConfiguration.class);
 
     @Bean(name = "defaultMicrosoftExchangeClient")
     @ConditionalOnProperty(prefix = "oauth2.exchange.providers.microsoft", name = "client-type", havingValue = "COMMON")
@@ -64,6 +68,7 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
                                                                                  @Value("${oauth2.exchange.providers.microsoft.code-verifier:#{null}}") String codeVerifier,
                                                                                  @Value("${oauth2.exchange.providers.microsoft.client-assertion-type:#{null}}") String clientAssertionType,
                                                                                  @Value("${oauth2.exchange.providers.microsoft.client-assertion:#{null}}") String clientAssertion) {
+        log.debug("Creating default OAuth2 authorization code exchange for Microsoft auth provider");
         return new MicrosoftAuthorizationCodeExchange.Builder()
                 .exchangeClient(exchangeClient)
                 .responseHandler(responseHandler)

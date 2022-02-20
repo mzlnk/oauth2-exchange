@@ -6,6 +6,8 @@ import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizatio
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,8 @@ import org.springframework.context.annotation.Configuration;
         properties = {"client-id", "client-secret", "redirect-uri"}
 )
 public class GoogleAuthorizationCodeExchangeDefaultConfiguration {
+
+    private final Logger log = LoggerFactory.getLogger(GoogleAuthorizationCodeExchangeDefaultConfiguration.class);
 
     @Bean("defaultGoogleExchangeClient")
     public GoogleAuthorizationCodeExchangeClient googleAuthorizationCodeExchangeClient(@Value("${oauth2.exchange.providers.google.client-id}") String clientId,
@@ -34,6 +38,7 @@ public class GoogleAuthorizationCodeExchangeDefaultConfiguration {
     public GoogleAuthorizationCodeExchange googleAuthorizationCodeExchange(OkHttpClient httpClient,
                                                                            @Qualifier("defaultGoogleExchangeClient") GoogleAuthorizationCodeExchangeClient exchangeClient,
                                                                            @Qualifier("defaultGoogleResponseHandler") GoogleAuthorizationCodeExchangeResponseHandler responseHandler) {
+        log.debug("Creating default OAuth2 authorization code exchange for Google auth provider");
         return new GoogleAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
