@@ -28,4 +28,12 @@ public final class KeycloakAuthorizationCodeExchangeClient extends AbstractAutho
         return "%s/auth/realms/%s".formatted(this.host, this.realm);
     }
 
+    public String getHost() {
+        return this.host;
+    }
+
+    public String getRealm() {
+        return this.realm;
+    }
+
 }
