@@ -165,10 +165,8 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
-                    // TODO: implement getter for oktaDomain field - GH-44
-                    // assert exchangeClient.oktaDomain == oktaDomain
-                    // TODO: implement getter for oktaAuthorizationServerId field - GH-44
-                    // assert exchangeClient.oktaAuthorizationServerId == oktaAuthorizationServerId
+                    assert exchangeClient.oktaDomain == oktaDomain
+                    assert exchangeClient.authorizationServerId == oktaAuthorizationServerId
                 })
     }
 
