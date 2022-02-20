@@ -26,7 +26,7 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
     }
 
     @Test
-    void "Should application context not fail to start if properties are present"() {
+    void "Should application context not fail to start if required properties are present"() {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
                 .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-id=some-client-id")
@@ -38,7 +38,7 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
     }
 
     @Test
-    void "Should application context not fail to start if properties are not present"() {
+    void "Should application context not fail to start if required properties are not present"() {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
                 .run((context) -> {
