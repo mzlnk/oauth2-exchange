@@ -230,8 +230,7 @@ class MicrosoftAuthorizationCodeExchangeDefaultConfigurationTest {
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
-                    // TODO: implement getter for azureAdId field - GH-41
-                    // assert exchangeClient.azureAdId == azureADId
+                    assert exchangeClient.azureADId == azureADId
                 })
     }
 
