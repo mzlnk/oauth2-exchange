@@ -2,6 +2,7 @@ package io.mzlnk.oauth2.exchange.springboot.autoconfigure;
 
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode.GoogleAuthorizationCodeExchangeDefaultConfiguration;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode.MicrosoftAuthorizationCodeExchangeDefaultConfiguration;
+import io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode.OktaAuthorizationCodeExchangeDefaultConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
@@ -13,7 +14,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Import({
         GoogleAuthorizationCodeExchangeDefaultConfiguration.class,
-        MicrosoftAuthorizationCodeExchangeDefaultConfiguration.class
+        MicrosoftAuthorizationCodeExchangeDefaultConfiguration.class,
+        OktaAuthorizationCodeExchangeDefaultConfiguration.class
 })
 public @interface EnableDefaultOAuth2Exchange {
 

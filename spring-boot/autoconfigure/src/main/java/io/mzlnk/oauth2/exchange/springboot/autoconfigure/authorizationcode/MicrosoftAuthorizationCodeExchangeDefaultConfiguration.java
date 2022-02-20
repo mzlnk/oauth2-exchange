@@ -31,7 +31,6 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
     public MicrosoftAuthorizationCodeExchangeClient microsoftAuthorizationCodeExchangeConsumerClient(@Value("${oauth2.exchange.providers.microsoft.client-id}") String clientId,
                                                                                                      @Value("${oauth2.exchange.providers.microsoft.client-secret}") String clientSecret,
                                                                                                      @Value("${oauth2.exchange.providers.microsoft.redirect-uri}") String redirectUri) {
-        System.out.println("consumer exchange client");
         return new MicrosoftAuthorizationCodeExchangeClient.MicrosoftConsumerClient(clientId, clientSecret, redirectUri);
     }
 
@@ -40,7 +39,6 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
     public MicrosoftAuthorizationCodeExchangeClient microsoftAuthorizationCodeExchangeOrganizationClient(@Value("${oauth2.exchange.providers.microsoft.client-id}") String clientId,
                                                                                                          @Value("${oauth2.exchange.providers.microsoft.client-secret}") String clientSecret,
                                                                                                          @Value("${oauth2.exchange.providers.microsoft.redirect-uri}") String redirectUri) {
-        System.out.println("organization exchange client");
         return new MicrosoftAuthorizationCodeExchangeClient.MicrosoftOrganizationClient(clientId, clientSecret, redirectUri);
     }
 
