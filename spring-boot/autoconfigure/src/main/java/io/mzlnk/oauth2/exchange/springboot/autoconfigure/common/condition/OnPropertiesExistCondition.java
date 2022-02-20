@@ -22,7 +22,6 @@ public class OnPropertiesExistCondition implements Condition {
                 .map(property -> "%s.%s".formatted(prefix, property))
                 .allMatch(context.getEnvironment()::containsProperty);
 
-        System.out.println("condition: " + result);
         return result;
     }
 
