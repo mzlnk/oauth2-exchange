@@ -61,6 +61,7 @@
 
         <!-- dependencies versions -->
         <spring-boot-dependencies.version>2.6.2</spring-boot-dependencies.version>
+        <slf4j-api.version>1.7.36</slf4j-api.version>
     </properties>
 
     <dependencyManagement>
@@ -84,6 +85,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
         </dependency>
 
         <!-- core library -->

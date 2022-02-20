@@ -6,6 +6,8 @@ import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubAuthorizatio
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,8 @@ import org.springframework.context.annotation.Configuration;
         properties = {"client-id", "client-secret", "redirect-uri"}
 )
 public class GitHubAuthorizationCodeExchangeDefaultConfiguration {
+
+    private final Logger log = LoggerFactory.getLogger(GitHubAuthorizationCodeExchangeDefaultConfiguration.class);
 
     @Bean("defaultGitHubExchangeClient")
     public GitHubAuthorizationCodeExchangeClient gitHubAuthorizationCodeExchangeClient(@Value("${oauth2.exchange.providers.github.client-id}") String clientId,
@@ -34,6 +38,7 @@ public class GitHubAuthorizationCodeExchangeDefaultConfiguration {
     public GitHubAuthorizationCodeExchange gitHubAuthorizationCodeExchange(OkHttpClient httpClient,
                                                                            @Qualifier("defaultGitHubExchangeClient") GitHubAuthorizationCodeExchangeClient exchangeClient,
                                                                            @Qualifier("defaultGitHubResponseHandler") GitHubAuthorizationCodeExchangeResponseHandler responseHandler) {
+        log.debug("Creating default OAuth2 authorization code exchange for GitHub auth provider");
         return new GitHubAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
