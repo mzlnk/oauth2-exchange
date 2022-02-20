@@ -1,7 +1,7 @@
-package io.mzlnk.oauth2.exchange.springboot.autoconfigure
+package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient
-import io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode.GoogleAuthorizationCodeExchangeDefaultConfiguration
+import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.AutoConfigurations
@@ -26,7 +26,7 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
     }
 
     @Test
-    void "Should application context not fail to start if properties are present"() {
+    void "Should application context not fail to start if required properties are present"() {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
                 .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-id=some-client-id")
@@ -38,7 +38,7 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
     }
 
     @Test
-    void "Should application context not fail to start if properties are not present"() {
+    void "Should application context not fail to start if required properties are not present"() {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
                 .run((context) -> {
