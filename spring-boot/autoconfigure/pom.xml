@@ -56,6 +56,9 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
+        <!-- core library version -->
+        <oauth2-exchange-core.version>${project.version}</oauth2-exchange-core.version>
+
         <!-- dependencies versions -->
         <spring-boot-dependencies.version>2.6.2</spring-boot-dependencies.version>
     </properties>
@@ -83,6 +86,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- core library -->
+        <dependency>
+            <groupId>io.mzlnk.oauth2.exchange</groupId>
+            <artifactId>oauth2-exchange-core</artifactId>
+            <version>${oauth2-exchange-core.version}</version>
+        </dependency>
+
         <!-- tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,6 +112,13 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.assertj</groupId>-->
+<!--            <artifactId>assertj-core</artifactId>-->
+<!--            <version>3.22.0</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
     </dependencies>
 
     <build>
