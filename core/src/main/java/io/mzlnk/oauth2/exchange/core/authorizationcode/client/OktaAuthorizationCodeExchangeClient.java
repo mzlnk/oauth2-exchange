@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  *     <li>{@link OktaAuthorizationCodeExchangeAuthorizationServerClient}</li>
  * </ul>
  * All implementations are created based on information found posted on official
- * <a href="https://developer.okta.com/docs/reference/api/oidc/#_2-okta-as-the-identity-platform-for-your-app-or-api">documentation site</a>.
+ * <a href="https://developer.okta.com/docs/reference/api/oidc/">documentation site</a>.
  */
 public sealed abstract class OktaAuthorizationCodeExchangeClient
         extends AbstractAuthorizationCodeExchangeClient
