@@ -1,8 +1,7 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.AuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.AuthorizationCodeExchangeResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakAuthorizationCodeExchangeClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.KeycloakAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.KeycloakAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
@@ -17,9 +16,13 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<KeycloakAuthorizationCodeExchangeResponse> {
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private KeycloakAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                              @NotNull AuthorizationCodeExchangeClient exchangeClient,
-                                              @NotNull AuthorizationCodeExchangeResponseHandler<KeycloakAuthorizationCodeExchangeResponse> responseHandler) {
+                                              @NotNull KeycloakAuthorizationCodeExchangeClient exchangeClient,
+                                              @NotNull KeycloakAuthorizationCodeExchangeResponseHandler responseHandler) {
         super(httpClient, exchangeClient, responseHandler);
     }
 
@@ -47,20 +50,24 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private AuthorizationCodeExchangeClient exchangeClient;
-        private AuthorizationCodeExchangeResponseHandler<KeycloakAuthorizationCodeExchangeResponse> responseHandler;
+        private KeycloakAuthorizationCodeExchangeClient exchangeClient;
+        private KeycloakAuthorizationCodeExchangeResponseHandler responseHandler;
+
+        private Builder() {
+
+        }
 
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
-        public Builder exchangeClient(AuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(KeycloakAuthorizationCodeExchangeClient exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
 
-        public Builder responseHandler(AuthorizationCodeExchangeResponseHandler<KeycloakAuthorizationCodeExchangeResponse> responseHandler) {
+        public Builder responseHandler(KeycloakAuthorizationCodeExchangeResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
