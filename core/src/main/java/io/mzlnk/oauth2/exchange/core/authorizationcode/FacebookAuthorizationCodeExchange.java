@@ -1,8 +1,7 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.AuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.AuthorizationCodeExchangeResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookAuthorizationCodeExchangeClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.FacebookAuthorizationCodeExchangeResponse;
 import okhttp3.HttpUrl;
@@ -17,9 +16,13 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<FacebookAuthorizationCodeExchangeResponse> {
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private FacebookAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                              @NotNull AuthorizationCodeExchangeClient exchangeClient,
-                                              @NotNull AuthorizationCodeExchangeResponseHandler<FacebookAuthorizationCodeExchangeResponse> responseHandler) {
+                                              @NotNull FacebookAuthorizationCodeExchangeClient exchangeClient,
+                                              @NotNull FacebookAuthorizationCodeExchangeResponseHandler responseHandler) {
         super(httpClient, exchangeClient, responseHandler);
     }
 
@@ -45,20 +48,24 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private AuthorizationCodeExchangeClient exchangeClient;
-        private AuthorizationCodeExchangeResponseHandler<FacebookAuthorizationCodeExchangeResponse> responseHandler;
+        private FacebookAuthorizationCodeExchangeClient exchangeClient;
+        private FacebookAuthorizationCodeExchangeResponseHandler responseHandler;
+
+        private Builder() {
+
+        }
 
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
-        public Builder exchangeClient(AuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(FacebookAuthorizationCodeExchangeClient exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
 
-        public Builder responseHandler(AuthorizationCodeExchangeResponseHandler<FacebookAuthorizationCodeExchangeResponse> responseHandler) {
+        public Builder responseHandler(FacebookAuthorizationCodeExchangeResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }

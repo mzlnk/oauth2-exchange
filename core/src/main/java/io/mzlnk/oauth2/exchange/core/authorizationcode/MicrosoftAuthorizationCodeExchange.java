@@ -1,8 +1,7 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.AuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.AuthorizationCodeExchangeResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
@@ -18,14 +17,18 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<MicrosoftAuthorizationCodeExchangeResponse> {
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private final String scope;
     private final String codeVerifier;
     private final String clientAssertionType;
     private final String clientAssertion;
 
     private MicrosoftAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                               @NotNull AuthorizationCodeExchangeClient exchangeClient,
-                                               @NotNull AuthorizationCodeExchangeResponseHandler<MicrosoftAuthorizationCodeExchangeResponse> responseHandler,
+                                               @NotNull MicrosoftAuthorizationCodeExchangeClient exchangeClient,
+                                               @NotNull MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler,
                                                @Nullable String scope,
                                                @Nullable String codeVerifier,
                                                @Nullable String clientAssertionType,
@@ -73,25 +76,29 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private AuthorizationCodeExchangeClient exchangeClient;
-        private AuthorizationCodeExchangeResponseHandler<MicrosoftAuthorizationCodeExchangeResponse> responseHandler;
+        private MicrosoftAuthorizationCodeExchangeClient exchangeClient;
+        private MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler;
 
         private String scope;
         private String codeVerifier;
         private String clientAssertionType;
         private String clientAssertion;
 
+        private Builder() {
+
+        }
+
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
-        public Builder exchangeClient(AuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(MicrosoftAuthorizationCodeExchangeClient exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
 
-        public Builder responseHandler(AuthorizationCodeExchangeResponseHandler<MicrosoftAuthorizationCodeExchangeResponse> responseHandler) {
+        public Builder responseHandler(MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }

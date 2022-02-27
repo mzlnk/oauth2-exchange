@@ -3,7 +3,11 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode.client;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class MicrosoftAuthorizationCodeExchangeClient extends AbstractAuthorizationCodeExchangeClient {
+import static io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient.*;
+
+public sealed abstract class MicrosoftAuthorizationCodeExchangeClient
+        extends AbstractAuthorizationCodeExchangeClient
+        permits MicrosoftCommonClient, MicrosoftOrganizationClient, MicrosoftConsumerClient, MicrosoftAzureADClient {
 
     protected MicrosoftAuthorizationCodeExchangeClient(@NotNull String clientId,
                                                        @NotNull String clientSecret,

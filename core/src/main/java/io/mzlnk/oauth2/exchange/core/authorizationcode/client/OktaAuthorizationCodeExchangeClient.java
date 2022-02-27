@@ -3,7 +3,11 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode.client;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class OktaAuthorizationCodeExchangeClient extends AbstractAuthorizationCodeExchangeClient {
+import static io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient.*;
+
+public sealed abstract class OktaAuthorizationCodeExchangeClient
+        extends AbstractAuthorizationCodeExchangeClient
+        permits OktaSingleSignOnClient, OktaAuthorizationServerClient {
 
     protected OktaAuthorizationCodeExchangeClient(@NotNull String clientId,
                                                   @NotNull String clientSecret,

@@ -1,8 +1,7 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.AuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.AuthorizationCodeExchangeResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OktaAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
@@ -17,9 +16,13 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
 
 public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<OktaAuthorizationCodeExchangeResponse> {
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private OktaAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                          @NotNull AuthorizationCodeExchangeClient exchangeClient,
-                                          @NotNull AuthorizationCodeExchangeResponseHandler<OktaAuthorizationCodeExchangeResponse> responseHandler) {
+                                          @NotNull OktaAuthorizationCodeExchangeClient exchangeClient,
+                                          @NotNull OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
         super(httpClient, exchangeClient, responseHandler);
     }
 
@@ -48,20 +51,24 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private AuthorizationCodeExchangeClient exchangeClient;
-        private AuthorizationCodeExchangeResponseHandler<OktaAuthorizationCodeExchangeResponse> responseHandler;
+        private OktaAuthorizationCodeExchangeClient exchangeClient;
+        private OktaAuthorizationCodeExchangeResponseHandler responseHandler;
+
+        private Builder() {
+
+        }
 
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
-        public Builder exchangeClient(AuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(OktaAuthorizationCodeExchangeClient exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
 
-        public Builder responseHandler(AuthorizationCodeExchangeResponseHandler<OktaAuthorizationCodeExchangeResponse> responseHandler) {
+        public Builder responseHandler(OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
