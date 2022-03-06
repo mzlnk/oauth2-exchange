@@ -41,7 +41,7 @@ public class KeycloakAuthorizationCodeExchangeDefaultConfiguration {
                                                                                @Qualifier("defaultKeycloakExchangeClient") KeycloakAuthorizationCodeExchangeClient exchangeClient,
                                                                                @Qualifier("defaultKeycloakResponseHandler") KeycloakAuthorizationCodeExchangeResponseHandler responseHandler) {
         log.debug("Creating default OAuth2 authorization code exchange for Keycloak auth provider");
-        return new KeycloakAuthorizationCodeExchange.Builder()
+        return KeycloakAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
                 .responseHandler(responseHandler)
