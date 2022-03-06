@@ -1,91 +1,35 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode.client;
 
-import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
-import static io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient.*;
-
+/**
+ * Represents a template for all types of clients available for OAuth2 authorization code flow for Microsoft identity provider.<br />
+ * Currently, there are available 4 different clients:
+ * <ul>
+ *     <li>{@link MicrosoftAuthorizationCodeExchangeCommonClient}</li>
+ *     <li>{@link MicrosoftAuthorizationCodeExchangeConsumerClient}</li>
+ *     <li>{@link MicrosoftAuthorizationCodeExchangeOrganizationsClient}</li>
+ *     <li>{@link MicrosoftAuthorizationCodeExchangeAzureADClient}</li>
+ * </ul>
+ * All implementations are created based on information found posted on official
+ * <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow">documentation site</a>.
+ */
 public sealed abstract class MicrosoftAuthorizationCodeExchangeClient
         extends AbstractAuthorizationCodeExchangeClient
-        permits MicrosoftCommonClient, MicrosoftOrganizationClient, MicrosoftConsumerClient, MicrosoftAzureADClient {
+        permits MicrosoftAuthorizationCodeExchangeCommonClient, MicrosoftAuthorizationCodeExchangeConsumerClient, MicrosoftAuthorizationCodeExchangeOrganizationsClient, MicrosoftAuthorizationCodeExchangeAzureADClient {
 
+    /**
+     * Construct an instance with given client ID, client secret (associated with the client ID) and redirection URI.
+     *
+     * @param clientId     non-null string representation of the client ID
+     * @param clientSecret non-null string representation of the client secret
+     * @param redirectUri  non-null string representation of the redirection URI
+     * @throws NullPointerException if any of the parameters is null
+     */
     protected MicrosoftAuthorizationCodeExchangeClient(@NotNull String clientId,
                                                        @NotNull String clientSecret,
                                                        @NotNull String redirectUri) {
         super(clientId, clientSecret, redirectUri);
-    }
-
-    public static final class MicrosoftCommonClient extends MicrosoftAuthorizationCodeExchangeClient {
-
-        public MicrosoftCommonClient(@NotNull String clientId,
-                                     @NotNull String clientSecret,
-                                     @NotNull String redirectUri) {
-            super(clientId, clientSecret, redirectUri);
-        }
-
-        @NotNull
-        @Override
-        public String getClientBaseUrl() {
-            return "https://login.microsoftonline.com/common";
-        }
-    }
-
-    public static final class MicrosoftOrganizationClient extends MicrosoftAuthorizationCodeExchangeClient {
-
-        public MicrosoftOrganizationClient(@NotNull String clientId,
-                                           @NotNull String clientSecret,
-                                           @NotNull String redirectUri) {
-            super(clientId, clientSecret, redirectUri);
-        }
-
-        @NotNull
-        @Override
-        public String getClientBaseUrl() {
-            return "https://login.microsoftonline.com/organizations";
-        }
-
-    }
-
-    public static final class MicrosoftConsumerClient extends MicrosoftAuthorizationCodeExchangeClient {
-
-        public MicrosoftConsumerClient(@NotNull String clientId,
-                                       @NotNull String clientSecret,
-                                       @NotNull String redirectUri) {
-            super(clientId, clientSecret, redirectUri);
-        }
-
-        @NotNull
-        @Override
-        public String getClientBaseUrl() {
-            return "https://login.microsoftonline.com/consumers";
-        }
-
-    }
-
-    public static final class MicrosoftAzureADClient extends MicrosoftAuthorizationCodeExchangeClient {
-
-        private final String azureADId;
-
-        public MicrosoftAzureADClient(@NotNull String clientId,
-                                      @NotNull String clientSecret,
-                                      @NotNull String redirectUri,
-                                      @NotNull String azureADId) {
-            super(clientId, clientSecret, redirectUri);
-
-            Preconditions.checkNotNull(azureADId, "Parameter `azureADId` cannot be null.");
-            this.azureADId = azureADId;
-        }
-
-        @NotNull
-        @Override
-        public String getClientBaseUrl() {
-            return "https://login.microsoftonline.com/%s".formatted(this.azureADId);
-        }
-
-        public String getAzureADId() {
-            return this.azureADId;
-        }
-
     }
 
 }

@@ -2,6 +2,7 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftAuthorizationCodeExchangeResponse;
 import okhttp3.FormBody;
@@ -10,13 +11,57 @@ import okhttp3.Request;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClient;
 
+/**
+ * Represents a ready-for-use exchange implementation for a Microsoft authorization provider responsible for exchanging
+ * authorization code for a token response in OAuth2 authorization code flow.
+ * <br />
+ * <p> Details about a HTTP call to GitHub auth provider made during exchange:</p>
+ * <ul>
+ *     <li><b>URL</b>: https://login.microsoftonline.com/{client}/oauth2/v2.0/token</li>
+ *     <li><b>HTTP method</b>: POST</li>
+ *     <li><b>Content-Type</b>: application/x-www-form-urlencoded</li>
+ *     <li><b>Form fields:</b>
+ *     <ul>
+ *         <li>Required:
+ *         <ul>
+ *             <li><code>client_id</code></li>
+ *             <li><code>client_secret</code></li>
+ *             <li><code>redirect_uri</code></li>
+ *             <li><code>grant_type</code></li>
+ *             <li><code>code</code></li>
+ *         </ul>
+ *         </li>
+ *         <li>Optional:
+ *         <ul>
+ *             <li><code>scope</code></li>
+ *             <li><code>code_verifier</code></li>
+ *             <li><code>client_assertion_type</code></li>
+ *             <li><code>client_assertion</code></li>
+ *         </ul>
+ *         </li>
+ *     </ul>
+ *     </li>
+ * </ul>
+ *
+ * <p>
+ * The exchange implementation is created based on information posted on official
+ * <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow">documentation site</a>.
+ * </p>
+ */
 public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<MicrosoftAuthorizationCodeExchangeResponse> {
 
+    /**
+     * Creates an instance of a builder used to create a {@link MicrosoftAuthorizationCodeExchange} instance with given
+     * parameters.
+     *
+     * @return newly created instance of a {@link MicrosoftAuthorizationCodeExchange.Builder}
+     */
     public static Builder builder() {
         return new Builder();
     }
@@ -41,6 +86,17 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
         this.clientAssertion = clientAssertion;
     }
 
+    /**
+     * Exchange a given authorization code for a token response by making proper HTTP call to a Microsoft authorization
+     * provider based on information posted on official
+     * <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow">documentation site</a>.
+     *
+     * @param code authorization code obtained from incoming HTTP response
+     * @return token response which consists of a response data in {@link Map} form
+     * @throws NullPointerException if authorization code is null
+     * @throws IllegalArgumentException if authorization code is empty
+     * @throws IllegalStateException if HTTP call made during exchange failed or cannot handle returned response properly
+     */
     @Override
     public MicrosoftAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
         verifyAuthorizationCode(code);
@@ -73,6 +129,9 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
         }
     }
 
+    /**
+     * Represents a builder used to configure and create an instance of a {@link MicrosoftAuthorizationCodeExchange} exchange.
+     */
     public static class Builder {
 
         private OkHttpClient httpClient;
@@ -88,41 +147,104 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
 
         }
 
+        /**
+         * Set an HTTP client used in an exchange.
+         *
+         * @param httpClient instance of HTTP client ({@link OkHttpClient} implementation)
+         * @return builder instance for further chain configuration
+         */
         public Builder httpClient(OkHttpClient httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
+        /**
+         * Set an exchange client used in an exchange.
+         *
+         * @param exchangeClient instance of {@link MicrosoftAuthorizationCodeExchangeClient} exchange client
+         * @return builder instance for further chain configuration
+         */
         public Builder exchangeClient(MicrosoftAuthorizationCodeExchangeClient exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
 
+        /**
+         * Set an response handler used in an exchange.
+         *
+         * @param responseHandler instance of {@link GoogleAuthorizationCodeExchangeResponseHandler} response handler
+         * @return builder instance for further chain configuration
+         */
         public Builder responseHandler(MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
 
+        /**
+         * Set a scope value sent in a <code>scope</code> form field of the HTTP call made during exchange.
+         *
+         * @param scope string representation of the <code>scope</code> form field
+         * @return builder instance for further chain configuration
+         */
         public Builder scope(String scope) {
             this.scope = scope;
             return this;
         }
 
+        /**
+         * Set a code verifier value sent in a <code>code_verifier</code> form field of the HTTP call made during exchange.
+         *
+         * @param codeVerifier string representation of the <code>code_verifier</code> form field
+         * @return builder instance for further chain configuration
+         */
         public Builder codeVerifier(String codeVerifier) {
             this.codeVerifier = codeVerifier;
             return this;
         }
 
+        /**
+         * Set a client assertion type value sent in a <code>client_assertion_type</code> form field of the HTTP call
+         * made during exchange.
+         *
+         * @param clientAssertionType string representation of the <code>client_assertion_type</code> form field
+         * @return builder instance for further chain configuration
+         */
         public Builder clientAssertionType(String clientAssertionType) {
             this.clientAssertionType = clientAssertionType;
             return this;
         }
 
+        /**
+         * Set a client assertion value sent in a <code>client_assertion</code> form field of the HTTP call made during exchange.
+         *
+         * @param clientAssertion string representation of the <code>client_assertion</code> form field
+         * @return builder instance for further chain configuration
+         */
         public Builder clientAssertion(String clientAssertion) {
             this.clientAssertion = clientAssertion;
             return this;
         }
 
+        /**
+         * Constructs an instance of a {@link MicrosoftAuthorizationCodeExchange} based on provided parameters.
+         *
+         * <p>Required parameters:</p>
+         * <ul>
+         *     <li><code>exchangeClient</code></li>
+         * </ul>
+         *
+         * <p>Optional parameters:</p>
+         * <ul>
+         *     <li><code>httpClient</code> - new instance of {@link OkHttpClient} used if no HTTP client explicitly provided</li>
+         *     <li><code>responseHandler</code> - new instance of {@link MicrosoftAuthorizationCodeExchangeResponseHandler} used if no response handler explicitly provided</li>
+         *     <li><code>scope</code></li>
+         *     <li><code>codeVerifier</code></li>
+         *     <li><code>clientAssertionType</code></li>
+         *     <li><code>clientAssertion</code></li>
+         * </ul>
+         *
+         * @return new instance of {@link MicrosoftAuthorizationCodeExchange} based on provided parameters
+         */
         public MicrosoftAuthorizationCodeExchange build() {
             return new MicrosoftAuthorizationCodeExchange(
                     Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),

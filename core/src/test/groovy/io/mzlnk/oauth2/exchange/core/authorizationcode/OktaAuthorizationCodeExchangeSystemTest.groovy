@@ -2,12 +2,11 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeSingleSignOnClient
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaAuthorizationCodeExchangeResponseHandler
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.loadResourceAsString
@@ -31,7 +30,7 @@ class OktaAuthorizationCodeExchangeSystemTest {
                 .addInterceptor(this.http)
                 .build()
 
-        def exchangeClient = new OktaAuthorizationCodeExchangeClient.OktaSingleSignOnClient(
+        def exchangeClient = new OktaAuthorizationCodeExchangeSingleSignOnClient(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri',

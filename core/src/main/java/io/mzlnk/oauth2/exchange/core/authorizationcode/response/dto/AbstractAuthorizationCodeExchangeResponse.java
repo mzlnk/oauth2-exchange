@@ -8,10 +8,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Represents a template in form of an abstract class which can be used to create custom
+ * responses returned by authorization code exchanges without implementing all the required
+ * methods related to {@link Map} interface.
+ */
 public abstract class AbstractAuthorizationCodeExchangeResponse implements Map<String, Object> {
 
     private final Map<String, Object> delegate;
 
+    /**
+     * Construct an instance of a response from given map of values.
+     * @param values non-null map of key-value pairs related to the exchange response
+     * @throws NullPointerException if values object passed as an argument is null
+     */
     protected AbstractAuthorizationCodeExchangeResponse(@NotNull Map<String, Object> values) {
         this();
 
@@ -19,6 +29,9 @@ public abstract class AbstractAuthorizationCodeExchangeResponse implements Map<S
         this.delegate.putAll(values);
     }
 
+    /**
+     * Construct an instance of an empty response (storing no key-value pairs).
+     */
     protected AbstractAuthorizationCodeExchangeResponse() {
         this.delegate = new HashMap<>();
     }
