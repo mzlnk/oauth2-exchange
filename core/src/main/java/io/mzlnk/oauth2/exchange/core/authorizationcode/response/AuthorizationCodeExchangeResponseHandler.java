@@ -9,7 +9,7 @@ import java.util.Map;
  * Represents a handler of the incoming HTTP response during authorization code exchange- either successful or error one
  * and return the object consisting of the response data.
  *
- * @param <R> response type which extends {@link Map} with {@link String}-{@link Object} key-value pair
+ * @param <R> response type which extends {@link Map} with {@link String}-{@link Object} key-value pairs
  */
 public interface AuthorizationCodeExchangeResponseHandler<R extends Map<String, Object>> {
 

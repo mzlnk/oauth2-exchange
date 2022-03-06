@@ -207,6 +207,7 @@
                     <links>
                         <link>https://javadoc.io/doc/org.jetbrains/annotations/latest</link>
                         <link>https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/</link>
+                        <link>https://javadoc.io/doc/com.squareup.okhttp3/okhttp/3.14.9/okhttp3/latest</link>
                     </links>
                 </configuration>
             </plugin>

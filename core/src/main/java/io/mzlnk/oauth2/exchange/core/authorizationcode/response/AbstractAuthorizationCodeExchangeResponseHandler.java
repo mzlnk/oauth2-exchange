@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 /**
- * Represents a generic template for handler of the incoming HTTP response during authorization code exchange- either successful or error one
+ * Represents a generic template for handler of the incoming HTTP response during authorization code exchange - either successful or error one
  * and return the object consisting of the response data.
  *
  * @param <R> response type which extends {@link Map} with {@link String}-{@link Object} key-value pair
