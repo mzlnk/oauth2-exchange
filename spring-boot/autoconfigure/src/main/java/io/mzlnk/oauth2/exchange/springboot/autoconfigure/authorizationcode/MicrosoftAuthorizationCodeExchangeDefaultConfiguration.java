@@ -2,7 +2,7 @@ package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.MicrosoftAuthorizationCodeExchange;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.*;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
     public MicrosoftAuthorizationCodeExchangeClient microsoftAuthorizationCodeExchangeCommonClient(@Value("${oauth2.exchange.providers.microsoft.client-id}") String clientId,
                                                                                                    @Value("${oauth2.exchange.providers.microsoft.client-secret}") String clientSecret,
                                                                                                    @Value("${oauth2.exchange.providers.microsoft.redirect-uri}") String redirectUri) {
-        return new MicrosoftAuthorizationCodeExchangeClient.MicrosoftCommonClient(clientId, clientSecret, redirectUri);
+        return new MicrosoftAuthorizationCodeExchangeCommonClient(clientId, clientSecret, redirectUri);
     }
 
     @Bean(name = "defaultMicrosoftExchangeClient")
@@ -35,7 +35,7 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
     public MicrosoftAuthorizationCodeExchangeClient microsoftAuthorizationCodeExchangeConsumerClient(@Value("${oauth2.exchange.providers.microsoft.client-id}") String clientId,
                                                                                                      @Value("${oauth2.exchange.providers.microsoft.client-secret}") String clientSecret,
                                                                                                      @Value("${oauth2.exchange.providers.microsoft.redirect-uri}") String redirectUri) {
-        return new MicrosoftAuthorizationCodeExchangeClient.MicrosoftConsumerClient(clientId, clientSecret, redirectUri);
+        return new MicrosoftAuthorizationCodeExchangeConsumerClient(clientId, clientSecret, redirectUri);
     }
 
     @Bean(name = "defaultMicrosoftExchangeClient")
@@ -43,7 +43,7 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
     public MicrosoftAuthorizationCodeExchangeClient microsoftAuthorizationCodeExchangeOrganizationClient(@Value("${oauth2.exchange.providers.microsoft.client-id}") String clientId,
                                                                                                          @Value("${oauth2.exchange.providers.microsoft.client-secret}") String clientSecret,
                                                                                                          @Value("${oauth2.exchange.providers.microsoft.redirect-uri}") String redirectUri) {
-        return new MicrosoftAuthorizationCodeExchangeClient.MicrosoftOrganizationClient(clientId, clientSecret, redirectUri);
+        return new MicrosoftAuthorizationCodeExchangeOrganizationsClient(clientId, clientSecret, redirectUri);
     }
 
     @Bean(name = "defaultMicrosoftExchangeClient")
@@ -53,7 +53,7 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
                                                                                                     @Value("${oauth2.exchange.providers.microsoft.client-secret}") String clientSecret,
                                                                                                     @Value("${oauth2.exchange.providers.microsoft.redirect-uri}") String redirectUri,
                                                                                                     @Value("${oauth2.exchange.providers.microsoft.azure-ad-id}") String azureAdId) {
-        return new MicrosoftAuthorizationCodeExchangeClient.MicrosoftAzureADClient(clientId, clientSecret, redirectUri, azureAdId);
+        return new MicrosoftAuthorizationCodeExchangeAzureADClient(clientId, clientSecret, redirectUri, azureAdId);
     }
 
     @Bean(name = "defaultMicrosoftResponseHandler")
@@ -69,7 +69,7 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
                                                                                  @Value("${oauth2.exchange.providers.microsoft.client-assertion-type:#{null}}") String clientAssertionType,
                                                                                  @Value("${oauth2.exchange.providers.microsoft.client-assertion:#{null}}") String clientAssertion) {
         log.debug("Creating default OAuth2 authorization code exchange for Microsoft auth provider");
-        return new MicrosoftAuthorizationCodeExchange.Builder()
+        return MicrosoftAuthorizationCodeExchange.builder()
                 .exchangeClient(exchangeClient)
                 .responseHandler(responseHandler)
                 .scope(scope)

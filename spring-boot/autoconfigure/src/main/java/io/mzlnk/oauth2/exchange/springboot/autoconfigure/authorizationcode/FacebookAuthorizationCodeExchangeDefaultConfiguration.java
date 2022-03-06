@@ -39,7 +39,7 @@ public class FacebookAuthorizationCodeExchangeDefaultConfiguration {
                                                                            @Qualifier("defaultFacebookExchangeClient") FacebookAuthorizationCodeExchangeClient exchangeClient,
                                                                            @Qualifier("defaultFacebookResponseHandler") FacebookAuthorizationCodeExchangeResponseHandler responseHandler) {
         log.debug("Creating default OAuth2 authorization code exchange for Facebook auth provider");
-        return new FacebookAuthorizationCodeExchange.Builder()
+        return FacebookAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
                 .responseHandler(responseHandler)

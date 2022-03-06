@@ -2,7 +2,9 @@ package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.OktaAuthorizationCodeExchange;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeAuthorizationServerClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeSingleSignOnClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaAuthorizationCodeExchangeResponseHandler;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
@@ -30,7 +32,7 @@ public class OktaAuthorizationCodeExchangeDefaultConfiguration {
                                                                                                @Value("${oauth2.exchange.providers.okta.client-secret}") String clientSecret,
                                                                                                @Value("${oauth2.exchange.providers.okta.redirect-uri}") String redirectUri,
                                                                                                @Value("${oauth2.exchange.providers.okta.okta-domain}") String oktaDomain) {
-        return new OktaAuthorizationCodeExchangeClient.OktaSingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain);
+        return new OktaAuthorizationCodeExchangeSingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain);
     }
 
     @Bean(name = "defaultOktaExchangeClient")
@@ -41,7 +43,7 @@ public class OktaAuthorizationCodeExchangeDefaultConfiguration {
                                                                                                       @Value("${oauth2.exchange.providers.okta.redirect-uri}") String redirectUri,
                                                                                                       @Value("${oauth2.exchange.providers.okta.okta-domain}") String oktaDomain,
                                                                                                       @Value("${oauth2.exchange.providers.okta.okta-authorization-server-id}") String oktaAuthorizationServerId) {
-        return new OktaAuthorizationCodeExchangeClient.OktaAuthorizationServerClient(clientId, clientSecret, redirectUri, oktaDomain, oktaAuthorizationServerId);
+        return new OktaAuthorizationCodeExchangeAuthorizationServerClient(clientId, clientSecret, redirectUri, oktaDomain, oktaAuthorizationServerId);
     }
 
     @Bean(name = "defaultOktaResponseHandler")
@@ -54,7 +56,7 @@ public class OktaAuthorizationCodeExchangeDefaultConfiguration {
                                                                        @Qualifier("defaultOktaExchangeClient") OktaAuthorizationCodeExchangeClient exchangeClient,
                                                                        @Qualifier("defaultOktaResponseHandler") OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
         log.debug("Creating default OAuth2 authorization code exchange for Okta auth provider");
-        return new OktaAuthorizationCodeExchange.Builder()
+        return OktaAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
                 .responseHandler(responseHandler)

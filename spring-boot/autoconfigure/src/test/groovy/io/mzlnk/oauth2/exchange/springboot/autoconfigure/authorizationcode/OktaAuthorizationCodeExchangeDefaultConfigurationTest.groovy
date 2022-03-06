@@ -1,6 +1,8 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeAuthorizationServerClient
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeSingleSignOnClient
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -19,7 +21,7 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
 
     @BeforeEach
     void "Set up tests"() {
-        def initializer = new ConditionEvaluationReportLoggingListener(LogLevel.INFO);
+        def initializer = new ConditionEvaluationReportLoggingListener(LogLevel.INFO)
 
         this.contextRunner = new ApplicationContextRunner()
                 .withInitializer(initializer)
@@ -130,9 +132,9 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                 .run((context) -> {
                     assertThat(context).hasBean('defaultOktaExchangeClient')
                     assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeClient)
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeClient.OktaSingleSignOnClient)
+                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeSingleSignOnClient)
 
-                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaAuthorizationCodeExchangeClient.OktaSingleSignOnClient)
+                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaAuthorizationCodeExchangeSingleSignOnClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
@@ -159,9 +161,9 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                 .run((context) -> {
                     assertThat(context).hasBean('defaultOktaExchangeClient')
                     assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeClient)
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeClient.OktaAuthorizationServerClient)
+                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeAuthorizationServerClient)
 
-                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaAuthorizationCodeExchangeClient.OktaAuthorizationServerClient)
+                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaAuthorizationCodeExchangeAuthorizationServerClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

@@ -39,7 +39,7 @@ public class GoogleAuthorizationCodeExchangeDefaultConfiguration {
                                                                            @Qualifier("defaultGoogleExchangeClient") GoogleAuthorizationCodeExchangeClient exchangeClient,
                                                                            @Qualifier("defaultGoogleResponseHandler") GoogleAuthorizationCodeExchangeResponseHandler responseHandler) {
         log.debug("Creating default OAuth2 authorization code exchange for Google auth provider");
-        return new GoogleAuthorizationCodeExchange.Builder()
+        return GoogleAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
                 .responseHandler(responseHandler)
