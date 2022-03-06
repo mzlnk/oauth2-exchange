@@ -203,6 +203,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <links>
+                        <link>https://javadoc.io/doc/org.jetbrains/annotations/latest</link>
+                        <link>https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/</link>
+                    </links>
+                </configuration>
             </plugin>
         </plugins>
     </build>
