@@ -14,7 +14,7 @@ class GitHubAuthorizationCodeExchangeResponseTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> GitHubAuthorizationCodeExchangeResponse.from(values)
+                () -> GitHubOAuth2TokenResponse.from(values)
         )
 
         then:

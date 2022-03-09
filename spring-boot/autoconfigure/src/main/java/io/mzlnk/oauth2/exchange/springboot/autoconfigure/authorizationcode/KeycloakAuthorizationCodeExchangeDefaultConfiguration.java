@@ -2,8 +2,8 @@ package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.KeycloakAuthorizationCodeExchange;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.KeycloakAuthorizationCodeExchangeResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakOAuth2Client;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.KeycloakOAuth2TokenResponseHandler;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
@@ -23,23 +23,23 @@ public class KeycloakAuthorizationCodeExchangeDefaultConfiguration {
     private final Logger log = LoggerFactory.getLogger(KeycloakAuthorizationCodeExchangeDefaultConfiguration.class);
 
     @Bean("defaultKeycloakExchangeClient")
-    public KeycloakAuthorizationCodeExchangeClient keycloakAuthorizationCodeExchangeClient(@Value("${oauth2.exchange.providers.keycloak.client-id}") String clientId,
-                                                                                           @Value("${oauth2.exchange.providers.keycloak.client-secret}") String clientSecret,
-                                                                                           @Value("${oauth2.exchange.providers.keycloak.redirect-uri}") String redirectUri,
-                                                                                           @Value("${oauth2.exchange.providers.keycloak.host}") String host,
-                                                                                           @Value("${oauth2.exchange.providers.keycloak.realm}") String realm) {
-        return new KeycloakAuthorizationCodeExchangeClient(clientId, clientSecret, redirectUri, host, realm);
+    public KeycloakOAuth2Client keycloakAuthorizationCodeExchangeClient(@Value("${oauth2.exchange.providers.keycloak.client-id}") String clientId,
+                                                                        @Value("${oauth2.exchange.providers.keycloak.client-secret}") String clientSecret,
+                                                                        @Value("${oauth2.exchange.providers.keycloak.redirect-uri}") String redirectUri,
+                                                                        @Value("${oauth2.exchange.providers.keycloak.host}") String host,
+                                                                        @Value("${oauth2.exchange.providers.keycloak.realm}") String realm) {
+        return new KeycloakOAuth2Client(clientId, clientSecret, redirectUri, host, realm);
     }
 
     @Bean("defaultKeycloakResponseHandler")
-    public KeycloakAuthorizationCodeExchangeResponseHandler keycloakAuthorizationCodeExchangeResponseHandler(ObjectMapper objectMapper) {
-        return new KeycloakAuthorizationCodeExchangeResponseHandler(objectMapper);
+    public KeycloakOAuth2TokenResponseHandler keycloakAuthorizationCodeExchangeResponseHandler(ObjectMapper objectMapper) {
+        return new KeycloakOAuth2TokenResponseHandler(objectMapper);
     }
 
     @Bean(name = "defaultKeycloakExchange")
     public KeycloakAuthorizationCodeExchange keycloakAuthorizationCodeExchange(OkHttpClient httpClient,
-                                                                               @Qualifier("defaultKeycloakExchangeClient") KeycloakAuthorizationCodeExchangeClient exchangeClient,
-                                                                               @Qualifier("defaultKeycloakResponseHandler") KeycloakAuthorizationCodeExchangeResponseHandler responseHandler) {
+                                                                               @Qualifier("defaultKeycloakExchangeClient") KeycloakOAuth2Client exchangeClient,
+                                                                               @Qualifier("defaultKeycloakResponseHandler") KeycloakOAuth2TokenResponseHandler responseHandler) {
         log.debug("Creating default OAuth2 authorization code exchange for Keycloak auth provider");
         return KeycloakAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)

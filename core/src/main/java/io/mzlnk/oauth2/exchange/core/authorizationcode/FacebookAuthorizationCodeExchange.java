@@ -1,9 +1,10 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookAuthorizationCodeExchangeResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.FacebookAuthorizationCodeExchangeResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookOAuth2Client;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookOAuth2TokenResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.FacebookOAuth2TokenResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -38,7 +39,7 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
  * <a href="https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/">documentation site</a>.
  * </p>
  */
-public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<FacebookAuthorizationCodeExchangeResponse> {
+public final class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange {
 
     /**
      * Creates an instance of a builder used to create a {@link FacebookAuthorizationCodeExchange} instance with given
@@ -51,9 +52,9 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
     }
 
     private FacebookAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                              @NotNull FacebookAuthorizationCodeExchangeClient exchangeClient,
-                                              @NotNull FacebookAuthorizationCodeExchangeResponseHandler responseHandler) {
-        super(httpClient, exchangeClient, responseHandler);
+                                              @NotNull FacebookOAuth2Client oAuth2Client,
+                                              @NotNull FacebookOAuth2TokenResponseHandler responseHandler) {
+        super(httpClient, oAuth2Client, responseHandler);
     }
 
     /**
@@ -68,14 +69,14 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
      * @throws IllegalStateException if HTTP call made during exchange failed or cannot handle returned response properly
      */
     @Override
-    public FacebookAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+    public OAuth2TokenResponse exchangeAuthorizationCode(@NotNull String code) {
         verifyAuthorizationCode(code);
 
-        var url = HttpUrl.parse("%s/v12.0/oauth/access_token".formatted(this.exchangeClient.getClientBaseUrl()))
+        var url = HttpUrl.parse(this.oAuth2Client.getTokenUrl())
                 .newBuilder()
-                .addQueryParameter("client_id", this.exchangeClient.getClientId())
-                .addQueryParameter("client_secret", this.exchangeClient.getClientSecret())
-                .addQueryParameter("redirect_uri", this.exchangeClient.getRedirectUri())
+                .addQueryParameter("client_id", this.oAuth2Client.getClientId())
+                .addQueryParameter("client_secret", this.oAuth2Client.getClientSecret())
+                .addQueryParameter("redirect_uri", this.oAuth2Client.getRedirectUri())
                 .addQueryParameter("code", code)
                 .build();
 
@@ -92,8 +93,8 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private FacebookAuthorizationCodeExchangeClient exchangeClient;
-        private FacebookAuthorizationCodeExchangeResponseHandler responseHandler;
+        private FacebookOAuth2Client exchangeClient;
+        private FacebookOAuth2TokenResponseHandler responseHandler;
 
         private Builder() {
 
@@ -113,10 +114,10 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
         /**
          * Set an exchange client used in an exchange.
          *
-         * @param exchangeClient instance of {@link FacebookAuthorizationCodeExchangeClient} exchange client
+         * @param exchangeClient instance of {@link FacebookOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(FacebookAuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(FacebookOAuth2Client exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
@@ -124,10 +125,10 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
         /**
          * Set an response handler used in an exchange.
          *
-         * @param responseHandler instance of {@link FacebookAuthorizationCodeExchangeResponseHandler} response handler
+         * @param responseHandler instance of {@link FacebookOAuth2TokenResponseHandler} response handler
          * @return builder instance for further chain configuration
          */
-        public Builder responseHandler(FacebookAuthorizationCodeExchangeResponseHandler responseHandler) {
+        public Builder responseHandler(FacebookOAuth2TokenResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
@@ -143,7 +144,7 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
          * <p>Optional parameters:</p>
          * <ul>
          *     <li><code>httpClient</code> - new instance of {@link OkHttpClient} used if no HTTP client explicitly provided</li>
-         *     <li><code>responseHandler</code> - new instance of {@link FacebookAuthorizationCodeExchangeResponseHandler} used if no response handler explicitly provided</li>
+         *     <li><code>responseHandler</code> - new instance of {@link FacebookOAuth2TokenResponseHandler} used if no response handler explicitly provided</li>
          * </ul>
          *
          * @return new instance of {@link FacebookAuthorizationCodeExchange} based on provided parameters
@@ -156,8 +157,8 @@ public class FacebookAuthorizationCodeExchange extends AbstractAuthorizationCode
             );
         }
 
-        private static Supplier<FacebookAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
-            return () -> new FacebookAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        private static Supplier<FacebookOAuth2TokenResponseHandler> defaultResponseHandler() {
+            return () -> new FacebookOAuth2TokenResponseHandler(new FacebookOAuth2TokenResponse.Factory(), new ObjectMapper());
         }
 
     }

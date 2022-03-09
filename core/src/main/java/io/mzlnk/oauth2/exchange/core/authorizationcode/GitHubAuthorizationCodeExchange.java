@@ -1,9 +1,10 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubAuthorizationCodeExchangeResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GitHubAuthorizationCodeExchangeResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubOAuth2Client;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubOAuth2TokenResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GitHubOAuth2TokenResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,7 +40,7 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
  * <a href="https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps">documentation site</a>.
  * </p>
  */
-public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<GitHubAuthorizationCodeExchangeResponse> {
+public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange {
 
     /**
      * Creates an instance of a builder used to create a {@link GitHubAuthorizationCodeExchange} instance with given
@@ -52,9 +53,9 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
     }
 
     private GitHubAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                            @NotNull GitHubAuthorizationCodeExchangeClient exchangeClient,
-                                            @NotNull GitHubAuthorizationCodeExchangeResponseHandler responseHandler) {
-        super(httpClient, exchangeClient, responseHandler);
+                                            @NotNull GitHubOAuth2Client oAuth2Client,
+                                            @NotNull GitHubOAuth2TokenResponseHandler responseHandler) {
+        super(httpClient, oAuth2Client, responseHandler);
     }
 
     /**
@@ -69,18 +70,18 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
      * @throws IllegalStateException if HTTP call made during exchange failed or cannot handle returned response properly
      */
     @Override
-    public GitHubAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+    public OAuth2TokenResponse exchangeAuthorizationCode(@NotNull String code) {
         verifyAuthorizationCode(code);
 
         var requestBody = new FormBody.Builder()
-                .add("client_id", this.exchangeClient.getClientId())
-                .add("client_secret", this.exchangeClient.getClientSecret())
+                .add("client_id", this.oAuth2Client.getClientId())
+                .add("client_secret", this.oAuth2Client.getClientSecret())
                 .add("code", code)
-                .add("redirect_uri", this.exchangeClient.getRedirectUri())
+                .add("redirect_uri", this.oAuth2Client.getRedirectUri())
                 .build();
 
         var request = new Request.Builder()
-                .url("%s/login/oauth/access_token".formatted(this.exchangeClient.getClientBaseUrl()))
+                .url(this.oAuth2Client.getTokenUrl())
                 .post(requestBody)
                 .addHeader("Accept", "application/json")
                 .build();
@@ -94,8 +95,8 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private GitHubAuthorizationCodeExchangeClient exchangeClient;
-        private GitHubAuthorizationCodeExchangeResponseHandler responseHandler;
+        private GitHubOAuth2Client exchangeClient;
+        private GitHubOAuth2TokenResponseHandler responseHandler;
 
         private Builder() {
 
@@ -115,10 +116,10 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         /**
          * Set an exchange client used in an exchange.
          *
-         * @param exchangeClient instance of {@link GitHubAuthorizationCodeExchangeClient} exchange client
+         * @param exchangeClient instance of {@link GitHubOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(GitHubAuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(GitHubOAuth2Client exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
@@ -126,10 +127,10 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         /**
          * Set an response handler used in an exchange.
          *
-         * @param responseHandler instance of {@link GitHubAuthorizationCodeExchangeResponseHandler} response handler
+         * @param responseHandler instance of {@link GitHubOAuth2TokenResponseHandler} response handler
          * @return builder instance for further chain configuration
          */
-        public Builder responseHandler(GitHubAuthorizationCodeExchangeResponseHandler responseHandler) {
+        public Builder responseHandler(GitHubOAuth2TokenResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
@@ -145,7 +146,7 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
          * <p>Optional parameters:</p>
          * <ul>
          *     <li><code>httpClient</code> - new instance of {@link OkHttpClient} used if no HTTP client explicitly provided</li>
-         *     <li><code>responseHandler</code> - new instance of {@link GitHubAuthorizationCodeExchangeResponseHandler} used if no response handler explicitly provided</li>
+         *     <li><code>responseHandler</code> - new instance of {@link GitHubOAuth2TokenResponseHandler} used if no response handler explicitly provided</li>
          * </ul>
          *
          * @return new instance of {@link FacebookAuthorizationCodeExchange} based on provided parameters
@@ -158,8 +159,8 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
             );
         }
 
-        private static Supplier<GitHubAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
-            return () -> new GitHubAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        private static Supplier<GitHubOAuth2TokenResponseHandler> defaultResponseHandler() {
+            return () -> new GitHubOAuth2TokenResponseHandler(new GitHubOAuth2TokenResponse.Factory(), new ObjectMapper());
         }
 
     }

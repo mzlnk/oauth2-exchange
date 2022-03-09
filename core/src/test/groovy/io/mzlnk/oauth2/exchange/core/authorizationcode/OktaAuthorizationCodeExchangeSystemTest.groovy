@@ -2,8 +2,8 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeSingleSignOnClient
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaAuthorizationCodeExchangeResponseHandler
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2SingleSignOnClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaOAuth2TokenResponseHandler
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
@@ -30,14 +30,14 @@ class OktaAuthorizationCodeExchangeSystemTest {
                 .addInterceptor(this.http)
                 .build()
 
-        def exchangeClient = new OktaAuthorizationCodeExchangeSingleSignOnClient(
+        def exchangeClient = new OktaOAuth2SingleSignOnClient(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri',
                 'https://some.domain.com'
         )
 
-        def responseHandler = new OktaAuthorizationCodeExchangeResponseHandler(new ObjectMapper())
+        def responseHandler = new OktaOAuth2TokenResponseHandler(new ObjectMapper())
 
         this.exchange = new OktaAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)

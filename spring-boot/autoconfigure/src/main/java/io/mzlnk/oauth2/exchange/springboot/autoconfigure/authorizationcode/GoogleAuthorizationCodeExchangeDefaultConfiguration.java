@@ -2,8 +2,8 @@ package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.GoogleAuthorizationCodeExchange;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleOAuth2Client;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleOAuth2TokenResponseHandler;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
@@ -23,21 +23,21 @@ public class GoogleAuthorizationCodeExchangeDefaultConfiguration {
     private final Logger log = LoggerFactory.getLogger(GoogleAuthorizationCodeExchangeDefaultConfiguration.class);
 
     @Bean("defaultGoogleExchangeClient")
-    public GoogleAuthorizationCodeExchangeClient googleAuthorizationCodeExchangeClient(@Value("${oauth2.exchange.providers.google.client-id}") String clientId,
-                                                                                       @Value("${oauth2.exchange.providers.google.client-secret}") String clientSecret,
-                                                                                       @Value("${oauth2.exchange.providers.google.redirect-uri}") String redirectUri) {
-        return new GoogleAuthorizationCodeExchangeClient(clientId, clientSecret, redirectUri);
+    public GoogleOAuth2Client googleAuthorizationCodeExchangeClient(@Value("${oauth2.exchange.providers.google.client-id}") String clientId,
+                                                                    @Value("${oauth2.exchange.providers.google.client-secret}") String clientSecret,
+                                                                    @Value("${oauth2.exchange.providers.google.redirect-uri}") String redirectUri) {
+        return new GoogleOAuth2Client(clientId, clientSecret, redirectUri);
     }
 
     @Bean("defaultGoogleResponseHandler")
-    public GoogleAuthorizationCodeExchangeResponseHandler googleAuthorizationCodeExchangeResponseHandler(ObjectMapper objectMapper) {
-        return new GoogleAuthorizationCodeExchangeResponseHandler(objectMapper);
+    public GoogleOAuth2TokenResponseHandler googleAuthorizationCodeExchangeResponseHandler(ObjectMapper objectMapper) {
+        return new GoogleOAuth2TokenResponseHandler(objectMapper);
     }
 
     @Bean(name = "defaultGoogleExchange")
     public GoogleAuthorizationCodeExchange googleAuthorizationCodeExchange(OkHttpClient httpClient,
-                                                                           @Qualifier("defaultGoogleExchangeClient") GoogleAuthorizationCodeExchangeClient exchangeClient,
-                                                                           @Qualifier("defaultGoogleResponseHandler") GoogleAuthorizationCodeExchangeResponseHandler responseHandler) {
+                                                                           @Qualifier("defaultGoogleExchangeClient") GoogleOAuth2Client exchangeClient,
+                                                                           @Qualifier("defaultGoogleResponseHandler") GoogleOAuth2TokenResponseHandler responseHandler) {
         log.debug("Creating default OAuth2 authorization code exchange for Google auth provider");
         return GoogleAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)

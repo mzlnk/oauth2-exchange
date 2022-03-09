@@ -14,7 +14,7 @@ class GoogleAuthorizationCodeExchangeResponseTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> GoogleAuthorizationCodeExchangeResponse.from(values)
+                () -> GoogleOAuth2TokenResponse.from(values)
         )
 
         then:

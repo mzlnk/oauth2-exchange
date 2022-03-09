@@ -1,6 +1,6 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookAuthorizationCodeExchangeClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookOAuth2Client
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -98,7 +98,7 @@ class FacebookAuthorizationCodeExchangeDefaultConfigurationTest {
                 .run((context) -> {
                     assertThat(context).hasBean('defaultFacebookExchangeClient')
 
-                    def exchangeClient = context.getBean('defaultFacebookExchangeClient', FacebookAuthorizationCodeExchangeClient)
+                    def exchangeClient = context.getBean('defaultFacebookExchangeClient', FacebookOAuth2Client)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

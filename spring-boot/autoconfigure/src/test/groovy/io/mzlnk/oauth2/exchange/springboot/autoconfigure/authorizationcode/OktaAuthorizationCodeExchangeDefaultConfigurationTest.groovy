@@ -1,8 +1,8 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeAuthorizationServerClient
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeSingleSignOnClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2Client
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2SingleSignOnClient
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -131,10 +131,10 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.okta-domain=${oktaDomain}")
                 .run((context) -> {
                     assertThat(context).hasBean('defaultOktaExchangeClient')
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeClient)
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeSingleSignOnClient)
+                    assertThat(context).hasSingleBean(OktaOAuth2Client)
+                    assertThat(context).hasSingleBean(OktaOAuth2SingleSignOnClient)
 
-                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaAuthorizationCodeExchangeSingleSignOnClient)
+                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaOAuth2SingleSignOnClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
@@ -160,7 +160,7 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.okta-authorization-server-id=${oktaAuthorizationServerId}")
                 .run((context) -> {
                     assertThat(context).hasBean('defaultOktaExchangeClient')
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeClient)
+                    assertThat(context).hasSingleBean(OktaOAuth2Client)
                     assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeAuthorizationServerClient)
 
                     def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaAuthorizationCodeExchangeAuthorizationServerClient)

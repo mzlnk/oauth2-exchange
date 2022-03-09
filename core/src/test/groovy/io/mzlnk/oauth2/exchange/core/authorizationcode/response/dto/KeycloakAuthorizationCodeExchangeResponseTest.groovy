@@ -14,7 +14,7 @@ class KeycloakAuthorizationCodeExchangeResponseTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> KeycloakAuthorizationCodeExchangeResponse.from(values)
+                () -> KeycloakOAuth2TokenResponse.from(values)
         )
 
         then:

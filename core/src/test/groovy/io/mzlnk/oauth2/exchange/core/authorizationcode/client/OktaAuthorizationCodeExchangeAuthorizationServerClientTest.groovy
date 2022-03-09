@@ -21,7 +21,7 @@ class OktaAuthorizationCodeExchangeAuthorizationServerClientTest {
         )
 
         when:
-        def clientBaseUrl = oktaClient.getClientBaseUrl()
+        def clientBaseUrl = oktaClient.getTokenUrl()
 
         then:
         assert clientBaseUrl != null

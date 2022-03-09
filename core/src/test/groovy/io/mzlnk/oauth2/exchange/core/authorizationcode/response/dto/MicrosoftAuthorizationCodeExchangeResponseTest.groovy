@@ -14,7 +14,7 @@ class MicrosoftAuthorizationCodeExchangeResponseTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> MicrosoftAuthorizationCodeExchangeResponse.from(values)
+                () -> MicrosoftOAuth2TokenResponse.from(values)
         )
 
         then:

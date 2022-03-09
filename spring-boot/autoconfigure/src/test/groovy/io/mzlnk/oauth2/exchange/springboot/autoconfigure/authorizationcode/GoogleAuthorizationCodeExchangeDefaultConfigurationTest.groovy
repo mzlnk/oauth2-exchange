@@ -1,6 +1,6 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleOAuth2Client
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -98,7 +98,7 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
                 .run((context) -> {
                     assertThat(context).hasBean('defaultGoogleExchangeClient')
 
-                    def exchangeClient = context.getBean('defaultGoogleExchangeClient', GoogleAuthorizationCodeExchangeClient)
+                    def exchangeClient = context.getBean('defaultGoogleExchangeClient', GoogleOAuth2Client)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

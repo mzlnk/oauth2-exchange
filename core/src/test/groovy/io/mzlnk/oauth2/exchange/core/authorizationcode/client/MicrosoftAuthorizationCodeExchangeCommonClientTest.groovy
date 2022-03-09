@@ -16,7 +16,7 @@ class MicrosoftAuthorizationCodeExchangeCommonClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeCommonClient(clientId, clientSecret, redirectUri)
+                () -> new MicrosoftOAuth2CommonClient(clientId, clientSecret, redirectUri)
         )
 
         then:
@@ -34,7 +34,7 @@ class MicrosoftAuthorizationCodeExchangeCommonClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeCommonClient(clientId, clientSecret, redirectUri)
+                () -> new MicrosoftOAuth2CommonClient(clientId, clientSecret, redirectUri)
         )
 
         then:
@@ -52,7 +52,7 @@ class MicrosoftAuthorizationCodeExchangeCommonClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeCommonClient(clientId, clientSecret, redirectUri)
+                () -> new MicrosoftOAuth2CommonClient(clientId, clientSecret, redirectUri)
         )
 
         then:

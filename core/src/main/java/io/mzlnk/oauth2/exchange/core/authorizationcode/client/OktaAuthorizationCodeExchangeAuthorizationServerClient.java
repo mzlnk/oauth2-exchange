@@ -4,13 +4,13 @@ import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents an implementation of {@link AuthorizationCodeExchangeClient} for Okta OAuth2 authorization code flow.
+ * Represents an implementation of {@link OAuth2Client} for Okta OAuth2 authorization code flow.
  * This type of the client is dedicated for use case where Okta is the authorization server for your resource server
  * <br />
  * Implementation of the client is created based on information posted on official
  * <a href="https://developer.okta.com/docs/reference/api/oidc/">documentation site</a>.
  */
-public final class OktaAuthorizationCodeExchangeAuthorizationServerClient extends OktaAuthorizationCodeExchangeClient {
+public final class OktaAuthorizationCodeExchangeAuthorizationServerClient extends OktaOAuth2Client {
 
     private final String oktaDomain;
     private final String authorizationServerId;
@@ -40,19 +40,19 @@ public final class OktaAuthorizationCodeExchangeAuthorizationServerClient extend
     }
 
     /**
-     * Returns the client base URL which the request for exchange authorization code for a token is sent to. For this type of
+     * Returns the token URL which the request for exchange authorization code for a token is sent to. For this type of
      * the Okta OAuth2 authorization code flow related client, the client base URL is <i>{oktaDomain}/oauth2/{authorizationServerId}</i>, where:
      * <ul>
      *     <li><b>oktaDomain</b> - string representation of the Okta domain</li>
      *     <li><b>authorizationServerId</b> - string representation of the Okta authorization server ID</li>
      * </ul>
      *
-     * @return non-null string representation of the client base URL
+     * @return non-null string representation of the token URL
      */
     @NotNull
     @Override
-    public String getClientBaseUrl() {
-        return "%s/oauth2/%s".formatted(this.oktaDomain, this.authorizationServerId);
+    public String getTokenUrl() {
+        return "%s/oauth2/%s/v1/token".formatted(this.oktaDomain, this.authorizationServerId);
     }
 
     /**

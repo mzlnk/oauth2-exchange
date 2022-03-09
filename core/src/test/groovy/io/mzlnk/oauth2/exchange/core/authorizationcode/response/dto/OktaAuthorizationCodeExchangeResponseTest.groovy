@@ -14,7 +14,7 @@ class OktaAuthorizationCodeExchangeResponseTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> OktaAuthorizationCodeExchangeResponse.from(values)
+                () -> OktaOAuth2TokenResponse.from(values)
         )
 
         then:

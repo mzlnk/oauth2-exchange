@@ -2,12 +2,11 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookAuthorizationCodeExchangeClient
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookAuthorizationCodeExchangeResponseHandler
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookOAuth2Client
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookOAuth2TokenResponseHandler
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.loadResourceAsString
@@ -31,13 +30,13 @@ class FacebookAuthorizationCodeExchangeSystemTest {
                 .addInterceptor(this.http)
                 .build()
 
-        def exchangeClient = new FacebookAuthorizationCodeExchangeClient(
+        def exchangeClient = new FacebookOAuth2Client(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri'
         )
 
-        def responseHandler = new FacebookAuthorizationCodeExchangeResponseHandler(new ObjectMapper())
+        def responseHandler = new FacebookOAuth2TokenResponseHandler(new ObjectMapper())
 
         this.exchange = new FacebookAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)

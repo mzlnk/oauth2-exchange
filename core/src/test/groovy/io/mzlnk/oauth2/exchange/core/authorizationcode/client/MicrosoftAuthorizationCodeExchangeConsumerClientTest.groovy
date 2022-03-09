@@ -3,8 +3,6 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode.client
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertThrows
-import static org.junit.jupiter.api.Assertions.assertThrows
-import static org.junit.jupiter.api.Assertions.assertThrows
 
 class MicrosoftAuthorizationCodeExchangeConsumerClientTest {
 
@@ -18,7 +16,7 @@ class MicrosoftAuthorizationCodeExchangeConsumerClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeConsumerClient(clientId, clientSecret, redirectUri)
+                () -> new MicrosoftOAuth2ConsumerClient(clientId, clientSecret, redirectUri)
         )
 
         then:
@@ -36,7 +34,7 @@ class MicrosoftAuthorizationCodeExchangeConsumerClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeConsumerClient(clientId, clientSecret, redirectUri)
+                () -> new MicrosoftOAuth2ConsumerClient(clientId, clientSecret, redirectUri)
         )
 
         then:
@@ -54,7 +52,7 @@ class MicrosoftAuthorizationCodeExchangeConsumerClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeConsumerClient(clientId, clientSecret, redirectUri)
+                () -> new MicrosoftOAuth2ConsumerClient(clientId, clientSecret, redirectUri)
         )
 
         then:

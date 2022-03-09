@@ -1,24 +1,21 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 /**
  * Represents an exchange which is responsible for exchanging the authorization code from incoming HTTP request for a token
  * in OAuth2 authorization code flow.
- *
- * @param <R> token response type which extends {@link Map} with {@link String}-{@link Object} key-value pairs
  */
-public interface AuthorizationCodeExchange<R extends Map<String, Object>> {
+public interface AuthorizationCodeExchange {
 
     /**
      * Exchanges authorization code obtained from incoming HTTP response for token response
      * by making proper HTTP request to the authorization provider.
      *
      * @param code authorization code obtained from incoming HTTP response
-     * @return token response which consists of response data in {@link Map} form
+     * @return {@link OAuth2TokenResponse} token response which consists of a response data
      */
-    R exchangeAuthorizationCode(@NotNull String code);
+    OAuth2TokenResponse exchangeAuthorizationCode(@NotNull String code);
 
 }

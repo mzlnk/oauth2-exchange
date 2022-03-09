@@ -1,9 +1,10 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.KeycloakAuthorizationCodeExchangeResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.KeycloakAuthorizationCodeExchangeResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakOAuth2Client;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.KeycloakOAuth2TokenResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.KeycloakOAuth2TokenResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -40,7 +41,7 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
  * <a href="https://www.keycloak.org/docs/latest/server_admin/">documentation site</a>.
  * </p>
  */
-public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<KeycloakAuthorizationCodeExchangeResponse> {
+public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange {
 
     /**
      * Creates an instance of a builder used to create a {@link KeycloakAuthorizationCodeExchange} instance with given
@@ -53,9 +54,9 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
     }
 
     private KeycloakAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                              @NotNull KeycloakAuthorizationCodeExchangeClient exchangeClient,
-                                              @NotNull KeycloakAuthorizationCodeExchangeResponseHandler responseHandler) {
-        super(httpClient, exchangeClient, responseHandler);
+                                              @NotNull KeycloakOAuth2Client oAuth2Client,
+                                              @NotNull KeycloakOAuth2TokenResponseHandler responseHandler) {
+        super(httpClient, oAuth2Client, responseHandler);
     }
 
     /**
@@ -70,20 +71,18 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
      * @throws IllegalStateException if HTTP call made during exchange failed or cannot handle returned response properly
      */
     @Override
-    public KeycloakAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+    public OAuth2TokenResponse exchangeAuthorizationCode(@NotNull String code) {
         verifyAuthorizationCode(code);
 
         var builder = new FormBody.Builder()
-                .add("client_id", this.exchangeClient.getClientId())
-                .add("client_secret", this.exchangeClient.getClientSecret())
+                .add("client_id", this.oAuth2Client.getClientId())
+                .add("client_secret", this.oAuth2Client.getClientSecret())
                 .add("code", code)
                 .add("grant_type", "authorization_code")
-                .add("redirect_uri", this.exchangeClient.getRedirectUri());
-
-        var url = "%s/protocol/openid-connect/token".formatted(this.exchangeClient.getClientBaseUrl());
+                .add("redirect_uri", this.oAuth2Client.getRedirectUri());
 
         var request = new Request.Builder()
-                .url(url)
+                .url(this.oAuth2Client.getTokenUrl())
                 .post(builder.build())
                 .build();
 
@@ -96,8 +95,8 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private KeycloakAuthorizationCodeExchangeClient exchangeClient;
-        private KeycloakAuthorizationCodeExchangeResponseHandler responseHandler;
+        private KeycloakOAuth2Client exchangeClient;
+        private KeycloakOAuth2TokenResponseHandler responseHandler;
 
         private Builder() {
 
@@ -115,20 +114,20 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
 
         /**
          * Set an exchange client used in an exchange.
-         * @param exchangeClient instance of {@link KeycloakAuthorizationCodeExchangeClient} exchange client
+         * @param exchangeClient instance of {@link KeycloakOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(KeycloakAuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(KeycloakOAuth2Client exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
 
         /**
          * Set an response handler used in an exchange.
-         * @param responseHandler instance of {@link KeycloakAuthorizationCodeExchangeResponseHandler} response handler
+         * @param responseHandler instance of {@link KeycloakOAuth2TokenResponseHandler} response handler
          * @return builder instance for further chain configuration
          */
-        public Builder responseHandler(KeycloakAuthorizationCodeExchangeResponseHandler responseHandler) {
+        public Builder responseHandler(KeycloakOAuth2TokenResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
@@ -144,7 +143,7 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
          * <p>Optional parameters:</p>
          * <ul>
          *     <li><code>httpClient</code> - new instance of {@link OkHttpClient} used if no HTTP client explicitly provided</li>
-         *     <li><code>responseHandler</code> - new instance of {@link KeycloakAuthorizationCodeExchangeResponseHandler} used if no response handler explicitly provided</li>
+         *     <li><code>responseHandler</code> - new instance of {@link KeycloakOAuth2TokenResponseHandler} used if no response handler explicitly provided</li>
          * </ul>
          * @return new instance of {@link FacebookAuthorizationCodeExchange} based on provided parameters
          */
@@ -156,8 +155,8 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
             );
         }
 
-        private static Supplier<KeycloakAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
-            return () -> new KeycloakAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        private static Supplier<KeycloakOAuth2TokenResponseHandler> defaultResponseHandler() {
+            return () -> new KeycloakOAuth2TokenResponseHandler(new KeycloakOAuth2TokenResponse.Factory(), new ObjectMapper());
         }
 
     }

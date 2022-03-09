@@ -14,7 +14,7 @@ class FacebookAuthorizationCodeExchangeResponseTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> FacebookAuthorizationCodeExchangeResponse.from(values)
+                () -> FacebookOAuth2TokenResponse.from(values)
         )
 
         then:

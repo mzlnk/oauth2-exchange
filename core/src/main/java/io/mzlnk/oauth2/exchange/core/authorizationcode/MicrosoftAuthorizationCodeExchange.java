@@ -1,10 +1,11 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftAuthorizationCodeExchangeResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftOAuth2Client;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleOAuth2TokenResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftOAuth2TokenResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftOAuth2TokenResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -54,7 +55,7 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
  * <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow">documentation site</a>.
  * </p>
  */
-public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<MicrosoftAuthorizationCodeExchangeResponse> {
+public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange {
 
     /**
      * Creates an instance of a builder used to create a {@link MicrosoftAuthorizationCodeExchange} instance with given
@@ -72,13 +73,13 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     private final String clientAssertion;
 
     private MicrosoftAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                               @NotNull MicrosoftAuthorizationCodeExchangeClient exchangeClient,
-                                               @NotNull MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler,
+                                               @NotNull MicrosoftOAuth2Client oAuth2Client,
+                                               @NotNull MicrosoftOAuth2TokenResponseHandler responseHandler,
                                                @Nullable String scope,
                                                @Nullable String codeVerifier,
                                                @Nullable String clientAssertionType,
                                                @Nullable String clientAssertion) {
-        super(httpClient, exchangeClient, responseHandler);
+        super(httpClient, oAuth2Client, responseHandler);
 
         this.scope = scope;
         this.codeVerifier = codeVerifier;
@@ -98,25 +99,23 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
      * @throws IllegalStateException if HTTP call made during exchange failed or cannot handle returned response properly
      */
     @Override
-    public MicrosoftAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+    public OAuth2TokenResponse exchangeAuthorizationCode(@NotNull String code) {
         verifyAuthorizationCode(code);
 
         var builder = new FormBody.Builder()
-                .add("client_id", this.exchangeClient.getClientId())
-                .add("client_secret", this.exchangeClient.getClientSecret())
+                .add("client_id", this.oAuth2Client.getClientId())
+                .add("client_secret", this.oAuth2Client.getClientSecret())
                 .add("code", code)
                 .add("grant_type", "authorization_code")
-                .add("redirect_uri", this.exchangeClient.getRedirectUri());
+                .add("redirect_uri", this.oAuth2Client.getRedirectUri());
 
         addFormFieldIfExists(builder, "scope", this.scope);
         addFormFieldIfExists(builder, "code_verifier", this.codeVerifier);
         addFormFieldIfExists(builder, "client_assertion_type", this.clientAssertionType);
         addFormFieldIfExists(builder, "client_assertion", this.clientAssertion);
 
-        var url = "%s/oauth2/v2.0/token".formatted(this.exchangeClient.getClientBaseUrl());
-
         var request = new Request.Builder()
-                .url(url)
+                .url(this.oAuth2Client.getTokenUrl())
                 .post(builder.build())
                 .build();
 
@@ -135,8 +134,8 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private MicrosoftAuthorizationCodeExchangeClient exchangeClient;
-        private MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler;
+        private MicrosoftOAuth2Client exchangeClient;
+        private MicrosoftOAuth2TokenResponseHandler responseHandler;
 
         private String scope;
         private String codeVerifier;
@@ -161,10 +160,10 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
         /**
          * Set an exchange client used in an exchange.
          *
-         * @param exchangeClient instance of {@link MicrosoftAuthorizationCodeExchangeClient} exchange client
+         * @param exchangeClient instance of {@link MicrosoftOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(MicrosoftAuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(MicrosoftOAuth2Client exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
@@ -172,10 +171,10 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
         /**
          * Set an response handler used in an exchange.
          *
-         * @param responseHandler instance of {@link GoogleAuthorizationCodeExchangeResponseHandler} response handler
+         * @param responseHandler instance of {@link GoogleOAuth2TokenResponseHandler} response handler
          * @return builder instance for further chain configuration
          */
-        public Builder responseHandler(MicrosoftAuthorizationCodeExchangeResponseHandler responseHandler) {
+        public Builder responseHandler(MicrosoftOAuth2TokenResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
@@ -236,7 +235,7 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
          * <p>Optional parameters:</p>
          * <ul>
          *     <li><code>httpClient</code> - new instance of {@link OkHttpClient} used if no HTTP client explicitly provided</li>
-         *     <li><code>responseHandler</code> - new instance of {@link MicrosoftAuthorizationCodeExchangeResponseHandler} used if no response handler explicitly provided</li>
+         *     <li><code>responseHandler</code> - new instance of {@link MicrosoftOAuth2TokenResponseHandler} used if no response handler explicitly provided</li>
          *     <li><code>scope</code></li>
          *     <li><code>codeVerifier</code></li>
          *     <li><code>clientAssertionType</code></li>
@@ -257,8 +256,8 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
             );
         }
 
-        private static Supplier<MicrosoftAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
-            return () -> new MicrosoftAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        private static Supplier<MicrosoftOAuth2TokenResponseHandler> defaultResponseHandler() {
+            return () -> new MicrosoftOAuth2TokenResponseHandler(new MicrosoftOAuth2TokenResponse.Factory(), new ObjectMapper());
         }
 
     }

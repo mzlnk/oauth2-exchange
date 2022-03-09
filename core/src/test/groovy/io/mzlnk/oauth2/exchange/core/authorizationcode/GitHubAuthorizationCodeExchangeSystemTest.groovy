@@ -2,12 +2,11 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubAuthorizationCodeExchangeClient
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubAuthorizationCodeExchangeResponseHandler
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubOAuth2Client
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubOAuth2TokenResponseHandler
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.loadResourceAsString
@@ -31,13 +30,13 @@ class GitHubAuthorizationCodeExchangeSystemTest {
                 .addInterceptor(this.http)
                 .build()
 
-        def exchangeClient = new GitHubAuthorizationCodeExchangeClient(
+        def exchangeClient = new GitHubOAuth2Client(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri'
         )
 
-        def responseHandler = new GitHubAuthorizationCodeExchangeResponseHandler(new ObjectMapper())
+        def responseHandler = new GitHubOAuth2TokenResponseHandler(new ObjectMapper())
 
         this.exchange = new GitHubAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)

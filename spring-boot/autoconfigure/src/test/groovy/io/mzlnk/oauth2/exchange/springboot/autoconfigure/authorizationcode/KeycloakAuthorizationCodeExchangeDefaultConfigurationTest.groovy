@@ -1,6 +1,6 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakAuthorizationCodeExchangeClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakOAuth2Client
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -106,7 +106,7 @@ class KeycloakAuthorizationCodeExchangeDefaultConfigurationTest {
                 .run((context) -> {
                     assertThat(context).hasBean('defaultKeycloakExchangeClient')
 
-                    def exchangeClient = context.getBean('defaultKeycloakExchangeClient', KeycloakAuthorizationCodeExchangeClient)
+                    def exchangeClient = context.getBean('defaultKeycloakExchangeClient', KeycloakOAuth2Client)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

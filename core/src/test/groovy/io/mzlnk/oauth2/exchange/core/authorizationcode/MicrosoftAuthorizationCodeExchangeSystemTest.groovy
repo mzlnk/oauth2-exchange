@@ -2,8 +2,8 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftAuthorizationCodeExchangeConsumerClient
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftAuthorizationCodeExchangeResponseHandler
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftOAuth2ConsumerClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftOAuth2TokenResponseHandler
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
@@ -30,13 +30,13 @@ class MicrosoftAuthorizationCodeExchangeSystemTest {
                 .addInterceptor(this.http)
                 .build()
 
-        def exchangeClient = new MicrosoftAuthorizationCodeExchangeConsumerClient(
+        def exchangeClient = new MicrosoftOAuth2ConsumerClient(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri'
         )
 
-        def responseHandler = new MicrosoftAuthorizationCodeExchangeResponseHandler(new ObjectMapper())
+        def responseHandler = new MicrosoftOAuth2TokenResponseHandler(new ObjectMapper())
 
         this.exchange = new MicrosoftAuthorizationCodeExchange.Builder()
                 .httpClient(httpClient)

@@ -10,7 +10,7 @@ class OktaAuthorizationCodeExchangeSingleSignOnClientTest {
     void "Should return client baseURL for single-sign-on client"() {
         given:
         def oktaDomain = 'https://some.domain.com'
-        def oktaClient = new OktaAuthorizationCodeExchangeSingleSignOnClient(
+        def oktaClient = new OktaOAuth2SingleSignOnClient(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri',
@@ -18,7 +18,7 @@ class OktaAuthorizationCodeExchangeSingleSignOnClientTest {
         )
 
         when:
-        def clientBaseUrl = oktaClient.getClientBaseUrl()
+        def clientBaseUrl = oktaClient.getTokenUrl()
 
         then:
         assert clientBaseUrl != null
@@ -36,7 +36,7 @@ class OktaAuthorizationCodeExchangeSingleSignOnClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new OktaAuthorizationCodeExchangeSingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain)
+                () -> new OktaOAuth2SingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain)
         )
 
         then:
@@ -55,7 +55,7 @@ class OktaAuthorizationCodeExchangeSingleSignOnClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new OktaAuthorizationCodeExchangeSingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain)
+                () -> new OktaOAuth2SingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain)
         )
 
         then:
@@ -74,7 +74,7 @@ class OktaAuthorizationCodeExchangeSingleSignOnClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new OktaAuthorizationCodeExchangeSingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain)
+                () -> new OktaOAuth2SingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain)
         )
 
         then:
@@ -93,7 +93,7 @@ class OktaAuthorizationCodeExchangeSingleSignOnClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new OktaAuthorizationCodeExchangeSingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain)
+                () -> new OktaOAuth2SingleSignOnClient(clientId, clientSecret, redirectUri, oktaDomain)
         )
 
         then:

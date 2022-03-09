@@ -3,9 +3,6 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode.client
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertThrows
-import static org.junit.jupiter.api.Assertions.assertThrows
-import static org.junit.jupiter.api.Assertions.assertThrows
-import static org.junit.jupiter.api.Assertions.assertThrows
 
 class MicrosoftAuthorizationCodeExchangeAzureADClientTest {
 
@@ -14,7 +11,7 @@ class MicrosoftAuthorizationCodeExchangeAzureADClientTest {
         given:
         def azureADId = 'some-azure-ad-id'
 
-        def client = new MicrosoftAuthorizationCodeExchangeAzureADClient(
+        def client = new MicrosoftOAuth2AzureADClient(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri',
@@ -22,7 +19,7 @@ class MicrosoftAuthorizationCodeExchangeAzureADClientTest {
         )
 
         when:
-        def clientBaseUrl = client.getClientBaseUrl()
+        def clientBaseUrl = client.getTokenUrl()
 
         then:
         assert clientBaseUrl != null
@@ -40,7 +37,7 @@ class MicrosoftAuthorizationCodeExchangeAzureADClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeAzureADClient(clientId, clientSecret, redirectUri, azureADId)
+                () -> new MicrosoftOAuth2AzureADClient(clientId, clientSecret, redirectUri, azureADId)
         )
 
         then:
@@ -59,7 +56,7 @@ class MicrosoftAuthorizationCodeExchangeAzureADClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeAzureADClient(clientId, clientSecret, redirectUri, azureADId)
+                () -> new MicrosoftOAuth2AzureADClient(clientId, clientSecret, redirectUri, azureADId)
         )
 
         then:
@@ -78,7 +75,7 @@ class MicrosoftAuthorizationCodeExchangeAzureADClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeAzureADClient(clientId, clientSecret, redirectUri, azureADId)
+                () -> new MicrosoftOAuth2AzureADClient(clientId, clientSecret, redirectUri, azureADId)
         )
 
         then:
@@ -97,7 +94,7 @@ class MicrosoftAuthorizationCodeExchangeAzureADClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftAuthorizationCodeExchangeAzureADClient(clientId, clientSecret, redirectUri, azureADId)
+                () -> new MicrosoftOAuth2AzureADClient(clientId, clientSecret, redirectUri, azureADId)
         )
 
         then:
