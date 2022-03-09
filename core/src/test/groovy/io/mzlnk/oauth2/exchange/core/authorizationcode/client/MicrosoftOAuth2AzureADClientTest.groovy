@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertThrows
 
-class MicrosoftAuthorizationCodeExchangeAzureADClientTest {
+class MicrosoftOAuth2AzureADClientTest {
 
     @Test
-    void "Should return client base URL for AzureAD client"() {
+    void "Should return token URL for AzureAD client"() {
         given:
         def azureADId = 'some-azure-ad-id'
 
@@ -23,7 +23,7 @@ class MicrosoftAuthorizationCodeExchangeAzureADClientTest {
 
         then:
         assert clientBaseUrl != null
-        assert clientBaseUrl == "https://login.microsoftonline.com/${azureADId}"
+        assert clientBaseUrl == "https://login.microsoftonline.com/${azureADId}/oauth2/v2.0/token"
     }
 
     @Test

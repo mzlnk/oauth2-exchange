@@ -27,7 +27,7 @@ public final class MicrosoftOAuth2CommonClient extends MicrosoftOAuth2Client {
 
     /**
      * Returns the token URL which the request for exchange authorization code for a token is sent to. For this type of
-     * the Microsoft OAuth2 authorization code flow related client, the client base URL is <i>https://login.microsoftonline.com/common</i>.
+     * the Microsoft OAuth2 authorization code flow related client, the token URL is <i>https://login.microsoftonline.com/common/oauth2/v2.0/token</i>.
      *
      * @return non-null string representation of the token URL
      */

@@ -1,6 +1,6 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeAuthorizationServerClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2AuthorizationServerClient
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2Client
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2SingleSignOnClient
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
@@ -161,9 +161,9 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                 .run((context) -> {
                     assertThat(context).hasBean('defaultOktaExchangeClient')
                     assertThat(context).hasSingleBean(OktaOAuth2Client)
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeAuthorizationServerClient)
+                    assertThat(context).hasSingleBean(OktaOAuth2AuthorizationServerClient)
 
-                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaAuthorizationCodeExchangeAuthorizationServerClient)
+                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaOAuth2AuthorizationServerClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

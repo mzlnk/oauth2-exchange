@@ -7,14 +7,14 @@ import org.jetbrains.annotations.NotNull;
  * Currently, there are available 2 different clients:
  * <ul>
  *     <li>{@link OktaOAuth2SingleSignOnClient}</li>
- *     <li>{@link OktaAuthorizationCodeExchangeAuthorizationServerClient}</li>
+ *     <li>{@link OktaOAuth2AuthorizationServerClient}</li>
  * </ul>
  * All implementations are created based on information found posted on official
  * <a href="https://developer.okta.com/docs/reference/api/oidc/">documentation site</a>.
  */
 public sealed abstract class OktaOAuth2Client
         extends AbstractOAuth2Client
-        permits OktaOAuth2SingleSignOnClient, OktaAuthorizationCodeExchangeAuthorizationServerClient {
+        permits OktaOAuth2SingleSignOnClient, OktaOAuth2AuthorizationServerClient {
 
     /**
      * Construct an instance with given client ID, client secret (associated with the client ID) and redirection URI.

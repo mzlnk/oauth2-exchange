@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows
 class KeycloakOAuth2ClientTest {
 
     @Test
-    void "Should return client base URL for host and realm"() {
+    void "Should return token URL for host and realm"() {
         given:
         def host = 'https://www.some.domain.com'
         def realm = 'some-realm'
@@ -21,11 +21,11 @@ class KeycloakOAuth2ClientTest {
         )
 
         when:
-        def clientBaseUrl = client.getTokenUrl()
+        def tokenUrl = client.getTokenUrl()
 
         then:
-        assert clientBaseUrl != null
-        assert clientBaseUrl == "${host}/auth/realms/${realm}"
+        assert tokenUrl != null
+        assert tokenUrl == "${host}/auth/realms/${realm}/protocol/openid-connect/token"
     }
 
     @Test

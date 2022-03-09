@@ -25,7 +25,7 @@ public final class GitHubOAuth2Client extends AbstractOAuth2Client {
 
     /**
      * Returns the token URL which the request for exchange authorization code for a token is sent to. For GitHub
-     * OAuth2 authorization code flow, the client base URL is <i>https://github.com</i>.
+     * OAuth2 authorization code flow, the token URL is <i>https://github.com/login/oauth/access_token</i>.
      *
      * @return non-null string representation of the token URL
      */

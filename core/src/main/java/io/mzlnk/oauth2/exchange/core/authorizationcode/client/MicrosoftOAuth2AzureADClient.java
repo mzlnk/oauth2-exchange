@@ -36,7 +36,7 @@ public final class MicrosoftOAuth2AzureADClient extends MicrosoftOAuth2Client {
 
     /**
      * Returns the token URL which the request for exchange authorization code for a token is sent to. For this type of
-     * the Microsoft OAuth2 authorization code flow related client, the client base URL is <i>https://login.microsoftonline.com/{azureADId}</i>, where:
+     * the Microsoft OAuth2 authorization code flow related client, the token URL is <i>https://login.microsoftonline.com/{azureADId}/oauth2/v2.0/token</i>, where:
      * <ul>
      *     <li><b>azureAdId</b> - string representation of the Azure AD ID</li>
      * </ul>

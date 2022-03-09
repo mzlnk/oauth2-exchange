@@ -2,7 +2,7 @@ package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.OktaAuthorizationCodeExchange;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeAuthorizationServerClient;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2AuthorizationServerClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2SingleSignOnClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaOAuth2TokenResponseHandler;
@@ -43,7 +43,7 @@ public class OktaAuthorizationCodeExchangeDefaultConfiguration {
                                                                                    @Value("${oauth2.exchange.providers.okta.redirect-uri}") String redirectUri,
                                                                                    @Value("${oauth2.exchange.providers.okta.okta-domain}") String oktaDomain,
                                                                                    @Value("${oauth2.exchange.providers.okta.okta-authorization-server-id}") String oktaAuthorizationServerId) {
-        return new OktaAuthorizationCodeExchangeAuthorizationServerClient(clientId, clientSecret, redirectUri, oktaDomain, oktaAuthorizationServerId);
+        return new OktaOAuth2AuthorizationServerClient(clientId, clientSecret, redirectUri, oktaDomain, oktaAuthorizationServerId);
     }
 
     @Bean(name = "defaultOktaResponseHandler")

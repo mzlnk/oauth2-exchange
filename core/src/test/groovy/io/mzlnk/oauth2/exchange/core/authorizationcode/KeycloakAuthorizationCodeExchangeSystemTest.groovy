@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakOAuth2Client
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.KeycloakOAuth2TokenResponseHandler
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.KeycloakOAuth2TokenResponse
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
@@ -38,9 +39,12 @@ class KeycloakAuthorizationCodeExchangeSystemTest {
                 'some-realm'
         )
 
-        def responseHandler = new KeycloakOAuth2TokenResponseHandler(new ObjectMapper())
+        def responseHandler = new KeycloakOAuth2TokenResponseHandler(
+                new KeycloakOAuth2TokenResponse.Factory(),
+                new ObjectMapper()
+        )
 
-        this.exchange = new KeycloakAuthorizationCodeExchange.Builder()
+        this.exchange = KeycloakAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
                 .responseHandler(responseHandler)
@@ -173,7 +177,7 @@ class KeycloakAuthorizationCodeExchangeSystemTest {
     @Test
     void "Should return exception when provide no exchange client"() {
         given:
-        def exchangeBuilder = new KeycloakAuthorizationCodeExchange.Builder()
+        def exchangeBuilder = KeycloakAuthorizationCodeExchange.builder()
                 .httpClient(new OkHttpClient())
 
         when:

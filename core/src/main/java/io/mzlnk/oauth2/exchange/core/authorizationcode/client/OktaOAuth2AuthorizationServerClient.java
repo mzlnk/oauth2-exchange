@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * Implementation of the client is created based on information posted on official
  * <a href="https://developer.okta.com/docs/reference/api/oidc/">documentation site</a>.
  */
-public final class OktaAuthorizationCodeExchangeAuthorizationServerClient extends OktaOAuth2Client {
+public final class OktaOAuth2AuthorizationServerClient extends OktaOAuth2Client {
 
     private final String oktaDomain;
     private final String authorizationServerId;
@@ -25,11 +25,11 @@ public final class OktaAuthorizationCodeExchangeAuthorizationServerClient extend
      * @param oktaAuthorizationServerId non-null string representation of the Okta authorization server ID
      * @throws NullPointerException if any of the parameters is null
      */
-    public OktaAuthorizationCodeExchangeAuthorizationServerClient(@NotNull String clientId,
-                                                                  @NotNull String clientSecret,
-                                                                  @NotNull String redirectUri,
-                                                                  @NotNull String oktaDomain,
-                                                                  @NotNull String oktaAuthorizationServerId) {
+    public OktaOAuth2AuthorizationServerClient(@NotNull String clientId,
+                                               @NotNull String clientSecret,
+                                               @NotNull String redirectUri,
+                                               @NotNull String oktaDomain,
+                                               @NotNull String oktaAuthorizationServerId) {
         super(clientId, clientSecret, redirectUri);
 
         Preconditions.checkNotNull(oktaDomain, "Parameter `oktaDomain` cannot be null.");
@@ -41,7 +41,7 @@ public final class OktaAuthorizationCodeExchangeAuthorizationServerClient extend
 
     /**
      * Returns the token URL which the request for exchange authorization code for a token is sent to. For this type of
-     * the Okta OAuth2 authorization code flow related client, the client base URL is <i>{oktaDomain}/oauth2/{authorizationServerId}</i>, where:
+     * the Okta OAuth2 authorization code flow related client, the token URL is <i>{oktaDomain}/oauth2/{authorizationServerId}/v1/token</i>, where:
      * <ul>
      *     <li><b>oktaDomain</b> - string representation of the Okta domain</li>
      *     <li><b>authorizationServerId</b> - string representation of the Okta authorization server ID</li>

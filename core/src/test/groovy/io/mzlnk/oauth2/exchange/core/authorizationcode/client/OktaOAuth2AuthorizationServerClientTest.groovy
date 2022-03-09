@@ -4,15 +4,15 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertThrows
 
-class OktaAuthorizationCodeExchangeAuthorizationServerClientTest {
+class OktaOAuth2AuthorizationServerClientTest {
 
     @Test
-    void "Should return client baseURL for authorization server client"() {
+    void "Should return token URL for authorization server client"() {
         given:
         def oktaDomain = 'https://some.domain.com'
         def oktaAuthorizationServerId = 'some-authorization-server-id'
 
-        def oktaClient = new OktaAuthorizationCodeExchangeAuthorizationServerClient(
+        def oktaClient = new OktaOAuth2AuthorizationServerClient(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri',
@@ -25,7 +25,7 @@ class OktaAuthorizationCodeExchangeAuthorizationServerClientTest {
 
         then:
         assert clientBaseUrl != null
-        assert clientBaseUrl == "${oktaDomain}/oauth2/${oktaAuthorizationServerId}"
+        assert clientBaseUrl == "${oktaDomain}/oauth2/${oktaAuthorizationServerId}/v1/token"
     }
 
     @Test
@@ -40,7 +40,7 @@ class OktaAuthorizationCodeExchangeAuthorizationServerClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new OktaAuthorizationCodeExchangeAuthorizationServerClient(
+                () -> new OktaOAuth2AuthorizationServerClient(
                         clientId,
                         clientSecret,
                         redirectUri,
@@ -65,7 +65,7 @@ class OktaAuthorizationCodeExchangeAuthorizationServerClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new OktaAuthorizationCodeExchangeAuthorizationServerClient(
+                () -> new OktaOAuth2AuthorizationServerClient(
                         clientId,
                         clientSecret,
                         redirectUri,
@@ -90,7 +90,7 @@ class OktaAuthorizationCodeExchangeAuthorizationServerClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new OktaAuthorizationCodeExchangeAuthorizationServerClient(
+                () -> new OktaOAuth2AuthorizationServerClient(
                         clientId,
                         clientSecret,
                         redirectUri,
@@ -115,7 +115,7 @@ class OktaAuthorizationCodeExchangeAuthorizationServerClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new OktaAuthorizationCodeExchangeAuthorizationServerClient(
+                () -> new OktaOAuth2AuthorizationServerClient(
                         clientId,
                         clientSecret,
                         redirectUri,
@@ -140,7 +140,7 @@ class OktaAuthorizationCodeExchangeAuthorizationServerClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new OktaAuthorizationCodeExchangeAuthorizationServerClient(
+                () -> new OktaOAuth2AuthorizationServerClient(
                         clientId,
                         clientSecret,
                         redirectUri,

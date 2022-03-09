@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertThrows
 
-class OktaAuthorizationCodeExchangeSingleSignOnClientTest {
+class OktaOAuth2SingleSignOnClienTest {
 
     @Test
-    void "Should return client baseURL for single-sign-on client"() {
+    void "Should return token URL for single-sign-on client"() {
         given:
         def oktaDomain = 'https://some.domain.com'
         def oktaClient = new OktaOAuth2SingleSignOnClient(
@@ -22,7 +22,7 @@ class OktaAuthorizationCodeExchangeSingleSignOnClientTest {
 
         then:
         assert clientBaseUrl != null
-        assert clientBaseUrl == "${oktaDomain}/oauth2"
+        assert clientBaseUrl == "${oktaDomain}/oauth2/v1/token"
     }
 
     @Test

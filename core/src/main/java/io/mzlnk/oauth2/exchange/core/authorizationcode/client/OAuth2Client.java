@@ -40,7 +40,7 @@ public interface OAuth2Client {
     /**
      * Returns the token URL which the request for exchange authorization code for a token is sent to.
      *
-     * @return non-null string representation of the client base URL
+     * @return non-null string representation of the token URL
      */
     @NotNull
     String getTokenUrl();

@@ -4,17 +4,18 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertThrows
 
-class FacebookAuthorizationCodeExchangeResponseTest {
+class GoogleOAuth2TokenResponseTest {
 
     @Test
     void "Should return exception when create response from null values"() {
         given:
+        def factory = new GoogleOAuth2TokenResponse.Factory()
         def values = null as Map<String, Object>
 
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> FacebookOAuth2TokenResponse.from(values)
+                () -> factory.create(values)
         )
 
         then:

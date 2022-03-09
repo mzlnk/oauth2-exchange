@@ -25,7 +25,7 @@ public final class FacebookOAuth2Client extends AbstractOAuth2Client {
 
     /**
      * Returns the token URL which the request for exchange authorization code for a token is sent to. For Facebook
-     * OAuth2 authorization code flow, the client base URL is <i>https://graph.facebook.com</i>.
+     * OAuth2 authorization code flow, the token URL is <i>https://graph.facebook.com/v12.0/oauth/access_token</i>.
      *
      * @return non-null string representation of the token URL
      */

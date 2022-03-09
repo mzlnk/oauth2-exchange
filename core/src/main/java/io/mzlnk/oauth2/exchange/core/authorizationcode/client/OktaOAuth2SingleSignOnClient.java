@@ -36,7 +36,7 @@ public final class OktaOAuth2SingleSignOnClient extends OktaOAuth2Client {
 
     /**
      * Returns the token URL which the request for exchange authorization code for a token is sent to. For this type of
-     * the Okta OAuth2 authorization code flow related client, the client base URL is <i>{oktaDomain}/oauth2</i>, where:
+     * the Okta OAuth2 authorization code flow related client, the token URL is <i>{oktaDomain}/oauth2/v1/token</i>, where:
      * <ul>
      *     <li><b>oktaDomain</b> - string representation of the Okta domain</li>
      * </ul>

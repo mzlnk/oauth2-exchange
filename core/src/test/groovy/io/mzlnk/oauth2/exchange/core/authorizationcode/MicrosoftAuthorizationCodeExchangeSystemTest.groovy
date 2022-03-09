@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftOAuth2ConsumerClient
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftOAuth2TokenResponseHandler
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftOAuth2TokenResponse
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
@@ -36,9 +37,12 @@ class MicrosoftAuthorizationCodeExchangeSystemTest {
                 'some-redirect-uri'
         )
 
-        def responseHandler = new MicrosoftOAuth2TokenResponseHandler(new ObjectMapper())
+        def responseHandler = new MicrosoftOAuth2TokenResponseHandler(
+                new MicrosoftOAuth2TokenResponse.Factory(),
+                new ObjectMapper()
+        )
 
-        this.exchange = new MicrosoftAuthorizationCodeExchange.Builder()
+        this.exchange = MicrosoftAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
                 .responseHandler(responseHandler)
@@ -169,7 +173,7 @@ class MicrosoftAuthorizationCodeExchangeSystemTest {
     @Test
     void "Should return exception when provide no exchange client"() {
         given:
-        def exchangeBuilder = new MicrosoftAuthorizationCodeExchange.Builder()
+        def exchangeBuilder = MicrosoftAuthorizationCodeExchange.builder()
                 .httpClient(new OkHttpClient())
 
         when:

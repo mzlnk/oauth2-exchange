@@ -39,7 +39,7 @@ public final class KeycloakOAuth2Client extends AbstractOAuth2Client {
 
     /**
      * Returns the token URL which the request for exchange authorization code for a token is sent to. For Keycloak
-     * OAuth2 authorization code flow, the client base URL is <i>{host}/auth/realms/{realm}</i> where
+     * OAuth2 authorization code flow, the token URL is <i>{host}/auth/realms/{realm}/protocol/openid-connect/token</i> where
      * <ul>
      *     <li><b>host</b> - string representation of the host provided during instance initialization</li>
      *     <li><b>realm</b> - string representation of the realm provided during instance initialization</li>

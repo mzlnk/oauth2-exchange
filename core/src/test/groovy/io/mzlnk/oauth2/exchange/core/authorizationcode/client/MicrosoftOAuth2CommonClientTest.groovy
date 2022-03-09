@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertThrows
 
-class MicrosoftAuthorizationCodeExchangeOrganizationsClientTest {
+class MicrosoftOAuth2CommonClientTest {
 
     @Test
-    void "Should return exception if clientId parameter is null for organization client"() {
+    void "Should return exception if clientId parameter is null for common client"() {
         given:
         def clientId = null
         def clientSecret = 'some-client-secret'
@@ -16,7 +16,7 @@ class MicrosoftAuthorizationCodeExchangeOrganizationsClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftOAuth2OrganizationsClient(clientId, clientSecret, redirectUri)
+                () -> new MicrosoftOAuth2CommonClient(clientId, clientSecret, redirectUri)
         )
 
         then:
@@ -25,7 +25,7 @@ class MicrosoftAuthorizationCodeExchangeOrganizationsClientTest {
     }
 
     @Test
-    void "Should return exception if clientSecret parameter is null for organization client"() {
+    void "Should return exception if clientSecret parameter is null for common client"() {
         given:
         def clientId = 'some-client-id'
         def clientSecret = null
@@ -34,7 +34,7 @@ class MicrosoftAuthorizationCodeExchangeOrganizationsClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftOAuth2OrganizationsClient(clientId, clientSecret, redirectUri)
+                () -> new MicrosoftOAuth2CommonClient(clientId, clientSecret, redirectUri)
         )
 
         then:
@@ -43,7 +43,7 @@ class MicrosoftAuthorizationCodeExchangeOrganizationsClientTest {
     }
 
     @Test
-    void "Should return exception if redirectUri parameter is null for organization client"() {
+    void "Should return exception if redirectUri parameter is null for common client"() {
         given:
         def clientId = 'some-client-id'
         def clientSecret = 'some-client-secret'
@@ -52,7 +52,7 @@ class MicrosoftAuthorizationCodeExchangeOrganizationsClientTest {
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftOAuth2OrganizationsClient(clientId, clientSecret, redirectUri)
+                () -> new MicrosoftOAuth2CommonClient(clientId, clientSecret, redirectUri)
         )
 
         then:
