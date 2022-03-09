@@ -33,7 +33,7 @@ class KeycloakOAuth2TokenResponseHandlerTest {
         }
 
         when:
-        def response = this.responseHandler.handleSuccessfulResponse(httpResponse)
+        def response = this.responseHandler.handleSuccessfulResponse(httpResponse) as KeycloakOAuth2TokenResponse
 
         then:
         assert response != null

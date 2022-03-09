@@ -33,7 +33,7 @@ class MicrosoftOAuth2TokenResponseHandlerTest {
         }
 
         when:
-        def response = this.responseHandler.handleResponse(httpResponse)
+        def response = this.responseHandler.handleResponse(httpResponse) as MicrosoftOAuth2TokenResponse
 
         then:
         assert response != null

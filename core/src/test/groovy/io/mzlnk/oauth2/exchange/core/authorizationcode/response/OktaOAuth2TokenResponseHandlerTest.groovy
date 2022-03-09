@@ -33,7 +33,7 @@ class OktaOAuth2TokenResponseHandlerTest {
         }
 
         when:
-        def response = this.responseHandler.handleResponse(httpResponse)
+        def response = this.responseHandler.handleResponse(httpResponse) as OktaOAuth2TokenResponse
 
         then:
         assert response != null
