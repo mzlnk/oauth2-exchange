@@ -1,9 +1,10 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GoogleAuthorizationCodeExchangeResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleOAuth2Client;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleOAuth2TokenResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GoogleOAuth2TokenResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -40,7 +41,7 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
  * <a href="https://developers.google.com/identity/protocols/oauth2/web-server">documentation site</a>.
  * </p>
  */
-public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<GoogleAuthorizationCodeExchangeResponse> {
+public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange {
 
     /**
      * Creates an instance of a builder used to create a {@link GoogleAuthorizationCodeExchange} instance with given
@@ -53,9 +54,9 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
     }
 
     private GoogleAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                            @NotNull GoogleAuthorizationCodeExchangeClient exchangeClient,
-                                            @NotNull GoogleAuthorizationCodeExchangeResponseHandler responseHandler) {
-        super(httpClient, exchangeClient, responseHandler);
+                                            @NotNull GoogleOAuth2Client oAuth2Client,
+                                            @NotNull GoogleOAuth2TokenResponseHandler responseHandler) {
+        super(httpClient, oAuth2Client, responseHandler);
     }
 
     /**
@@ -70,21 +71,19 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
      * @throws IllegalStateException if HTTP call made during exchange failed or cannot handle returned response properly
      */
     @Override
-    public GoogleAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+    public OAuth2TokenResponse exchangeAuthorizationCode(@NotNull String code) {
         verifyAuthorizationCode(code);
 
         var requestBody = new FormBody.Builder()
-                .add("client_id", this.exchangeClient.getClientId())
-                .add("client_secret", this.exchangeClient.getClientSecret())
+                .add("client_id", this.oAuth2Client.getClientId())
+                .add("client_secret", this.oAuth2Client.getClientSecret())
                 .add("code", code)
                 .add("grant_type", "authorization_code")
-                .add("redirect_uri", this.exchangeClient.getRedirectUri())
+                .add("redirect_uri", this.oAuth2Client.getRedirectUri())
                 .build();
 
-        var url = "%s/token".formatted(this.exchangeClient.getClientBaseUrl());
-
         var request = new Request.Builder()
-                .url(url)
+                .url(this.oAuth2Client.getTokenUrl())
                 .post(requestBody)
                 .build();
 
@@ -97,8 +96,8 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private GoogleAuthorizationCodeExchangeClient exchangeClient;
-        private GoogleAuthorizationCodeExchangeResponseHandler responseHandler;
+        private GoogleOAuth2Client exchangeClient;
+        private GoogleOAuth2TokenResponseHandler responseHandler;
 
         private Builder() {
 
@@ -118,10 +117,10 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         /**
          * Set an exchange client used in an exchange.
          *
-         * @param exchangeClient instance of {@link GoogleAuthorizationCodeExchangeClient} exchange client
+         * @param exchangeClient instance of {@link GoogleOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(GoogleAuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(GoogleOAuth2Client exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
@@ -129,10 +128,10 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         /**
          * Set an response handler used in an exchange.
          *
-         * @param responseHandler instance of {@link GoogleAuthorizationCodeExchangeResponseHandler} response handler
+         * @param responseHandler instance of {@link GoogleOAuth2TokenResponseHandler} response handler
          * @return builder instance for further chain configuration
          */
-        public Builder responseHandler(GoogleAuthorizationCodeExchangeResponseHandler responseHandler) {
+        public Builder responseHandler(GoogleOAuth2TokenResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
@@ -148,7 +147,7 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
          * <p>Optional parameters:</p>
          * <ul>
          *     <li><code>httpClient</code> - new instance of {@link OkHttpClient} used if no HTTP client explicitly provided</li>
-         *     <li><code>responseHandler</code> - new instance of {@link GoogleAuthorizationCodeExchangeResponseHandler} used if no response handler explicitly provided</li>
+         *     <li><code>responseHandler</code> - new instance of {@link GoogleOAuth2TokenResponseHandler} used if no response handler explicitly provided</li>
          * </ul>
          *
          * @return new instance of {@link GoogleAuthorizationCodeExchange} based on provided parameters
@@ -161,8 +160,8 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
             );
         }
 
-        private static Supplier<GoogleAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
-            return () -> new GoogleAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        private static Supplier<GoogleOAuth2TokenResponseHandler> defaultResponseHandler() {
+            return () -> new GoogleOAuth2TokenResponseHandler(new GoogleOAuth2TokenResponse.Factory(), new ObjectMapper());
         }
 
     }

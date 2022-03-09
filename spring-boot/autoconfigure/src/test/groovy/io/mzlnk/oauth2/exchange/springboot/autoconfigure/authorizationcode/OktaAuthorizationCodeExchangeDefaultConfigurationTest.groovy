@@ -1,8 +1,8 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeAuthorizationServerClient
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeSingleSignOnClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2AuthorizationServerClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2Client
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2SingleSignOnClient
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -86,8 +86,8 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.client-type=SINGLE_SIGN_ON")
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.okta-domain=some-okta-domain")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultOktaExchangeClient')
-                    assertThat(context).hasBean('defaultOktaResponseHandler')
+                    assertThat(context).hasBean('defaultOktaOAuth2Client')
+                    assertThat(context).hasBean('defaultOktaTokenResponseHandler')
                     assertThat(context).hasBean('defaultOktaExchange')
                 })
     }
@@ -99,8 +99,8 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.client-id=some-client-id")
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.client-secret=some-client-secret")
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultOktaExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultOktaResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultOktaOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultOktaTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultOktaExchange')
                 })
     }
@@ -110,8 +110,8 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, OktaAuthorizationCodeExchangeDefaultConfiguration))
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultOktaExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultOktaResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultOktaOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultOktaTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultOktaExchange')
                 })
     }
@@ -130,16 +130,15 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.client-type=SINGLE_SIGN_ON")
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.okta-domain=${oktaDomain}")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultOktaExchangeClient')
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeClient)
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeSingleSignOnClient)
+                    assertThat(context).hasBean('defaultOktaOAuth2Client')
+                    assertThat(context).hasSingleBean(OktaOAuth2Client)
+                    assertThat(context).hasSingleBean(OktaOAuth2SingleSignOnClient)
 
-                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaAuthorizationCodeExchangeSingleSignOnClient)
+                    def exchangeClient = context.getBean('defaultOktaOAuth2Client', OktaOAuth2SingleSignOnClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
-                    // TODO: implement getter for oktaDomain field - GH-44
-                    // assert exchangeClient.oktaDomain == oktaDomain
+                    assert exchangeClient.oktaDomain == oktaDomain
                 })
     }
 
@@ -159,11 +158,11 @@ class OktaAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.okta-domain=${oktaDomain}")
                 .withPropertyValues("${OKTA_EXCHANGE_PREFIX}.okta-authorization-server-id=${oktaAuthorizationServerId}")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultOktaExchangeClient')
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeClient)
-                    assertThat(context).hasSingleBean(OktaAuthorizationCodeExchangeAuthorizationServerClient)
+                    assertThat(context).hasBean('defaultOktaOAuth2Client')
+                    assertThat(context).hasSingleBean(OktaOAuth2Client)
+                    assertThat(context).hasSingleBean(OktaOAuth2AuthorizationServerClient)
 
-                    def exchangeClient = context.getBean('defaultOktaExchangeClient', OktaAuthorizationCodeExchangeAuthorizationServerClient)
+                    def exchangeClient = context.getBean('defaultOktaOAuth2Client', OktaOAuth2AuthorizationServerClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

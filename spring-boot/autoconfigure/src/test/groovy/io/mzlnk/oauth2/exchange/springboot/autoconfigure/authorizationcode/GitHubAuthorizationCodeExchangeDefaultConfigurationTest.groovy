@@ -1,6 +1,6 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubAuthorizationCodeExchangeClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubOAuth2Client
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -54,8 +54,8 @@ class GitHubAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${GITHUB_EXCHANGE_PREFIX}.client-secret=some-client-secret")
                 .withPropertyValues("${GITHUB_EXCHANGE_PREFIX}.redirect-uri=some-redirect-uri")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultGitHubExchangeClient')
-                    assertThat(context).hasBean('defaultGitHubResponseHandler')
+                    assertThat(context).hasBean('defaultGitHubOAuth2Client')
+                    assertThat(context).hasBean('defaultGitHubTokenResponseHandler')
                     assertThat(context).hasBean('defaultGitHubExchange')
                 })
     }
@@ -65,8 +65,8 @@ class GitHubAuthorizationCodeExchangeDefaultConfigurationTest {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GitHubAuthorizationCodeExchangeDefaultConfiguration))
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultGitHubExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultGitHubResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultGitHubOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultGitHubTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultGitHubExchange')
                 })
     }
@@ -78,8 +78,8 @@ class GitHubAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${GITHUB_EXCHANGE_PREFIX}.client-id=some-client-id")
                 .withPropertyValues("${GITHUB_EXCHANGE_PREFIX}.client-secret=some-client-secret")
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultGitHubExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultGitHubResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultGitHubOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultGitHubTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultGitHubExchange')
                 })
     }
@@ -96,9 +96,9 @@ class GitHubAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${GITHUB_EXCHANGE_PREFIX}.client-secret=${clientSecret}")
                 .withPropertyValues("${GITHUB_EXCHANGE_PREFIX}.redirect-uri=${redirectUri}")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultGitHubExchangeClient')
+                    assertThat(context).hasBean('defaultGitHubOAuth2Client')
 
-                    def exchangeClient = context.getBean('defaultGitHubExchangeClient', GitHubAuthorizationCodeExchangeClient)
+                    def exchangeClient = context.getBean('defaultGitHubOAuth2Client', GitHubOAuth2Client)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

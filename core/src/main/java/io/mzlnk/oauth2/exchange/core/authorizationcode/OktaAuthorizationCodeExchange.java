@@ -1,9 +1,10 @@
 package io.mzlnk.oauth2.exchange.core.authorizationcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaAuthorizationCodeExchangeClient;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaAuthorizationCodeExchangeResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OktaAuthorizationCodeExchangeResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2Client;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaOAuth2TokenResponseHandler;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OktaOAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -40,7 +41,7 @@ import static io.mzlnk.oauth2.exchange.core.utils.OkHttpUtils.defaultOkHttpClien
  * <a href="https://developer.okta.com/docs/reference/api/oidc/">documentation site</a>.
  * </p>
  */
-public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange<OktaAuthorizationCodeExchangeResponse> {
+public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExchange {
 
     /**
      * Creates an instance of a builder used to create a {@link OktaAuthorizationCodeExchange} instance with given
@@ -53,9 +54,9 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
     }
 
     private OktaAuthorizationCodeExchange(@NotNull OkHttpClient httpClient,
-                                          @NotNull OktaAuthorizationCodeExchangeClient exchangeClient,
-                                          @NotNull OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
-        super(httpClient, exchangeClient, responseHandler);
+                                          @NotNull OktaOAuth2Client oAuth2Client,
+                                          @NotNull OktaOAuth2TokenResponseHandler responseHandler) {
+        super(httpClient, oAuth2Client, responseHandler);
     }
 
     /**
@@ -70,21 +71,19 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
      * @throws IllegalStateException if HTTP call made during exchange failed or cannot handle returned response properly
      */
     @Override
-    public OktaAuthorizationCodeExchangeResponse exchangeAuthorizationCode(@NotNull String code) {
+    public OAuth2TokenResponse exchangeAuthorizationCode(@NotNull String code) {
         verifyAuthorizationCode(code);
 
         var requestBody = new FormBody.Builder()
-                .add("client_id", this.exchangeClient.getClientId())
-                .add("client_secret", this.exchangeClient.getClientSecret())
+                .add("client_id", this.oAuth2Client.getClientId())
+                .add("client_secret", this.oAuth2Client.getClientSecret())
                 .add("code", code)
                 .add("grant_type", "authorization_code")
-                .add("redirect_uri", this.exchangeClient.getRedirectUri())
+                .add("redirect_uri", this.oAuth2Client.getRedirectUri())
                 .build();
 
-        var url = "%s/v1/token".formatted(this.exchangeClient.getClientBaseUrl());
-
         var request = new Request.Builder()
-                .url(url)
+                .url(this.oAuth2Client.getTokenUrl())
                 .post(requestBody)
                 .build();
 
@@ -97,8 +96,8 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private OktaAuthorizationCodeExchangeClient exchangeClient;
-        private OktaAuthorizationCodeExchangeResponseHandler responseHandler;
+        private OktaOAuth2Client exchangeClient;
+        private OktaOAuth2TokenResponseHandler responseHandler;
 
         private Builder() {
 
@@ -118,10 +117,10 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
         /**
          * Set an exchange client used in an exchange.
          *
-         * @param exchangeClient instance of {@link OktaAuthorizationCodeExchangeClient} exchange client
+         * @param exchangeClient instance of {@link OktaOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(OktaAuthorizationCodeExchangeClient exchangeClient) {
+        public Builder exchangeClient(OktaOAuth2Client exchangeClient) {
             this.exchangeClient = exchangeClient;
             return this;
         }
@@ -129,10 +128,10 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
         /**
          * Set an response handler used in an exchange.
          *
-         * @param responseHandler instance of {@link OktaAuthorizationCodeExchangeResponseHandler} response handler
+         * @param responseHandler instance of {@link OktaOAuth2TokenResponseHandler} response handler
          * @return builder instance for further chain configuration
          */
-        public Builder responseHandler(OktaAuthorizationCodeExchangeResponseHandler responseHandler) {
+        public Builder responseHandler(OktaOAuth2TokenResponseHandler responseHandler) {
             this.responseHandler = responseHandler;
             return this;
         }
@@ -148,7 +147,7 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
          * <p>Optional parameters:</p>
          * <ul>
          *     <li><code>httpClient</code> - new instance of {@link OkHttpClient} used if no HTTP client explicitly provided</li>
-         *     <li><code>responseHandler</code> - new instance of {@link OktaAuthorizationCodeExchangeResponseHandler} used if no response handler explicitly provided</li>
+         *     <li><code>responseHandler</code> - new instance of {@link OktaOAuth2TokenResponseHandler} used if no response handler explicitly provided</li>
          * </ul>
          *
          * @return new instance of {@link GoogleAuthorizationCodeExchange} based on provided parameters
@@ -161,8 +160,8 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
             );
         }
 
-        private static Supplier<OktaAuthorizationCodeExchangeResponseHandler> defaultResponseHandler() {
-            return () -> new OktaAuthorizationCodeExchangeResponseHandler(new ObjectMapper());
+        private static Supplier<OktaOAuth2TokenResponseHandler> defaultResponseHandler() {
+            return () -> new OktaOAuth2TokenResponseHandler(new OktaOAuth2TokenResponse.Factory(), new ObjectMapper());
         }
 
     }

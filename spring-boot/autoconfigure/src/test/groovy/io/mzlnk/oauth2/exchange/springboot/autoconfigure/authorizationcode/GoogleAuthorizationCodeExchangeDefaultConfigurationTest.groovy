@@ -1,6 +1,6 @@
 package io.mzlnk.oauth2.exchange.springboot.autoconfigure.authorizationcode
 
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleOAuth2Client
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.OAuth2ExchangeCoreAutoConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -54,8 +54,8 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-secret=some-client-secret")
                 .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.redirect-uri=some-redirect-uri")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultGoogleExchangeClient')
-                    assertThat(context).hasBean('defaultGoogleResponseHandler')
+                    assertThat(context).hasBean('defaultGoogleOAuth2Client')
+                    assertThat(context).hasBean('defaultGoogleTokenResponseHandler')
                     assertThat(context).hasBean('defaultGoogleExchange')
                 })
     }
@@ -65,8 +65,8 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, GoogleAuthorizationCodeExchangeDefaultConfiguration))
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultGoogleExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultGoogleResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultGoogleOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultGoogleTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultGoogleExchange')
                 })
     }
@@ -78,8 +78,8 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-id=some-client-id")
                 .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-secret=some-client-secret")
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultGoogleExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultGoogleResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultGoogleOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultGoogleTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultGoogleExchange')
                 })
     }
@@ -96,9 +96,9 @@ class GoogleAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.client-secret=${clientSecret}")
                 .withPropertyValues("${GOOGLE_EXCHANGE_PREFIX}.redirect-uri=${redirectUri}")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultGoogleExchangeClient')
+                    assertThat(context).hasBean('defaultGoogleOAuth2Client')
 
-                    def exchangeClient = context.getBean('defaultGoogleExchangeClient', GoogleAuthorizationCodeExchangeClient)
+                    def exchangeClient = context.getBean('defaultGoogleOAuth2Client', GoogleOAuth2Client)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

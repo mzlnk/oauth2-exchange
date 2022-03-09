@@ -2,12 +2,12 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
-import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleAuthorizationCodeExchangeClient
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleAuthorizationCodeExchangeResponseHandler
+import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleOAuth2Client
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleOAuth2TokenResponseHandler
+import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GoogleOAuth2TokenResponse
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 import static io.mzlnk.oauth2.exchange.core.utils.TestUtils.loadResourceAsString
@@ -31,15 +31,18 @@ class GoogleAuthorizationCodeExchangeSystemTest {
                 .addInterceptor(http)
                 .build()
 
-        def exchangeClient = new GoogleAuthorizationCodeExchangeClient(
+        def exchangeClient = new GoogleOAuth2Client(
                 'some-client-id',
                 'some-client-secret',
                 'some-redirect-uri'
         )
 
-        def responseHandler = new GoogleAuthorizationCodeExchangeResponseHandler(new ObjectMapper())
+        def responseHandler = new GoogleOAuth2TokenResponseHandler(
+                new GoogleOAuth2TokenResponse.Factory(),
+                new ObjectMapper()
+        )
 
-        this.exchange = new GoogleAuthorizationCodeExchange.Builder()
+        this.exchange = GoogleAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
                 .exchangeClient(exchangeClient)
                 .responseHandler(responseHandler)
@@ -169,7 +172,7 @@ class GoogleAuthorizationCodeExchangeSystemTest {
     @Test
     void "Should return exception when provide no exchange client"() {
         given:
-        def exchangeBuilder = new GoogleAuthorizationCodeExchange.Builder()
+        def exchangeBuilder = GoogleAuthorizationCodeExchange.builder()
                 .httpClient(new OkHttpClient())
 
         when:
