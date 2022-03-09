@@ -11,67 +11,28 @@ on:
       - 'tmp/**'
 
 jobs:
-  core-tests:
-    name: 'oauth2-exchange-core: run tests'
+  tests:
+    name: 'run tests'
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setting up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: Build, verify and install with Maven (core)
         working-directory: core
+        run: mvn clean install
 
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setting up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-          cache: maven
-
-      - name: Build and verify with Maven
-        run: mvn clean verify
-
-
-  spring-boot-autoconfigure-tests:
-    name: 'oauth2-exchange-spring-boot-autoconfigure: run tests'
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
+      - name: Build, verify and install with Maven (spring-boot-autoconfigure)
         working-directory: spring-boot/autoconfigure
+        run: mvn clean install
 
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setting up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-          cache: maven
-
-      - name: Build and verify with Maven
-        run: mvn clean verify
-
-
-  spring-boot-starter-run-tests-on-pr:
-    name: 'oauth2-exchange-spring-boot-starter: run tests'
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
+      - name: Build and verify with Maven (spring-boot-starter)
         working-directory: spring-boot/starter
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setting up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-          cache: maven
-
-      - name: Build and verify with Maven
-        run: mvn clean verify
+        run: mvn clean install
