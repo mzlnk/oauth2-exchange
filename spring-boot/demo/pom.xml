@@ -18,12 +18,22 @@
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+
+        <!-- dependencies -->
+        <oauth2-exchange-spring-boot-starter.version>${project.version}</oauth2-exchange-spring-boot-starter.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- oauth2-exchange spring-boot-starter -->
+        <dependency>
+            <groupId>io.mzlnk.oauth2.exchange</groupId>
+            <artifactId>oauth2-exchange-spring-boot-starter</artifactId>
+            <version>${oauth2-exchange-spring-boot-starter.version}</version>
         </dependency>
 
         <!-- tests -->
