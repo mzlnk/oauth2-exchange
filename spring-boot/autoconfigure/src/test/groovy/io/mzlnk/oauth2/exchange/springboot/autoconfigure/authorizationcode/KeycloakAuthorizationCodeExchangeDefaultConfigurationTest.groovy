@@ -58,8 +58,8 @@ class KeycloakAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${KEYCLOAK_EXCHANGE_PREFIX}.host=https://some-host.com")
                 .withPropertyValues("${KEYCLOAK_EXCHANGE_PREFIX}.realm=some-realm")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultKeycloakExchangeClient')
-                    assertThat(context).hasBean('defaultKeycloakResponseHandler')
+                    assertThat(context).hasBean('defaultKeycloakOAuth2Client')
+                    assertThat(context).hasBean('defaultKeycloakTokenResponseHandler')
                     assertThat(context).hasBean('defaultKeycloakExchange')
                 })
     }
@@ -69,8 +69,8 @@ class KeycloakAuthorizationCodeExchangeDefaultConfigurationTest {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, KeycloakAuthorizationCodeExchangeDefaultConfiguration))
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultKeycloakExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultKeycloakResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultKeycloakOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultKeycloakTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultKeycloakExchange')
                 })
     }
@@ -82,8 +82,8 @@ class KeycloakAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${KEYCLOAK_EXCHANGE_PREFIX}.client-id=some-client-id")
                 .withPropertyValues("${KEYCLOAK_EXCHANGE_PREFIX}.client-secret=some-client-secret")
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultKeycloakExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultKeycloakResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultKeycloakOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultKeycloakTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultKeycloakExchange')
                 })
     }
@@ -104,9 +104,9 @@ class KeycloakAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${KEYCLOAK_EXCHANGE_PREFIX}.host=${host}")
                 .withPropertyValues("${KEYCLOAK_EXCHANGE_PREFIX}.realm=${realm}")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultKeycloakExchangeClient')
+                    assertThat(context).hasBean('defaultKeycloakOAuth2Client')
 
-                    def exchangeClient = context.getBean('defaultKeycloakExchangeClient', KeycloakOAuth2Client)
+                    def exchangeClient = context.getBean('defaultKeycloakOAuth2Client', KeycloakOAuth2Client)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

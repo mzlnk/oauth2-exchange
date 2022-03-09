@@ -54,8 +54,8 @@ class FacebookAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${FACEBOOK_EXCHANGE_PREFIX}.client-secret=some-client-secret")
                 .withPropertyValues("${FACEBOOK_EXCHANGE_PREFIX}.redirect-uri=some-redirect-uri")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultFacebookExchangeClient')
-                    assertThat(context).hasBean('defaultFacebookResponseHandler')
+                    assertThat(context).hasBean('defaultFacebookOAuth2Client')
+                    assertThat(context).hasBean('defaultFacebookTokenResponseHandler')
                     assertThat(context).hasBean('defaultFacebookExchange')
                 })
     }
@@ -65,8 +65,8 @@ class FacebookAuthorizationCodeExchangeDefaultConfigurationTest {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, FacebookAuthorizationCodeExchangeDefaultConfiguration))
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultFacebookExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultFacebookResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultFacebookOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultFacebookTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultFacebookExchange')
                 })
     }
@@ -78,8 +78,8 @@ class FacebookAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${FACEBOOK_EXCHANGE_PREFIX}.client-id=some-client-id")
                 .withPropertyValues("${FACEBOOK_EXCHANGE_PREFIX}.client-secret=some-client-secret")
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultFacebookExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultFacebookResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultFacebookOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultFacebookTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultFacebookExchange')
                 })
     }
@@ -96,9 +96,9 @@ class FacebookAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${FACEBOOK_EXCHANGE_PREFIX}.client-secret=${clientSecret}")
                 .withPropertyValues("${FACEBOOK_EXCHANGE_PREFIX}.redirect-uri=${redirectUri}")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultFacebookExchangeClient')
+                    assertThat(context).hasBean('defaultFacebookOAuth2Client')
 
-                    def exchangeClient = context.getBean('defaultFacebookExchangeClient', FacebookOAuth2Client)
+                    def exchangeClient = context.getBean('defaultFacebookOAuth2Client', FacebookOAuth2Client)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri

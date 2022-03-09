@@ -94,8 +94,8 @@ class MicrosoftAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.client-assertion-type=some-client-assertion-type")
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.client-assertion=some-client-assertion")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultMicrosoftExchangeClient')
-                    assertThat(context).hasBean('defaultMicrosoftResponseHandler')
+                    assertThat(context).hasBean('defaultMicrosoftOAuth2Client')
+                    assertThat(context).hasBean('defaultMicrosoftTokenResponseHandler')
                     assertThat(context).hasBean('defaultMicrosoftExchange')
                 })
     }
@@ -109,8 +109,8 @@ class MicrosoftAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.redirect-uri=some-redirect-uri")
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.client-type=COMMON")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultMicrosoftExchangeClient')
-                    assertThat(context).hasBean('defaultMicrosoftResponseHandler')
+                    assertThat(context).hasBean('defaultMicrosoftOAuth2Client')
+                    assertThat(context).hasBean('defaultMicrosoftTokenResponseHandler')
                     assertThat(context).hasBean('defaultMicrosoftExchange')
                 })
     }
@@ -122,8 +122,8 @@ class MicrosoftAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.client-id=some-client-id")
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.client-secret=some-client-secret")
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultMicrosoftExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultMicrosoftResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultMicrosoftOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultMicrosoftTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultMicrosoftExchange')
                 })
     }
@@ -133,8 +133,8 @@ class MicrosoftAuthorizationCodeExchangeDefaultConfigurationTest {
         this.contextRunner
                 .withConfiguration(AutoConfigurations.of(OAuth2ExchangeCoreAutoConfiguration, MicrosoftAuthorizationCodeExchangeDefaultConfiguration))
                 .run((context) -> {
-                    assertThat(context).doesNotHaveBean('defaultMicrosoftExchangeClient')
-                    assertThat(context).doesNotHaveBean('defaultMicrosoftResponseHandler')
+                    assertThat(context).doesNotHaveBean('defaultMicrosoftOAuth2Client')
+                    assertThat(context).doesNotHaveBean('defaultMicrosoftTokenResponseHandler')
                     assertThat(context).doesNotHaveBean('defaultMicrosoftExchange')
                 })
     }
@@ -152,11 +152,11 @@ class MicrosoftAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.redirect-uri=${redirectUri}")
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.client-type=COMMON")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultMicrosoftExchangeClient')
+                    assertThat(context).hasBean('defaultMicrosoftOAuth2Client')
                     assertThat(context).hasSingleBean(MicrosoftOAuth2Client)
                     assertThat(context).hasSingleBean(MicrosoftOAuth2CommonClient)
 
-                    def exchangeClient = context.getBean('defaultMicrosoftExchangeClient', MicrosoftOAuth2CommonClient)
+                    def exchangeClient = context.getBean('defaultMicrosoftOAuth2Client', MicrosoftOAuth2CommonClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
@@ -176,11 +176,11 @@ class MicrosoftAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.redirect-uri=${redirectUri}")
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.client-type=CONSUMER")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultMicrosoftExchangeClient')
+                    assertThat(context).hasBean('defaultMicrosoftOAuth2Client')
                     assertThat(context).hasSingleBean(MicrosoftOAuth2Client)
                     assertThat(context).hasSingleBean(MicrosoftOAuth2ConsumerClient)
 
-                    def exchangeClient = context.getBean('defaultMicrosoftExchangeClient', MicrosoftOAuth2ConsumerClient)
+                    def exchangeClient = context.getBean('defaultMicrosoftOAuth2Client', MicrosoftOAuth2ConsumerClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
@@ -200,11 +200,11 @@ class MicrosoftAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.redirect-uri=${redirectUri}")
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.client-type=ORGANIZATION")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultMicrosoftExchangeClient')
+                    assertThat(context).hasBean('defaultMicrosoftOAuth2Client')
                     assertThat(context).hasSingleBean(MicrosoftOAuth2Client)
                     assertThat(context).hasSingleBean(MicrosoftOAuth2OrganizationsClient)
 
-                    def exchangeClient = context.getBean('defaultMicrosoftExchangeClient', MicrosoftOAuth2OrganizationsClient)
+                    def exchangeClient = context.getBean('defaultMicrosoftOAuth2Client', MicrosoftOAuth2OrganizationsClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
@@ -226,11 +226,11 @@ class MicrosoftAuthorizationCodeExchangeDefaultConfigurationTest {
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.client-type=AZURE")
                 .withPropertyValues("${MICROSOFT_EXCHANGE_PREFIX}.azure-ad-id=${azureADId}")
                 .run((context) -> {
-                    assertThat(context).hasBean('defaultMicrosoftExchangeClient')
+                    assertThat(context).hasBean('defaultMicrosoftOAuth2Client')
                     assertThat(context).hasSingleBean(MicrosoftOAuth2Client)
                     assertThat(context).hasSingleBean(MicrosoftOAuth2AzureADClient)
 
-                    def exchangeClient = context.getBean('defaultMicrosoftExchangeClient', MicrosoftOAuth2AzureADClient)
+                    def exchangeClient = context.getBean('defaultMicrosoftOAuth2Client', MicrosoftOAuth2AzureADClient)
                     assert exchangeClient.clientId == clientId
                     assert exchangeClient.clientSecret == clientSecret
                     assert exchangeClient.redirectUri == redirectUri
