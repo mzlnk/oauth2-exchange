@@ -25,14 +25,14 @@ jobs:
           distribution: 'adopt'
           cache: maven
 
-      - name: Build, verify and install with Maven (core)
+      - name: run tests (core)
         working-directory: core
         run: mvn clean install
 
-      - name: Build, verify and install with Maven (spring-boot-autoconfigure)
+      - name: run tests (spring-boot-autoconfigure)
         working-directory: spring-boot/autoconfigure
         run: mvn clean install
 
-      - name: Build and verify with Maven (spring-boot-starter)
+      - name: run tests (spring-boot-starter)
         working-directory: spring-boot/starter
-        run: mvn clean install
+        run: mvn clean verify
