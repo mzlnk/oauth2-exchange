@@ -95,7 +95,7 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private OktaOAuth2Client exchangeClient;
+        private OktaOAuth2Client oAuth2Client;
         private OktaOAuth2TokenResponseHandler responseHandler;
 
         private Builder() {
@@ -114,13 +114,13 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
         }
 
         /**
-         * Set an exchange client used in an exchange.
+         * Set an OAuth2Client client used in an exchange.
          *
-         * @param exchangeClient instance of {@link OktaOAuth2Client} exchange client
+         * @param oAuth2Client instance of {@link OktaOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(OktaOAuth2Client exchangeClient) {
-            this.exchangeClient = exchangeClient;
+        public Builder oAuth2Client(OktaOAuth2Client oAuth2Client) {
+            this.oAuth2Client = oAuth2Client;
             return this;
         }
 
@@ -154,7 +154,7 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
         public OktaAuthorizationCodeExchange build() {
             return new OktaAuthorizationCodeExchange(
                     Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),
-                    this.exchangeClient,
+                    this.oAuth2Client,
                     Optional.ofNullable(this.responseHandler).orElseGet(defaultResponseHandler())
             );
         }

@@ -58,7 +58,7 @@ public class OktaAuthorizationCodeExchangeDefaultConfiguration {
         log.debug("Creating default OAuth2 authorization code exchange for Okta auth provider");
         return OktaAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
-                .exchangeClient(exchangeClient)
+                .oAuth2Client(exchangeClient)
                 .responseHandler(responseHandler)
                 .build();
     }

@@ -70,7 +70,7 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
                                                                                  @Value("${oauth2.exchange.providers.microsoft.client-assertion:#{null}}") String clientAssertion) {
         log.debug("Creating default OAuth2 authorization code exchange for Microsoft auth provider");
         return MicrosoftAuthorizationCodeExchange.builder()
-                .exchangeClient(exchangeClient)
+                .oAuth2Client(exchangeClient)
                 .responseHandler(responseHandler)
                 .scope(scope)
                 .codeVerifier(codeVerifier)

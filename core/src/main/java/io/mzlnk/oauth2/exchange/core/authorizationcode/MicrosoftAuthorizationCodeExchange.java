@@ -133,7 +133,7 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private MicrosoftOAuth2Client exchangeClient;
+        private MicrosoftOAuth2Client oAuth2Client;
         private MicrosoftOAuth2TokenResponseHandler responseHandler;
 
         private String scope;
@@ -157,13 +157,13 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
         }
 
         /**
-         * Set an exchange client used in an exchange.
+         * Set an OAuth2 client used in an exchange.
          *
-         * @param exchangeClient instance of {@link MicrosoftOAuth2Client} exchange client
+         * @param oAuth2Client instance of {@link MicrosoftOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(MicrosoftOAuth2Client exchangeClient) {
-            this.exchangeClient = exchangeClient;
+        public Builder oAuth2Client(MicrosoftOAuth2Client oAuth2Client) {
+            this.oAuth2Client = oAuth2Client;
             return this;
         }
 
@@ -246,7 +246,7 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
         public MicrosoftAuthorizationCodeExchange build() {
             return new MicrosoftAuthorizationCodeExchange(
                     Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),
-                    this.exchangeClient,
+                    this.oAuth2Client,
                     Optional.ofNullable(this.responseHandler).orElseGet(defaultResponseHandler()),
                     this.scope,
                     this.codeVerifier,

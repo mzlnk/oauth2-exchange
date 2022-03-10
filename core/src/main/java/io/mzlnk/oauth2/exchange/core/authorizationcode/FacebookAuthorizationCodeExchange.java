@@ -92,7 +92,7 @@ public final class FacebookAuthorizationCodeExchange extends AbstractAuthorizati
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private FacebookOAuth2Client exchangeClient;
+        private FacebookOAuth2Client oauth2Client;
         private FacebookOAuth2TokenResponseHandler responseHandler;
 
         private Builder() {
@@ -111,13 +111,13 @@ public final class FacebookAuthorizationCodeExchange extends AbstractAuthorizati
         }
 
         /**
-         * Set an exchange client used in an exchange.
+         * Set an OAuth2 client used in an exchange.
          *
-         * @param exchangeClient instance of {@link FacebookOAuth2Client} exchange client
+         * @param oAuth2Client instance of {@link FacebookOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(FacebookOAuth2Client exchangeClient) {
-            this.exchangeClient = exchangeClient;
+        public Builder oAuth2Client(FacebookOAuth2Client oAuth2Client) {
+            this.oauth2Client = oAuth2Client;
             return this;
         }
 
@@ -151,7 +151,7 @@ public final class FacebookAuthorizationCodeExchange extends AbstractAuthorizati
         public FacebookAuthorizationCodeExchange build() {
             return new FacebookAuthorizationCodeExchange(
                     Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),
-                    this.exchangeClient,
+                    this.oauth2Client,
                     Optional.ofNullable(this.responseHandler).orElseGet(defaultResponseHandler())
             );
         }

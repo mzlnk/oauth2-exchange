@@ -41,7 +41,7 @@ class MicrosoftAuthorizationCodeExchangeSystemTest {
 
         this.exchange = MicrosoftAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
-                .exchangeClient(exchangeClient)
+                .oAuth2Client(exchangeClient)
                 .responseHandler(responseHandler)
                 .build()
     }

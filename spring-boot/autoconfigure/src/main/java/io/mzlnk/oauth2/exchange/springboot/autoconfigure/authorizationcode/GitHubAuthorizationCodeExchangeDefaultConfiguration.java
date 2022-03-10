@@ -41,7 +41,7 @@ public class GitHubAuthorizationCodeExchangeDefaultConfiguration {
         log.debug("Creating default OAuth2 authorization code exchange for GitHub auth provider");
         return GitHubAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
-                .exchangeClient(exchangeClient)
+                .oAuth2Client(exchangeClient)
                 .responseHandler(responseHandler)
                 .build();
     }

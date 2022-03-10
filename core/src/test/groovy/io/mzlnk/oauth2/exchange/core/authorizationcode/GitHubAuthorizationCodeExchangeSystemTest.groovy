@@ -40,7 +40,7 @@ class GitHubAuthorizationCodeExchangeSystemTest {
 
         this.exchange = GitHubAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
-                .exchangeClient(exchangeClient)
+                .oAuth2Client(exchangeClient)
                 .responseHandler(responseHandler)
                 .build()
     }
