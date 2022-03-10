@@ -6,7 +6,7 @@
 
     <groupId>io.mzlnk.oauth2.exchange</groupId>
     <artifactId>oauth2-exchange-spring-boot-starter</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>oauth2-exchange-spring-boot-starter</name>
@@ -90,7 +90,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
+                <version>1.6.12</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
