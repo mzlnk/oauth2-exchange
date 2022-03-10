@@ -43,6 +43,17 @@ Currently, the oauth2-exchange library provides *ready-to-use* support for the f
 - [Microsoft](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)
 - [Okta](https://developer.okta.com/docs/reference/api/oidc/#_2-okta-as-the-identity-platform-for-your-app-or-api)
 
+### See a bug?
+
+Have noticed a bug in a library? Do not hesitate to report it by creating an GitHub issue!
+
+### Want to contribute?
+
+If you want to contribute to the source code:
+- find an issue you want to work on (or create a new one if you want to create something new)
+- fork the project
+- implement the feature/fix (do not forget about test coverage!)
+- create a pull request to `develop` branch
 
 ## How to install
 
