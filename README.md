@@ -29,7 +29,7 @@ The whole project is currently in development, so you can expect plenty of updat
 
 | type   | current version |
 | ------ | --------------- |
-| stable | -               |
+| stable | 0.1.0           |
 | latest | 0.1.0-SNAPSHOT  |
 
 
