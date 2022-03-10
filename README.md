@@ -21,7 +21,7 @@ Apart from the core library which can be used in any Java project, there is also
 and automatically configures proper templates based on provided credentials via application properties. Therefore, you do not need to bother about declaring 
 necessary beans and other related stuff in your Spring Boot application ;)
 
-You can find out more about implementation details and how to get started with a library on [GitHub wiki pages](https://github.com/mzlnk/oauth2-exchange/wiki).
+You can find out more about implementation details and how to get started with a library on [GitHub wiki pages](https://github.com/mzlnk/oauth2-exchange/wiki/Welcome-to-the-OAuth2-Exchange-Wiki!) or official [Java docs](https://www.javadoc.io/doc/io.mzlnk.oauth2.exchange/oauth2-exchange-core).
 
 ## Development
 
@@ -104,7 +104,7 @@ implementation 'io.mzlnk.oauth2.exchange:oauth2-exchange-spring-boot-starter:0.1
 
 ## Documentation
 
-If you want to get to know how the whole library works and how to use it in your project - you can check out [GitHub wiki pages](https://github.com/mzlnk/oauth2-exchange/wiki)
+If you want to get to know how the whole library works and how to use it in your project - you can check out [GitHub wiki pages](https://github.com/mzlnk/oauth2-exchange/wiki/Welcome-to-the-OAuth2-Exchange-Wiki!)
 which include guides and tutorials. There are also official [Java docs](https://www.javadoc.io/doc/io.mzlnk.oauth2.exchange/oauth2-exchange-core) for core library.
 
 ## Credits
