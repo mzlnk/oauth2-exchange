@@ -37,10 +37,7 @@ class MicrosoftAuthorizationCodeExchangeSystemTest {
                 'some-redirect-uri'
         )
 
-        def responseHandler = new MicrosoftOAuth2TokenResponseHandler(
-                new MicrosoftOAuth2TokenResponse.Factory(),
-                new ObjectMapper()
-        )
+        def responseHandler = new MicrosoftOAuth2TokenResponseHandler(new ObjectMapper())
 
         this.exchange = MicrosoftAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
@@ -69,7 +66,7 @@ class MicrosoftAuthorizationCodeExchangeSystemTest {
         ).thenReturn(httpResponse)
 
         when:
-        def response = this.exchange.exchangeAuthorizationCode('some-code')
+        def response = this.exchange.exchangeAuthorizationCode('some-code') as MicrosoftOAuth2TokenResponse
 
         then:
         assert response != null

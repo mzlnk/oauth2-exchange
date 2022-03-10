@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookOAuth2Client
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookOAuth2TokenResponseHandler
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.FacebookOAuth2TokenResponse
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
@@ -37,10 +36,7 @@ class FacebookAuthorizationCodeExchangeSystemTest {
                 'some-redirect-uri'
         )
 
-        def responseHandler = new FacebookOAuth2TokenResponseHandler(
-                new FacebookOAuth2TokenResponse.Factory(),
-                new ObjectMapper()
-        )
+        def responseHandler = new FacebookOAuth2TokenResponseHandler(new ObjectMapper())
 
         this.exchange = FacebookAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)

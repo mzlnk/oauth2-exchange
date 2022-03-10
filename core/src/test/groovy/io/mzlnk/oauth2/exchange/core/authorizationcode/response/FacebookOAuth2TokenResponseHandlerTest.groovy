@@ -2,7 +2,6 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode.response
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.FacebookOAuth2TokenResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -18,10 +17,7 @@ class FacebookOAuth2TokenResponseHandlerTest {
 
     @BeforeEach
     void "Set up tests"() {
-        this.responseHandler = new FacebookOAuth2TokenResponseHandler(
-                new FacebookOAuth2TokenResponse.Factory(),
-                new ObjectMapper()
-        )
+        this.responseHandler = new FacebookOAuth2TokenResponseHandler(new ObjectMapper())
     }
 
     @Test
@@ -82,35 +78,17 @@ class FacebookOAuth2TokenResponseHandlerTest {
     @Test
     void "Should return exception if objectMapper parameter is null"() {
         given:
-        def responseFactory = new FacebookOAuth2TokenResponse.Factory()
         def objectMapper = null
 
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new FacebookOAuth2TokenResponseHandler(responseFactory, objectMapper)
+                () -> new FacebookOAuth2TokenResponseHandler(objectMapper)
         )
 
         then:
         assert exception != null
         assert exception.message == 'Parameter `objectMapper` cannot be null.'
-    }
-
-    @Test
-    void "Should return exception if responseFactory parameter is null"() {
-        given:
-        def responseFactory = null
-        def objectMapper = new ObjectMapper()
-
-        when:
-        def exception = assertThrows(
-                NullPointerException,
-                () -> new FacebookOAuth2TokenResponseHandler(responseFactory, objectMapper)
-        )
-
-        then:
-        assert exception != null
-        assert exception.message == 'Parameter `responseFactory` cannot be null.'
     }
 
 }

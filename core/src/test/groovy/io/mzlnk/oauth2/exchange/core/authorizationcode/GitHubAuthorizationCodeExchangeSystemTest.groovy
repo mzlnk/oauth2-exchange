@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.mzlnk.oauth2.exchange.core.ExchangeException
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubOAuth2Client
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubOAuth2TokenResponseHandler
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GitHubOAuth2TokenResponse
 import io.mzlnk.oauth2.exchange.core.utils.http.MockHttpClientInterceptor
 import okhttp3.OkHttpClient
 import org.junit.jupiter.api.BeforeEach
@@ -37,10 +36,7 @@ class GitHubAuthorizationCodeExchangeSystemTest {
                 'some-redirect-uri'
         )
 
-        def responseHandler = new GitHubOAuth2TokenResponseHandler(
-                new GitHubOAuth2TokenResponse.Factory(),
-                new ObjectMapper()
-        )
+        def responseHandler = new GitHubOAuth2TokenResponseHandler(new ObjectMapper())
 
         this.exchange = GitHubAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)

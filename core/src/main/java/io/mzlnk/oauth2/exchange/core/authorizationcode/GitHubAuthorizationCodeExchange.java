@@ -3,7 +3,6 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GitHubOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -160,7 +159,7 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         }
 
         private static Supplier<GitHubOAuth2TokenResponseHandler> defaultResponseHandler() {
-            return () -> new GitHubOAuth2TokenResponseHandler(new GitHubOAuth2TokenResponse.Factory(), new ObjectMapper());
+            return () -> new GitHubOAuth2TokenResponseHandler(new ObjectMapper());
         }
 
     }

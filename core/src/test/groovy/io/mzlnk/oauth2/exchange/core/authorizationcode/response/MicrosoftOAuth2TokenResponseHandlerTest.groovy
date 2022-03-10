@@ -18,10 +18,7 @@ class MicrosoftOAuth2TokenResponseHandlerTest {
 
     @BeforeEach
     void "Set up tests"() {
-        this.responseHandler = new MicrosoftOAuth2TokenResponseHandler(
-                new MicrosoftOAuth2TokenResponse.Factory(),
-                new ObjectMapper()
-        )
+        this.responseHandler = new MicrosoftOAuth2TokenResponseHandler(new ObjectMapper())
     }
 
     @Test
@@ -85,35 +82,17 @@ class MicrosoftOAuth2TokenResponseHandlerTest {
     @Test
     void "Should return exception if objectMapper parameter is null"() {
         given:
-        def responseFactory = new MicrosoftOAuth2TokenResponse.Factory()
         def objectMapper = null
 
         when:
         def exception = assertThrows(
                 NullPointerException,
-                () -> new MicrosoftOAuth2TokenResponseHandler(responseFactory, objectMapper)
+                () -> new MicrosoftOAuth2TokenResponseHandler(objectMapper)
         )
 
         then:
         assert exception != null
         assert exception.message == 'Parameter `objectMapper` cannot be null.'
-    }
-
-    @Test
-    void "Should return exception if responseFactory parameter is null"() {
-        given:
-        def responseFactory = null
-        def objectMapper = new ObjectMapper()
-
-        when:
-        def exception = assertThrows(
-                NullPointerException,
-                () -> new MicrosoftOAuth2TokenResponseHandler(responseFactory, objectMapper)
-        )
-
-        then:
-        assert exception != null
-        assert exception.message == 'Parameter `responseFactory` cannot be null.'
     }
 
 }

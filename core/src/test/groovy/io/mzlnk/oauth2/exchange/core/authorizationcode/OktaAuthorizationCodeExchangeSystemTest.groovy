@@ -38,10 +38,7 @@ class OktaAuthorizationCodeExchangeSystemTest {
                 'https://some.domain.com'
         )
 
-        def responseHandler = new OktaOAuth2TokenResponseHandler(
-                new OktaOAuth2TokenResponse.Factory(),
-                new ObjectMapper()
-        )
+        def responseHandler = new OktaOAuth2TokenResponseHandler(new ObjectMapper())
 
         this.exchange = OktaAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
@@ -70,7 +67,7 @@ class OktaAuthorizationCodeExchangeSystemTest {
         ).thenReturn(httpResponse)
 
         when:
-        def response = this.exchange.exchangeAuthorizationCode('some-code')
+        def response = this.exchange.exchangeAuthorizationCode('some-code') as OktaOAuth2TokenResponse
 
         then:
         assert response != null

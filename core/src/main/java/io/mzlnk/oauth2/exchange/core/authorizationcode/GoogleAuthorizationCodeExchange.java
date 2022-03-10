@@ -3,7 +3,6 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GoogleOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -161,7 +160,7 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         }
 
         private static Supplier<GoogleOAuth2TokenResponseHandler> defaultResponseHandler() {
-            return () -> new GoogleOAuth2TokenResponseHandler(new GoogleOAuth2TokenResponse.Factory(), new ObjectMapper());
+            return () -> new GoogleOAuth2TokenResponseHandler(new ObjectMapper());
         }
 
     }
