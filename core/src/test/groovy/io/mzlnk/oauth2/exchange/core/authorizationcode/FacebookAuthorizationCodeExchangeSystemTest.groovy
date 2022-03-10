@@ -40,7 +40,7 @@ class FacebookAuthorizationCodeExchangeSystemTest {
 
         this.exchange = FacebookAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
-                .exchangeClient(exchangeClient)
+                .oAuth2Client(exchangeClient)
                 .responseHandler(responseHandler)
                 .build()
     }

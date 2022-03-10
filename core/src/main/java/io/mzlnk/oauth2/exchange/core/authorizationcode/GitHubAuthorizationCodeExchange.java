@@ -113,13 +113,13 @@ public class GitHubAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         }
 
         /**
-         * Set an exchange client used in an exchange.
+         * Set an OAuth2 client used in an exchange.
          *
-         * @param exchangeClient instance of {@link GitHubOAuth2Client} exchange client
+         * @param oAuth2Client instance of {@link GitHubOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(GitHubOAuth2Client exchangeClient) {
-            this.exchangeClient = exchangeClient;
+        public Builder oAuth2Client(GitHubOAuth2Client oAuth2Client) {
+            this.exchangeClient = oAuth2Client;
             return this;
         }
 

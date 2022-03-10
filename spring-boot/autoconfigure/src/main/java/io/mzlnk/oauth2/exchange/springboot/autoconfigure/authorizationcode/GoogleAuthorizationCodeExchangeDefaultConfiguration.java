@@ -41,7 +41,7 @@ public class GoogleAuthorizationCodeExchangeDefaultConfiguration {
         log.debug("Creating default OAuth2 authorization code exchange for Google auth provider");
         return GoogleAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
-                .exchangeClient(exchangeClient)
+                .oAuth2Client(exchangeClient)
                 .responseHandler(responseHandler)
                 .build();
     }

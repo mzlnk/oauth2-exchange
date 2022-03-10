@@ -42,7 +42,7 @@ class OktaAuthorizationCodeExchangeSystemTest {
 
         this.exchange = OktaAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
-                .exchangeClient(exchangeClient)
+                .oAuth2Client(exchangeClient)
                 .responseHandler(responseHandler)
                 .build()
     }

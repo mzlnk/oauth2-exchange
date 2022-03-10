@@ -94,7 +94,7 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private KeycloakOAuth2Client exchangeClient;
+        private KeycloakOAuth2Client oAuth2Client;
         private KeycloakOAuth2TokenResponseHandler responseHandler;
 
         private Builder() {
@@ -112,12 +112,12 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
         }
 
         /**
-         * Set an exchange client used in an exchange.
-         * @param exchangeClient instance of {@link KeycloakOAuth2Client} exchange client
+         * Set an OAuth2 client used in an exchange.
+         * @param oAuth2Client instance of {@link KeycloakOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(KeycloakOAuth2Client exchangeClient) {
-            this.exchangeClient = exchangeClient;
+        public Builder oAuth2Client(KeycloakOAuth2Client oAuth2Client) {
+            this.oAuth2Client = oAuth2Client;
             return this;
         }
 
@@ -149,7 +149,7 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
         public KeycloakAuthorizationCodeExchange build() {
             return new KeycloakAuthorizationCodeExchange(
                     Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),
-                    this.exchangeClient,
+                    this.oAuth2Client,
                     Optional.ofNullable(this.responseHandler).orElseGet(defaultResponseHandler())
             );
         }

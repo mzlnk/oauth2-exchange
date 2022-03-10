@@ -95,7 +95,7 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
     public static class Builder {
 
         private OkHttpClient httpClient;
-        private GoogleOAuth2Client exchangeClient;
+        private GoogleOAuth2Client oAuth2Client;
         private GoogleOAuth2TokenResponseHandler responseHandler;
 
         private Builder() {
@@ -114,13 +114,13 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         }
 
         /**
-         * Set an exchange client used in an exchange.
+         * Set an OAuth2 client used in an exchange.
          *
-         * @param exchangeClient instance of {@link GoogleOAuth2Client} exchange client
+         * @param oAuth2Client instance of {@link GoogleOAuth2Client} exchange client
          * @return builder instance for further chain configuration
          */
-        public Builder exchangeClient(GoogleOAuth2Client exchangeClient) {
-            this.exchangeClient = exchangeClient;
+        public Builder oAuth2Client(GoogleOAuth2Client oAuth2Client) {
+            this.oAuth2Client = oAuth2Client;
             return this;
         }
 
@@ -154,7 +154,7 @@ public class GoogleAuthorizationCodeExchange extends AbstractAuthorizationCodeEx
         public GoogleAuthorizationCodeExchange build() {
             return new GoogleAuthorizationCodeExchange(
                     Optional.ofNullable(this.httpClient).orElseGet(defaultOkHttpClient()),
-                    this.exchangeClient,
+                    this.oAuth2Client,
                     Optional.ofNullable(this.responseHandler).orElseGet(defaultResponseHandler())
             );
         }

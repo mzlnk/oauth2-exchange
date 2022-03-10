@@ -41,7 +41,7 @@ public class FacebookAuthorizationCodeExchangeDefaultConfiguration {
         log.debug("Creating default OAuth2 authorization code exchange for Facebook auth provider");
         return FacebookAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
-                .exchangeClient(exchangeClient)
+                .oAuth2Client(exchangeClient)
                 .responseHandler(responseHandler)
                 .build();
     }
