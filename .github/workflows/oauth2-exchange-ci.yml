@@ -7,6 +7,7 @@ on:
       - 'develop'
       - 'feature/**'
       - 'bugfix/**'
+      - 'hotfix/**'
       - 'release/**'
       - 'tmp/**'
 
