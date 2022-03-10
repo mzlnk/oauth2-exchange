@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.KeycloakAuthorizationCodeExchange;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.KeycloakOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.KeycloakOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,16 +31,9 @@ public class KeycloakAuthorizationCodeExchangeDefaultConfiguration {
         return new KeycloakOAuth2Client(clientId, clientSecret, redirectUri, host, realm);
     }
 
-    @Bean(name = "defaultKeycloakTokenResponseFactory")
-    @ConditionalOnMissingBean
-    public KeycloakOAuth2TokenResponse.Factory keycloakOAuth2TokenResponseFactory() {
-        return new KeycloakOAuth2TokenResponse.Factory();
-    }
-
     @Bean(name = "defaultKeycloakTokenResponseHandler")
-    public KeycloakOAuth2TokenResponseHandler keycloakAuth2TokenResponseHandler(KeycloakOAuth2TokenResponse.Factory responseFactory,
-                                                                                ObjectMapper objectMapper) {
-        return new KeycloakOAuth2TokenResponseHandler(responseFactory, objectMapper);
+    public KeycloakOAuth2TokenResponseHandler keycloakAuth2TokenResponseHandler(ObjectMapper objectMapper) {
+        return new KeycloakOAuth2TokenResponseHandler(objectMapper);
     }
 
     @Bean(name = "defaultKeycloakExchange")

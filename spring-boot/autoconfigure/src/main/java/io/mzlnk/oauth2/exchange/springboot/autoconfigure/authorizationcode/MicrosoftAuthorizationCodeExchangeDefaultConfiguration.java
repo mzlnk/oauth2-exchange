@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.MicrosoftAuthorizationCodeExchange;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.*;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,16 +56,9 @@ public class MicrosoftAuthorizationCodeExchangeDefaultConfiguration {
         return new MicrosoftOAuth2AzureADClient(clientId, clientSecret, redirectUri, azureAdId);
     }
 
-    @Bean(name = "defaultMicrosoftTokenResponseFactory")
-    @ConditionalOnMissingBean
-    public MicrosoftOAuth2TokenResponse.Factory microsoftOAuth2TokenResponseFactory() {
-        return new MicrosoftOAuth2TokenResponse.Factory();
-    }
-
     @Bean(name = "defaultMicrosoftTokenResponseHandler")
-    public MicrosoftOAuth2TokenResponseHandler microsoftOAuth2TokenResponseHandler(MicrosoftOAuth2TokenResponse.Factory responseFactory,
-                                                                                   ObjectMapper objectMapper) {
-        return new MicrosoftOAuth2TokenResponseHandler(responseFactory, objectMapper);
+    public MicrosoftOAuth2TokenResponseHandler microsoftOAuth2TokenResponseHandler(ObjectMapper objectMapper) {
+        return new MicrosoftOAuth2TokenResponseHandler(objectMapper);
     }
 
     @Bean(name = "defaultMicrosoftExchange")

@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.GitHubAuthorizationCodeExchange;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GitHubOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GitHubOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GitHubOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,16 +29,9 @@ public class GitHubAuthorizationCodeExchangeDefaultConfiguration {
         return new GitHubOAuth2Client(clientId, clientSecret, redirectUri);
     }
 
-    @Bean(name = "defaultGitHubTokenResponseFactory")
-    @ConditionalOnMissingBean
-    public GitHubOAuth2TokenResponse.Factory gitHubOAuth2TokenResponseFactory() {
-        return new GitHubOAuth2TokenResponse.Factory();
-    }
-
     @Bean(name = "defaultGitHubTokenResponseHandler")
-    public GitHubOAuth2TokenResponseHandler gitHubOAuth2TokenResponseHandler(GitHubOAuth2TokenResponse.Factory responseFactory,
-                                                                             ObjectMapper objectMapper) {
-        return new GitHubOAuth2TokenResponseHandler(responseFactory, objectMapper);
+    public GitHubOAuth2TokenResponseHandler gitHubOAuth2TokenResponseHandler(ObjectMapper objectMapper) {
+        return new GitHubOAuth2TokenResponseHandler(objectMapper);
     }
 
     @Bean(name = "defaultGitHubExchange")
