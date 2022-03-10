@@ -12,7 +12,7 @@ in OAuth2 Authorization Code Flow. It consists of templates and ready-to-use imp
 Therefore, you can save your time as you do not need to search through plenty of API docs or to implement a custom HTTP client just to 
 exchange a code for a token - the library do it under the hood via a single method call ;)
 
-According to the [OAuth2 overview](https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2) found on DigitalOcen, 
+According to the [OAuth2 overview](https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2) found on DigitalOcean, 
 the library manages the step 4 (issuing a token from authorization code) and step 5 (receiving token response):
 
 ![OAuth2 Authorization Code Flow diagram](https://assets.digitalocean.com/articles/oauth/auth_code_flow.png)
