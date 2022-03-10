@@ -3,7 +3,6 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.KeycloakOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.KeycloakOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.KeycloakOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -156,7 +155,7 @@ public class KeycloakAuthorizationCodeExchange extends AbstractAuthorizationCode
         }
 
         private static Supplier<KeycloakOAuth2TokenResponseHandler> defaultResponseHandler() {
-            return () -> new KeycloakOAuth2TokenResponseHandler(new KeycloakOAuth2TokenResponse.Factory(), new ObjectMapper());
+            return () -> new KeycloakOAuth2TokenResponseHandler(new ObjectMapper());
         }
 
     }

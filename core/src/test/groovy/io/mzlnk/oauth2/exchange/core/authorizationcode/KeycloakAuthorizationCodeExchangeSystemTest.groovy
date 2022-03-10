@@ -39,10 +39,7 @@ class KeycloakAuthorizationCodeExchangeSystemTest {
                 'some-realm'
         )
 
-        def responseHandler = new KeycloakOAuth2TokenResponseHandler(
-                new KeycloakOAuth2TokenResponse.Factory(),
-                new ObjectMapper()
-        )
+        def responseHandler = new KeycloakOAuth2TokenResponseHandler(new ObjectMapper())
 
         this.exchange = KeycloakAuthorizationCodeExchange.builder()
                 .httpClient(httpClient)
@@ -71,7 +68,7 @@ class KeycloakAuthorizationCodeExchangeSystemTest {
         ).thenReturn(httpResponse)
 
         when:
-        def response = this.exchange.exchangeAuthorizationCode('some-code')
+        def response = this.exchange.exchangeAuthorizationCode('some-code') as KeycloakOAuth2TokenResponse
 
         then:
         assert response != null

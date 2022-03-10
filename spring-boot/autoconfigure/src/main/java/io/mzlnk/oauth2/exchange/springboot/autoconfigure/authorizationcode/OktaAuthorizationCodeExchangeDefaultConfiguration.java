@@ -6,14 +6,12 @@ import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2Authoriz
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2SingleSignOnClient;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OktaOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,16 +46,9 @@ public class OktaAuthorizationCodeExchangeDefaultConfiguration {
         return new OktaOAuth2AuthorizationServerClient(clientId, clientSecret, redirectUri, oktaDomain, oktaAuthorizationServerId);
     }
 
-    @Bean(name = "defaultOktaTokenResponseFactory")
-    @ConditionalOnMissingBean
-    public OktaOAuth2TokenResponse.Factory oktaOAuth2TokenResponseFactory() {
-        return new OktaOAuth2TokenResponse.Factory();
-    }
-
     @Bean(name = "defaultOktaTokenResponseHandler")
-    public OktaOAuth2TokenResponseHandler oktaOAuth2TokenResponseHandler(OktaOAuth2TokenResponse.Factory responseFactory,
-                                                                         ObjectMapper objectMapper) {
-        return new OktaOAuth2TokenResponseHandler(responseFactory, objectMapper);
+    public OktaOAuth2TokenResponseHandler oktaOAuth2TokenResponseHandler(ObjectMapper objectMapper) {
+        return new OktaOAuth2TokenResponseHandler(objectMapper);
     }
 
     @Bean(name = "defaultOktaExchange")

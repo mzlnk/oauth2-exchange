@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.OktaOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.OktaOAuth2TokenResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OktaOAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -161,7 +160,7 @@ public class OktaAuthorizationCodeExchange extends AbstractAuthorizationCodeExch
         }
 
         private static Supplier<OktaOAuth2TokenResponseHandler> defaultResponseHandler() {
-            return () -> new OktaOAuth2TokenResponseHandler(new OktaOAuth2TokenResponse.Factory(), new ObjectMapper());
+            return () -> new OktaOAuth2TokenResponseHandler(new ObjectMapper());
         }
 
     }

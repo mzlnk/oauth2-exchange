@@ -3,7 +3,6 @@ package io.mzlnk.oauth2.exchange.core.authorizationcode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.FacebookOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.FacebookOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.FacebookOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -158,7 +157,7 @@ public final class FacebookAuthorizationCodeExchange extends AbstractAuthorizati
         }
 
         private static Supplier<FacebookOAuth2TokenResponseHandler> defaultResponseHandler() {
-            return () -> new FacebookOAuth2TokenResponseHandler(new FacebookOAuth2TokenResponse.Factory(), new ObjectMapper());
+            return () -> new FacebookOAuth2TokenResponseHandler(new ObjectMapper());
         }
 
     }

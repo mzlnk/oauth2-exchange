@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.MicrosoftOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleOAuth2TokenResponseHandler;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.MicrosoftOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.MicrosoftOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.OAuth2TokenResponse;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -257,7 +256,7 @@ public class MicrosoftAuthorizationCodeExchange extends AbstractAuthorizationCod
         }
 
         private static Supplier<MicrosoftOAuth2TokenResponseHandler> defaultResponseHandler() {
-            return () -> new MicrosoftOAuth2TokenResponseHandler(new MicrosoftOAuth2TokenResponse.Factory(), new ObjectMapper());
+            return () -> new MicrosoftOAuth2TokenResponseHandler(new ObjectMapper());
         }
 
     }

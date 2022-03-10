@@ -42,15 +42,12 @@ import org.jetbrains.annotations.NotNull;
 public final class MicrosoftOAuth2TokenResponseHandler extends AbstractJsonBodyOAuth2TokenResponseHandler {
 
     /**
-     * Constructs a handler with a given {@link OAuth2TokenResponse.Factory} response factory used to create
-     * {@link OAuth2TokenResponse} response and Jackson object mapper used during JSON body deserialization.
+     * Constructs a handler with a given Jackson object mapper used during JSON body deserialization.
      *
-     * @param responseFactory response factory used to create {@link OAuth2TokenResponse} response
-     * @param objectMapper    Jackson object mapper used to parse incoming JSON body
+     * @param objectMapper Jackson object mapper used to parse incoming JSON body
      */
-    public MicrosoftOAuth2TokenResponseHandler(@NotNull MicrosoftOAuth2TokenResponse.Factory responseFactory,
-                                               @NotNull ObjectMapper objectMapper) {
-        super(responseFactory, objectMapper);
+    public MicrosoftOAuth2TokenResponseHandler(@NotNull ObjectMapper objectMapper) {
+        super(new MicrosoftOAuth2TokenResponse.Factory(), objectMapper);
     }
 
     /**

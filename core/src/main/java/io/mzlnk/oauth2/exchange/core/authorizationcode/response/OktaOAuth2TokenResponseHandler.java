@@ -36,15 +36,12 @@ import org.jetbrains.annotations.NotNull;
 public final class OktaOAuth2TokenResponseHandler extends AbstractJsonBodyOAuth2TokenResponseHandler {
 
     /**
-     * Constructs a handler with a given {@link OAuth2TokenResponse.Factory} response factory used to create
-     * {@link OAuth2TokenResponse} response and Jackson object mapper used during JSON body deserialization.
+     * Constructs a handler with a given Jackson object mapper used during JSON body deserialization.
      *
-     * @param responseFactory response factory used to create {@link OAuth2TokenResponse} response
-     * @param objectMapper    Jackson object mapper used to parse incoming JSON body
+     * @param objectMapper Jackson object mapper used to parse incoming JSON body
      */
-    public OktaOAuth2TokenResponseHandler(@NotNull OktaOAuth2TokenResponse.Factory responseFactory,
-                                          @NotNull ObjectMapper objectMapper) {
-        super(responseFactory, objectMapper);
+    public OktaOAuth2TokenResponseHandler(@NotNull ObjectMapper objectMapper) {
+        super(new OktaOAuth2TokenResponse.Factory(), objectMapper);
     }
 
     /**

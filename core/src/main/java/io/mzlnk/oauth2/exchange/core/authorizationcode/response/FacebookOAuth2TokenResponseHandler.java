@@ -40,15 +40,12 @@ import java.util.Map;
 public final class FacebookOAuth2TokenResponseHandler extends AbstractJsonBodyOAuth2TokenResponseHandler {
 
     /**
-     * Constructs a handler with a given {@link OAuth2TokenResponse.Factory} response factory used to create
-     * {@link OAuth2TokenResponse} response and Jackson object mapper used during JSON body deserialization.
+     * Constructs a handler with a given Jackson object mapper used during JSON body deserialization.
      *
-     * @param responseFactory response factory used to create {@link OAuth2TokenResponse} response
      * @param objectMapper Jackson object mapper used to parse incoming JSON body
      */
-    public FacebookOAuth2TokenResponseHandler(@NotNull FacebookOAuth2TokenResponse.Factory responseFactory,
-                                              @NotNull ObjectMapper objectMapper) {
-        super(responseFactory, objectMapper);
+    public FacebookOAuth2TokenResponseHandler(@NotNull ObjectMapper objectMapper) {
+        super(new FacebookOAuth2TokenResponse.Factory(), objectMapper);
     }
 
     /**

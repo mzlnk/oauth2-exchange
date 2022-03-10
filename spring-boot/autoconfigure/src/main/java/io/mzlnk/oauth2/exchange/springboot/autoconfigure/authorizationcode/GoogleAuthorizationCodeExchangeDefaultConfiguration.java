@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.GoogleAuthorizationCodeExchange;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.client.GoogleOAuth2Client;
 import io.mzlnk.oauth2.exchange.core.authorizationcode.response.GoogleOAuth2TokenResponseHandler;
-import io.mzlnk.oauth2.exchange.core.authorizationcode.response.dto.GoogleOAuth2TokenResponse;
 import io.mzlnk.oauth2.exchange.springboot.autoconfigure.common.condition.ConditionalOnPropertiesExist;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,16 +29,9 @@ public class GoogleAuthorizationCodeExchangeDefaultConfiguration {
         return new GoogleOAuth2Client(clientId, clientSecret, redirectUri);
     }
 
-    @Bean(name = "defaultGoogleTokenResponseFactory")
-    @ConditionalOnMissingBean
-    public GoogleOAuth2TokenResponse.Factory googleOAuth2TokenResponseFactory() {
-        return new GoogleOAuth2TokenResponse.Factory();
-    }
-
     @Bean(name = "defaultGoogleTokenResponseHandler")
-    public GoogleOAuth2TokenResponseHandler googleOAuth2TokenResponseHandler(GoogleOAuth2TokenResponse.Factory responseFactory,
-                                                                             ObjectMapper objectMapper) {
-        return new GoogleOAuth2TokenResponseHandler(responseFactory, objectMapper);
+    public GoogleOAuth2TokenResponseHandler googleOAuth2TokenResponseHandler(ObjectMapper objectMapper) {
+        return new GoogleOAuth2TokenResponseHandler(objectMapper);
     }
 
     @Bean(name = "defaultGoogleExchange")
