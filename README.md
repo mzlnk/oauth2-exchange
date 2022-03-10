@@ -71,7 +71,7 @@ If you want to use the core library itself in your Maven project - just include 
 <dependency>
     <groupId>io.mzlnk.oauth2.exchange</groupId>
     <artifactId>oauth2-exchange-core</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
@@ -79,7 +79,7 @@ If you want to use the core library itself in your Maven project - just include 
 
 If you want to use the core library itself in your Gradle project - just include the dependency `build.gradle` file:
 ```text
-implementation 'io.mzlnk.oauth2.exchange:oauth2-exchange-core:0.1.0'
+implementation 'io.mzlnk.oauth2.exchange:oauth2-exchange-core:0.1.1'
 ```
 
 #### Using standalone JAR file
@@ -96,7 +96,7 @@ If you want to use the Spring Boot starter in your Maven project - just include 
 <dependency>
     <groupId>io.mzlnk.oauth2.exchange</groupId>
     <artifactId>oauth2-exchange-spring-boot-starter</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
@@ -104,7 +104,7 @@ If you want to use the Spring Boot starter in your Maven project - just include 
 
 If you want to use the core library itself in your Gradle project - just include the dependency `build.gradle` file:
 ```text
-implementation 'io.mzlnk.oauth2.exchange:oauth2-exchange-spring-boot-starter:0.1.0'
+implementation 'io.mzlnk.oauth2.exchange:oauth2-exchange-spring-boot-starter:0.1.1'
 ```
 
 ## Documentation
