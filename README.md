@@ -1,7 +1,7 @@
 # OAuth2 Exchange Library for Java
 
 [![Licence: MIT](https://img.shields.io/badge/Licence-MIT-blue.svg)](https://shields.io/)
-[![Version: 0.1.0](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://shields.io/)
+[![Version: 0.1.1](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://shields.io/)
 [![Java : 17](https://img.shields.io/badge/Java-17-orange.svg)](https://jdk.java.net/17/)
 [![Open Source](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
@@ -30,7 +30,7 @@ The whole project is currently in development, so you can expect plenty of updat
 | type   | current version |
 | ------ | --------------- |
 | stable | 0.1.1           |
-| latest | 0.1.0-SNAPSHOT  |
+| latest | 0.2.0-SNAPSHOT  |
 
 
 ### Supported auth providers
