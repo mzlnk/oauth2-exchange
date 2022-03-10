@@ -43,6 +43,11 @@ Currently, the oauth2-exchange library provides *ready-to-use* support for the f
 - [Microsoft](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)
 - [Okta](https://developer.okta.com/docs/reference/api/oidc/#_2-okta-as-the-identity-platform-for-your-app-or-api)
 
+
+### Snapshots
+
+Every successfull build from `develop` branch is automatically deployed in form of snapshot to a public Sonatype repository.
+
 ### See a bug?
 
 Have noticed a bug in a library? Do not hesitate to report it by creating an GitHub issue!
