@@ -4,10 +4,53 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.mzlnk.oauth2</groupId>
+    <groupId>io.mzlnk.oauth2.exchange</groupId>
     <artifactId>oauth2-exchange-core</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+
     <name>oauth2-exchange-core</name>
+    <description>Java library for managing OAuth2 flows from server side</description>
+    <url>https://github.com/mzlnk/oauth2-exchange</url>
+
+    <inceptionYear>2021</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>mzlnk</id>
+            <name>Marcin Zielonka</name>
+            <email>zielonka.marcin@protonmail.com</email>
+            <url>mzlnk.io</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Warsaw</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/mzlnk/oauth2-exchange.git
+        </connection>
+        <developerConnection>
+            scm:git:ssh://github.com:mzlnk/oauth2-exchange.git
+        </developerConnection>
+        <url>https://github.com/mzlnk/oauth2-exchange</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -32,6 +75,17 @@
             <artifactId>okhttp</artifactId>
             <version>4.9.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.0.1-jre</version>
+        </dependency>
+
 
         <!-- logging -->
         <dependency>
@@ -56,14 +110,8 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp</groupId>
-            <artifactId>mockwebserver</artifactId>
-            <version>2.7.5</version>
+            <artifactId>mockito-core</artifactId>
+            <version>4.2.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -71,6 +119,11 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.11.0</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -85,6 +138,28 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*SystemTest</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*SystemTest</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
@@ -105,7 +180,81 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <links>
+                        <link>https://javadoc.io/doc/org.jetbrains/annotations/latest</link>
+                        <link>https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/</link>
+                        <link>https://javadoc.io/doc/com.squareup.okhttp3/okhttp/3.14.9/okhttp3/latest</link>
+                    </links>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

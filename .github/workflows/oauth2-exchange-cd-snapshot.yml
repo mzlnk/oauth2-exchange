@@ -1,0 +1,45 @@
+name: 'oauth2-exchange CD (snapshots)'
+
+on:
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  deploy-snapshots:
+    name: 'deploy snapshots'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setting up JDK 17 and Maven Central Repository
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          cache: maven
+
+      - name: deploy snapshot (core)
+        working-directory: core
+        run: mvn clean deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+
+      - name: deploy snapshot (spring-boot-autoconfigure)
+        working-directory: spring-boot/autoconfigure
+        run: mvn clean deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+
+      - name: deploy snapshot (spring-boot-starter)
+        working-directory: spring-boot/starter
+        run: mvn clean deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

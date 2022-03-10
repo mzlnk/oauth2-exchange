@@ -1,1 +1,7 @@
-
+oauth2:
+  exchange:
+    providers:
+      google:
+        client-id: <CLIENT-ID-HERE>
+        client-secret: <CLIENT-SECRET-HERE>
+        redirect-uri: <REDIRECT-URI-HERE>
